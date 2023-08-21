@@ -1,0 +1,14 @@
+=== Get Started
+
+include::pages/intro.adoc[]
+
+=== Microservice Architecture
+
+include::pages/microservice_architecture.adoc[]
+
+=== Database per Service Pattern
+
+include::pages/database_per_service_pattern.adoc[]
+
+
+

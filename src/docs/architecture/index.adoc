@@ -1,0 +1,20 @@
+=== StackSaga in High-level
+
+include::pages/high_level_architecture.adoc[]
+
+=== Key Processes of ecosystem [[key_processes_of_ecosystem]]
+
+include::key_processes_of_ecosystem.adoc[]
+
+=== Aggregator
+
+include::pages/aggregator.adoc[]
+
+==== Aggregator and Executors [[aggregator_and_executors]]
+
+include::pages/aggregator_and_executors.adoc[]
+
+==== How the Aggregator is used through the Executors [[aggregator_usage_with_executor]]
+
+include::pages/aggregator_usage_with_executor.adoc[]
+

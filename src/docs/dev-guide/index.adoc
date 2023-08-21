@@ -1,0 +1,45 @@
+=== Aggregator Introduction
+
+include::pages/intro.adoc[]
+
+=== Creating Aggregator Class [[creating_aggregator_class]]
+
+include::pages/create-aggregator.adoc[]
+
+=== Creating SagaSerializable Class for Aggregator [[saga_serializable]]
+
+include::pages/saga_serializable.adoc[]
+
+=== Aggregator Mapper Implementation [[aggregator_mapper_implementation]]
+
+include::pages/aggregator_mapper_implementation.adoc[]
+
+=== Full Aggregate implementation. [[complex_aggrgator]]
+
+include::pages/complex_aggrgator.adoc[]
+
+=== Saga Executors. [[saga_executors]]
+
+include::pages/saga_executors.adoc[]
+
+=== Query Executor. [[query_executor]]
+
+include::pages/query_executor.adoc[]
+
+=== Command Executor. [[command_executor]]
+
+include::pages/command_executor.adoc[]
+
+=== Revert Before Executor. [[revert_before_executor]]
+
+include::pages/revert_before_executor.adoc[]
+
+=== Revert After Executor. [[revert_after_executor]]
+
+include::pages/revert_after_executor.adoc[]
+
+=== ProcessStack
+
+=== NonRetryableExecutorException
+
+=== RevertHintStore

@@ -1,0 +1,37 @@
+The `SagaSerializable` class provides you a method called `<T> getSamples()` to provide the sample array of objects of your real Aggregator. for each aggregator class that you made should have a separate implementation of `SagaSerializable` for validating the sample object before the application is started. that process ensures that your aggregator object will not face a serialization error while the transactions are being processed in the production.
+
+you can see a sample SagaSerializable `(PlaceOrderAggregatorSample.class)` implementation of the PlaceOrderAggregator.
+
+[source,java,highlight=1;3-7;!5]
+----
+public class PlaceOrderAggregatorSample implements SagaSerializable<PlaceOrderAggregator> { //<1>
+    @Override
+    public PlaceOrderAggregator[] getSamples() {
+        //samples objects for the PlaceOrderAggregator
+
+        //sample-1
+        PlaceOrderAggregator aggregator1 = new PlaceOrderAggregator();
+        aggregator1.setOrderId(UUID.randomUUID().toString());
+
+        //sample-1
+        PlaceOrderAggregator aggregator2 = new PlaceOrderAggregator();
+        aggregator2.setOrderId(UUID.randomUUID().toString());
+        aggregator2.setUsername("mafei");
+
+        //<2>
+        return new PlaceOrderAggregator[]{
+                aggregator1,
+                aggregator2,
+        };
+    }
+}
+----
+
+<1> Implement your custom `PlaceOrderAggregatorSample` from the `SagaSerializable<T>`.
+The generic type should be the aggregator that you wish to check the sample object.
+According to the example, the Type is `PlaceOrderAggregator`.
+Then you will have a method for providing the sample objects for that given type.
+
+<2> Rerun your initialized sample objects by creating a new array for the validation process.
+
+WARNING: Make sure to keep the default constructor for each SagaSerializable implementation.

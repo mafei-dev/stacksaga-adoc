@@ -1,0 +1,20 @@
+:toc-title: Table of Contents
+:icons: font
+:prewrap!:
+:toc: left
+:toc-levels: 4
+:docinfo: shared
+
+toc::[]
+
+== Introduction To Microservices
+
+include::introduction/index.adoc[]
+
+== Architecture
+
+include::architecture/index.adoc[]
+
+== Developer Guide
+
+include::dev-guide/index.adoc[]

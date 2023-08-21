@@ -1,0 +1,1 @@
+image::resources/img/stack-saga-e-store-example-aggregator-state.drawio.svg[alt="StackSaga Aggregator And Executors",height=300]

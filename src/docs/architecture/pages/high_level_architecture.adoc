@@ -1,0 +1,22 @@
+in the introduction, we got a clear idea of how microservice architecture works, and what are the challenges that we have to face when implementing the microservice. here, we are going to explain how the stack saga works together with typical microservice architecture. here we have demonstrated a spring boot microservice architecture and how the StackSaga framework provides the Saga execution coordinator (SEC) capabilities without bothering to the default architecture.
+
+image::resources/img/stack-saga-high-level-diagram.svg[alt="StackSaga High-level architecture",height=300]
+
+After adding stack saga in the microservice architecture, you can see there are some additional components in the high-level architecture diagram.
+In the diagram, the gray color components and lines are related to the general microservice architecture and additional stacksaga related components and lines have been colored by green color.
+Let's discuss all the components and how they are interacted with general architecture.
+When you use StackSaga, you have to provide the facilities to create a database in addition to the database that you use for each microservice.
+This is also the same as the database per service design pattern.
+A service group (multiple instances of one service) uses one database to store the events of the executions.
+The only thing is newly added an extra schema.
+If you like to use one database for all microservices for StackSaga, it doesn't matter you can use one database as the event-store.
+But as the best practice, one database per service is recommended.
+
+As a summary of the image above, you can identify mainly 4 components as new.in the next image below you can see those new components how to interact with the general components.
+
+. StackSaga Coordinator (A Library) and StackSaga Connector (A Library) is located in the individual services.
+. StackSaga Shield (A Library) is located in the API gateway.
+. StackSaga Server (A Standalone Application) is one separate unit that provides a dashboard.
+
+
+image::resources/img/architecture-stacksaga-products.drawio.svg[alt="StackSaga High-level architecture",height=300]
