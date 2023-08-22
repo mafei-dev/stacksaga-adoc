@@ -444,9 +444,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect2">
-<h3 id="_creating_aggregator_class">Creating Aggregator Class</h3>
+<h3 id="creating_aggregator_class">Creating Aggregator Class</h3>
 <div class="paragraph">
-<p>The aggregator class does represent your business domain, and it is the container for carrying out the data for the executors.
+<p>The aggregator<sup><a href="#aggregator_architecture">ref</a></sup>  class does represent your business domain, and it is the container for carrying out the data for the executors.
 In side of the aggregator class, you should provide all the data regarding your entire transaction.</p>
 </div>
 <div class="paragraph">
@@ -626,6 +626,10 @@ Make sure to keep the default constructor for each SagaSerializable implementati
 </div>
 </div>
 <div class="sect2">
+<h3 id="aggregator_mapper_implementation">Aggregator Mapper Implementation</h3>
+
+</div>
+<div class="sect2">
 <h3 id="complex_aggrgator">Full Aggregate implementation.</h3>
 <div class="listingblock">
 <div class="content">
@@ -708,21 +712,21 @@ And those executions you van create as the methods in your application anywhere.
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><strong><a href="#query_executor">Query executors</a></strong>: if some atomic process has no compensation (query execution), that kind of process is used in a query executor.</p>
+<p><strong><a href="#query_executor">Query executors</a></strong>: If some atomic process has no compensation (query execution), that kind of process is used in a query executor.</p>
 </li>
 <li>
-<p><strong>Command executors</strong>:if some atomic process has a compensation (command execution), that kind of process is used in a command executor.</p>
+<p><strong><a href="#command_executor">Command executors</a></strong>: If some atomic process has a compensation (command execution), that kind of process is used in a command executor.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p><strong>Revert executors</strong>:for the compensation process of the command executor it can be used other sub processes if you need.</p>
+<p><strong>Revert executors</strong>: For the compensation process of the command executor it can be used other sub processes if you need.</p>
 <div class="olist lowerroman">
 <ol class="lowerroman" type="i">
 <li>
-<p><strong>Revert Before Executors</strong>:if you want to execute an atomic process before executing the main revert process, you can create a Revert-Before-Executor.</p>
+<p><strong><a href="#revert_before_executor">Revert Before Executors</a></strong>: If you want to execute an atomic process before executing the main revert process, you can create a Revert-Before-Executor.</p>
 </li>
 <li>
-<p><strong>Revert After Executors</strong>:if you want to execute an atomic process after executing the main revert process, you can create a Revert-Before-Executor.</p>
+<p><strong><a href="#revert_after_executor">Revert After Executors</a></strong>: If you want to execute an atomic process after executing the main revert process, you can create a Revert-Before-Executor.</p>
 </li>
 </ol>
 </div>
@@ -735,12 +739,338 @@ And those executions you van create as the methods in your application anywhere.
 </div>
 <div class="sect2">
 <h3 id="query_executor">Query Executor.</h3>
+<div class="paragraph">
+<p>You can create any number of your custom Query-Executors regarding the Aggregator.
+Here you can see how you can create a Query-Executor for your <code><a href="#creating_aggregator_class">PlaceOrderAggregator</a></code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">// <b class="conum">(1)</b>
+<span style="color:#007">@SagaExecutor</span>(
+        executeFor = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">user-service</span><span style="color:#710">&quot;</span></span>, // <b class="conum">(2)</b>
+        liveCheck = <span style="color:#069">true</span>, // <b class="conum">(3)</b>
+        value = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">CheckUserExecutor</span><span style="color:#710">&quot;</span></span> // <b class="conum">(4)</b>
+)
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CheckUserExecutor</span> <span style="color:#088;font-weight:bold">implements</span> QueryExecutor&lt;PlaceOrderAggregator&gt; { // <b class="conum">(5)</b>
+
+    // <b class="conum">(6)</b>
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> ProcessStepManager&lt;PlaceOrderAggregator&gt; doProcess(
+            ProcessStack processStack,
+            PlaceOrderAggregator aggregator,
+            ProcessStepManagerUtil&lt;PlaceOrderAggregator&gt; stepManagerUtil
+    ) <span style="color:#088;font-weight:bold">throws</span> RetryableExecutorException, NonRetryableExecutorException {
+        <span style="color:#777">//execute the service and check the conndtion.</span>
+
+        <span style="color:#777">//return or throw </span>// <b class="conum">(7)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p><strong>@SagaExecutor</strong>: annotate your query executor with <code>@org.stacksaga.annotation.SagaExecutor</code> annotation.
+The annotation provides the spring bean capabilities and also another metadata for the StackSaga framework.</p>
+</li>
+<li>
+<p><strong>executeFor</strong>: The name of the service that particular executor is going to be connected. it can be a service name of another service. if the service is spring boot service, make sure to keep the application name as its. because it will be helpful for the retry process.</p>
+</li>
+<li>
+<p><strong>liveCheck</strong>: When the retry process is executed, liveCheck is considered by the engine. if the target service is a spring boot service or registered service with the service registry, the availability is checked before executing the retry by the StackSaga engine.</p>
+</li>
+<li>
+<p><strong>value</strong>: The bean name of the executor.
+The executor is identified with this value by StackSaga engine. after configuring the bean name, it cannot be changed at all. if you want to the class package, it does not matter without changing the configured name.</p>
+</li>
+<li>
+<p><strong>QueryExecutor&lt;T&gt;</strong> IF the executor is Query one, The executor should be implemented by <code>org.stacksaga.executor.QueryExecutor&lt;T&gt;</code>. <code>T</code> should be the target Aggregator class for the domain.</p>
+</li>
+<li>
+<p>Override the <code>doProcess()</code>  method and put your execution code block that should be executed when the executor is executed by the StackSaga engine.</p>
+</li>
+<li>
+<p>Finally, you can either return the next executor with the method that provides by the <code>ProcessStepManager</code>.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="command_executor">Command Executor.</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">// <b class="conum">(1)</b>
+<span style="color:#007">@SagaExecutor</span>(
+        executeFor = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">delivery-service</span><span style="color:#710">&quot;</span></span>, // <b class="conum">(2)</b>
+        liveCheck = <span style="color:#069">true</span>, // <b class="conum">(3)</b>
+        value = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">DispatchOrderExecutor</span><span style="color:#710">&quot;</span></span> // <b class="conum">(4)</b>
+)
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">DispatchOrderExecutor</span> <span style="color:#088;font-weight:bold">implements</span> CommandExecutor&lt;PlaceOrderAggregator&gt; { // <b class="conum">(5)</b>
+
+    // <b class="conum">(6)</b>
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> ProcessStepManager&lt;PlaceOrderAggregator&gt; doProcess(
+            ProcessStack processStack, // <b class="conum">(7)</b>
+            PlaceOrderAggregator aggregator, // <b class="conum">(8)</b>
+            ProcessStepManagerUtil&lt;PlaceOrderAggregator&gt; stepManager // <b class="conum">(9)</b>
+    ) <span style="color:#088;font-weight:bold">throws</span> RetryableExecutorException, NonRetryableExecutorException {
+        <span style="color:#777">//execute the service and check the conndtion.</span>
+        ...
+        <span style="color:#777">//return or throw </span>// <b class="conum">(10)</b>
+    }
+
+    <span style="color:#007">@RevertBefore</span>(startFrom = DispatchRevertNotifierExecutor.class)  // <b class="conum">(11)</b>
+    <span style="color:#007">@RevertAfter</span>(startFrom = DispatchRevertCompleteLogExecutor.class) // <b class="conum">(12)</b>
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> doRevert(
+            ProcessStack processStack,// <b class="conum">(13)</b>
+            NonRetryableExecutorException nonRetryableExecutorException,// <b class="conum">(14)</b>
+            PlaceOrderAggregator aggregator, // <b class="conum">(15)</b>
+            RevertHintStore revertHintStore // <b class="conum">(16)</b>
+    ) <span style="color:#088;font-weight:bold">throws</span> RetryableExecutorException {
+        <span style="color:#777">//call the atomic process that you want to as the compensation,</span>
+        ...
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p><strong>@SagaExecutor</strong>: annotate your query executor with <code>@org.stacksaga.annotation.SagaExecutor</code> annotation.
+The annotation provides the spring bean capabilities and also another metadata for the StackSaga framework.</p>
+</li>
+<li>
+<p><strong>executeFor</strong>: The name of the service that particular executor is going to be connected. it can be a service name of another service. if the service is spring boot service, make sure to keep the application name as its. because it will be helpful for the retry process.</p>
+</li>
+<li>
+<p><strong>liveCheck</strong>: When the retry process is executed, liveCheck is considered by the engine. if the target service is a spring boot service or registered service with the service registry, the availability is checked before executing the retry by the StackSaga engine.</p>
+</li>
+<li>
+<p><strong>value</strong>: The bean name of the executor.
+The executor is identified with this value by StackSaga engine. after configuring the bean name, it cannot be changed at all. if you want to the class package, it does not matter without changing the configured name.</p>
+</li>
+<li>
+<p><strong>CommandExecutor&lt;T&gt;</strong> IF the executor is command one, The executor should be implemented by <code>org.stacksaga.executor.CommandExecutor&lt;T&gt;</code>. <code>T</code> should be the target Aggregator class for the domain.</p>
+</li>
+<li>
+<p>Override the <code>doProcess()</code>  method and put your execution code block that should be executed when the executor is executed by the StackSaga engine.</p>
+</li>
+<li>
+<p><strong>ProcessStack</strong> Object provides all the executed execution until the process so far.
+It will help for gen an idea about the execution history.
+And also you can get the decision of the execution base on the execution history.</p>
+</li>
+<li>
+<p><strong>PlaceOrderAggregator</strong>: The current aggregator state.</p>
+</li>
+<li>
+<p><strong>ProcessStepManagerUtil&lt;T&gt;</strong>: This object provides the methods for giving the navigation to the engine regarding the next step. it can be another executor (command or query) or a process completion.</p>
+</li>
+<li>
+<p>Inside the method scope, you can provide the execution that should be executed when the StackSaga engine executes.
+And finally you can navigate to the next step by using the <code>ProcessStepManagerUtil</code> object.</p>
+</li>
+<li>
+<p><strong>@RevertBefore</strong>: If the executor has any revert-before-executors, you can mention that executor class with <code>@RevertBefore</code> annotation.
+According to the example, the revert before execution will be started from <a href="#revert_before_executor">DispatchRevertNotifierExecutor</a>.</p>
+</li>
+<li>
+<p><strong>@RevertAfter</strong>: If the executor has any revert-after-executors, you can mention that executor class with <code>@RevertAfter</code> annotation.
+According to the example, the revert after execution will be started from <a href="#revert_after_executor">DispatchRevertCompleteLogExecutor</a>.</p>
+</li>
+<li>
+<p><strong>ProcessStack</strong> The final process stack that was when the final execution was executed.</p>
+</li>
+<li>
+<p><strong>NonRetryableExecutorException</strong> The exception that caused the transition process stopping to forward.</p>
+</li>
+<li>
+<p><strong>PlaceOrderAggregator</strong> The final aggregator state when the NonRetryableExecutorException is thrown.</p>
+</li>
+<li>
+<p><strong>RevertHintStore</strong> If you want to add some data to the backward process, you can use the <code>RevertHintStore</code> to put the data.</p>
+</li>
+</ol>
+</div>
+<hr>
+</div>
+<div class="sect2">
+<h3 id="revert_before_executor">Revert Before Executor.</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">//<b class="conum">(1)</b>
+<span style="color:#007">@SagaExecutor</span>(
+        executeFor = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">delivery-service</span><span style="color:#710">&quot;</span></span>,//<b class="conum">(2)</b>
+        liveCheck = <span style="color:#069">true</span>,//<b class="conum">(3)</b>
+        value = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">DispatchRevertNotifierExecutor</span><span style="color:#710">&quot;</span></span> //<b class="conum">(4)</b>
+)
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">DispatchRevertNotifierExecutor</span> <span style="color:#088;font-weight:bold">implements</span> RevertBeforeExecutor&lt;PlaceOrderAggregator, DispatchOrderExecutor&gt; {//<b class="conum">(5)</b>
+
+    //<b class="conum">(6)</b>
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> RevertBeforeStepManager&lt;PlaceOrderAggregator, DispatchOrderExecutor&gt; doProcess(
+            PlaceOrderAggregator aggregator,//<b class="conum">(7)</b>
+            ProcessStack previousProcessStack,//<b class="conum">(8)</b>
+            NonRetryableExecutorException processException,//<b class="conum">(9)</b>
+            RevertHintStore revertHintStore,//<b class="conum">(10)</b>
+            RevertBeforeStepManagerUtil&lt;PlaceOrderAggregator, DispatchOrderExecutor&gt; revertStepManagerUtil //<b class="conum">(11)</b>
+    ) <span style="color:#088;font-weight:bold">throws</span> RetryableExecutorException { //<b class="conum">(12)</b>
+        <span style="color:#080;font-weight:bold">return</span> revertStepManagerUtil.next(NextBeforExecutor.class); //<b class="conum">(13)</b>
+        <span style="color:#777">//or</span>
+        <span style="color:#080;font-weight:bold">return</span> revertStepManagerUtil.complete(); //<b class="conum">(14)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p><strong>@SagaExecutor</strong>: annotate your query executor with <code>@org.stacksaga.annotation.SagaExecutor</code> annotation.
+The annotation provides the spring bean capabilities and also another metadata for the StackSaga framework.</p>
+</li>
+<li>
+<p><strong>executeFor</strong>: The name of the service that particular executor is going to be connected. it can be a service name of another service. if the service is spring boot service, make sure to keep the application name as its. because it will be helpful for the retry process.</p>
+</li>
+<li>
+<p><strong>liveCheck</strong>: When the retry process is executed, liveCheck is considered by the engine. if the target service is a spring boot service or registered service with the service registry, the availability is checked before executing the retry by the StackSaga engine.</p>
+</li>
+<li>
+<p><strong>value</strong>: The bean name of the executor.
+The executor is identified with this value by StackSaga engine. after configuring the bean name, it cannot be changed at all. if you want to the class package, it does not matter without changing the configured name.</p>
+</li>
+<li>
+<p><strong>RevertBeforeExecutor&lt;A, E&gt;</strong>: The Revert Before Executor should be implemented from the <code>RevertBeforeExecutor&lt;A,E&gt;</code>.
+Generic <strong>A</strong> is the aggregator.
+Generic <strong>E</strong> is the <a href="#command_executor">command-executor</a> of the given aggregator as the Generic <strong>A</strong>.</p>
+</li>
+<li>
+<p>Override the <code>doProcess()</code> method that <code>RevertBeforeExecutor</code> provides.
+That is the method is executed by the StackSaga engine.</p>
+</li>
+<li>
+<p><strong>PlaceOrderAggregator</strong>: The final aggregator state when the process exception is thrown.</p>
+</li>
+<li>
+<p><strong>ProcessStack</strong>: The final process stack when the process exception is thrown.</p>
+</li>
+<li>
+<p><strong>NonRetryableExecutorException</strong>:The process-exception that was thrown by the last executor.</p>
+</li>
+<li>
+<p><strong>RevertHintStore</strong> If you want to add some data to the backward process, you can use the <code>RevertHintStore</code> to put the data as container.</p>
+</li>
+<li>
+<p><strong>RevertBeforeStepManagerUtil&lt;A, E&gt;</strong>: This object provides the methods for giving the navigation to the engine regarding the next step. it can be another revert-before-executor or a revert-before completion.</p>
+</li>
+<li>
+<p><strong>RetryableExecutorException</strong>: If the revert before execution is failed due to a retryable exception, you can provide that by warping with <code>RetryableExecutorException</code>.</p>
+</li>
+<li>
+<p><strong>next()</strong>: You can provide (only if you have) the next revert-before-executor with <code>revertStepManagerUtil.next()</code>.</p>
+</li>
+<li>
+<p><strong>complete()</strong>: If you don&#8217;t have any revert-before-executor to be executed as next regarding the command-executor, you can return <code>revertStepManagerUtil.complete()</code>.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="revert_after_executor">Revert After Executor.</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">//<b class="conum">(1)</b>
+<span style="color:#007">@SagaExecutor</span>(
+        executeFor = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">delivery-service</span><span style="color:#710">&quot;</span></span>,//<b class="conum">(2)</b>
+        liveCheck = <span style="color:#069">true</span>,//<b class="conum">(3)</b>
+        value = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">DispatchRevertNotifierExecutor</span><span style="color:#710">&quot;</span></span> //<b class="conum">(4)</b>
+)
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">DispatchRevertCompleteLogExecutor</span> <span style="color:#088;font-weight:bold">implements</span> RevertAfterExecutor&lt;PlaceOrderAggregator, DispatchOrderExecutor&gt; {//<b class="conum">(5)</b>
+
+    //<b class="conum">(6)</b>
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> RevertAfterStepManager&lt;PlaceOrderAggregator, DispatchOrderExecutor&gt; doProcess(
+            PlaceOrderAggregator aggregator,//<b class="conum">(7)</b>
+            ProcessStack previousProcessStack,//<b class="conum">(8)</b>
+            NonRetryableExecutorException processException,//<b class="conum">(9)</b>
+            RevertHintStore revertHintStore,//<b class="conum">(10)</b>
+            RevertAfterStepManagerUtil&lt;PlaceOrderAggregator, DispatchOrderExecutor&gt; revertStepManagerUtil //<b class="conum">(11)</b>
+    ) <span style="color:#088;font-weight:bold">throws</span> RetryableExecutorException { //<b class="conum">(12)</b>
+        <span style="color:#080;font-weight:bold">return</span> revertStepManagerUtil.next(NextAfterExecutor.class); //<b class="conum">(13)</b>
+        <span style="color:#777">//or</span>
+        <span style="color:#080;font-weight:bold">return</span> revertStepManagerUtil.complete(); //<b class="conum">(14)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p><strong>@SagaExecutor</strong>: annotate your query executor with <code>@org.stacksaga.annotation.SagaExecutor</code> annotation.
+The annotation provides the spring bean capabilities and also another metadata for the StackSaga framework.</p>
+</li>
+<li>
+<p><strong>executeFor</strong>: The name of the service that particular executor is going to be connected. it can be a service name of another service. if the service is spring boot service, make sure to keep the application name as its. because it will be helpful for the retry process.</p>
+</li>
+<li>
+<p><strong>liveCheck</strong>: When the retry process is executed, liveCheck is considered by the engine. if the target service is a spring boot service or registered service with the service registry, the availability is checked before executing the retry by the StackSaga engine.</p>
+</li>
+<li>
+<p><strong>value</strong>: The bean name of the executor.
+The executor is identified with this value by StackSaga engine. after configuring the bean name, it cannot be changed at all. if you want to the class package, it does not matter without changing the configured name.</p>
+</li>
+<li>
+<p><strong>RevertAfterExecutor&lt;A, E&gt;</strong>: The Revert After Executor should be implemented from the <code>RevertAfterExecutor&lt;A,E&gt;</code>.
+Generic <strong>A</strong> is the aggregator.
+Generic <strong>E</strong> is the <a href="#command_executor">command-executor</a> of the given aggregator as the Generic <strong>A</strong>.</p>
+</li>
+<li>
+<p>Override the <code>doProcess()</code> method that <code>RevertAfterExecutor</code> provides.
+That is the method is executed by the StackSaga engine.</p>
+</li>
+<li>
+<p><strong>PlaceOrderAggregator</strong>: The final aggregator state when the process exception is thrown.</p>
+</li>
+<li>
+<p><strong>ProcessStack</strong>: The final process stack when the process exception is thrown.</p>
+</li>
+<li>
+<p><strong>NonRetryableExecutorException</strong>:The process-exception that was thrown by the last executor.</p>
+</li>
+<li>
+<p><strong>RevertHintStore</strong> If you want to add some data to the backward process, you can use the <code>RevertHintStore</code> to put the data as container.</p>
+</li>
+<li>
+<p><strong>RevertAfterStepManagerUtil&lt;A, E&gt;</strong>: This object provides the methods for giving the navigation to the engine regarding the next step. it can be another revert-after-executor or a revert-after completion.</p>
+</li>
+<li>
+<p><strong>RetryableExecutorException</strong>: If the revert after execution is failed due to a retryable exception, you can provide that by warping with <code>RetryableExecutorException</code>.</p>
+</li>
+<li>
+<p><strong>next()</strong>: You can provide (only if you have) the next revert-after-executor with <code>revertStepManagerUtil.next()</code>.</p>
+</li>
+<li>
+<p><strong>complete()</strong>: If you don&#8217;t have any revert-after-executor to be executed as next regarding the command-executor, you can return <code>revertStepManagerUtil.complete()</code>.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_processstack">ProcessStack</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_nonretryableexecutorexception">NonRetryableExecutorException</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_reverthintstore">RevertHintStore</h3>
 
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-21 13:40:32 +0530
+Last updated 2023-08-21 22:56:24 +0530
 </div>
 </div>
 </body>

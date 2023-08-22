@@ -438,40 +438,50 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="paragraph">
-<p>According to the saga design pattern, sub processes (atomic executions) can have two executions called process execution and compensation execution.
-And those executions you van create as the methods in your application anywhere.</p>
+<p>An <strong>aggregator</strong> <a href="https://example.com" class="button">Click me</a> is the main location that all the data should be kept for the entire transaction.
+According to the StackSaga example, the entire process has set pf sub processes.
+Create order, check user activeness, make payment, increase points and dispatch the order.
+While those processes, you have to keep some data regarding the transaction.
+For instance, the process is started from creating order.
+After creating the order, you have a data to be kept.
+As a response, you will get the order id.
+You have to keep it, and you have to reuse it in your whole process.
+After creating the order, you check the user activeness.
+Then the user service is called and get the response of user&#8217;s activeness and keep that data as user is active at the time of the process started.
+Likewise, each and every process will return you to data.
+Those data you have to keep in one location.
+That location called as the aggregator.
+At the start, you have to declare the variables, and after doing each process, you can update the values in the aggregator.
+On the other hand, we can say it is the data bucket that you bring the data to each executor.</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Query executors</strong>: if some atomic process has no compensation (query execution), that kind of process is used in a query executor.</p>
-</li>
-<li>
-<p><strong>Command executors</strong>:if some atomic process has a compensation (command execution), that kind of process is used in a command executor.</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p><strong>Revert executors</strong>:for the compensation process of the command executor it can be used other sub processes if you need.</p>
-<div class="olist lowerroman">
-<ol class="lowerroman" type="i">
-<li>
-<p><strong>Revert Before Executors</strong>:if you want to execute an atomic process before executing the main revert process, you can create a Revert-Before-Executor.</p>
-</li>
-<li>
-<p><strong>Revert After Executors</strong>:if you want to execute an atomic process after executing the main revert process, you can create a Revert-Before-Executor.</p>
-</li>
-</ol>
+<div class="paragraph">
+<p>Another special thing is that the aggregator is used as the key of your entire transaction.
+That means the executors are identified by the aggregator class that you use.
+Because your entire transaction can have only one aggregator.
+Therefore, the aggregator class is used in each and every time by representing the transaction.
+For instance, according to the StackSaga example, the place order is the entire process.
+It contains many sub processes like create order, check user ect.
+Each process is introduced to the framework by using executors.
+So, for each process have separate executors.
+When you create each executor, you should mention what ks the aggregator that you want to use in that executor.</p>
 </div>
-</li>
-</ol>
-</div>
-</li>
-</ol>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+You can store/update the data in the aggregator by using the process execution only (doProcess()).
+If you want to keep some metadata while your revert/compensation processes, you can use the hint-store that the framework provides.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-21 13:37:21 +0530
+Last updated 2023-08-22 14:13:39 +0530
 </div>
 </div>
 </body>

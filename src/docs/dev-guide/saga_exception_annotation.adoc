@@ -1,0 +1,22 @@
+[source,java]
+----
+@SagaException(name = "UserInactiveException") //<1>
+public class UserInactiveException extends RuntimeException {
+    public UserInactiveException() {
+    }
+
+    public UserInactiveException(String message) {
+        super(message);
+    }
+
+    public UserInactiveException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}
+----
+
+<1> According to the example, the executor will throw and exception if the user is inactive.
+Therefore, a new exception class is created.
+And also if you think the package if the execution class will be changed in some cases in the future, you can set a fixed name for the exception.
+By annotating `@SagaException`.
+

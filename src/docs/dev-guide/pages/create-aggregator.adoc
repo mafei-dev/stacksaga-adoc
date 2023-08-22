@@ -1,4 +1,4 @@
-The aggregator class does represent your business domain, and it is the container for carrying out the data for the executors.
+The aggregator^<<aggregator_architecture,ref>>^  class does represent your business domain, and it is the container for carrying out the data for the executors.
 In side of the aggregator class, you should provide all the data regarding your entire transaction.
 
 example: Just think you are will be to make a transaction for place and order by using StackSaga. then you have to create an Aggregator class to put the data that you want to while the whole process. you can create an Aggregator class called `PlaceOrderAggregator` and provide all the data that you want like _username, orderId, transactionId_ etc... and also you might want to add complex data structure inside that aggregate class like _list of items_ regarding the items that the customer's order. then you have to create a java pojo as well. as a best practice, the framework suggests you to create all related pojo classes in the same package of the Aggregator class or as the inner classes of the Aggregator class.

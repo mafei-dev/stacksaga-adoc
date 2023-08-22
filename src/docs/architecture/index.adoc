@@ -6,7 +6,7 @@ include::pages/high_level_architecture.adoc[]
 
 include::key_processes_of_ecosystem.adoc[]
 
-=== Aggregator
+=== Aggregator [[aggregator_architecture]]
 
 include::pages/aggregator.adoc[]
 
