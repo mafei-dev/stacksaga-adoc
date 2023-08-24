@@ -1,14 +1,23 @@
+If you want to throw an exception as a <<non_retryable_executor_exception,NonRetryableExecutorException>>, The framework suggests you to create a new exception for that by warping the real exception and specially that can be annotated with `@SagaException` annotation like below.
+
+IMPORTANT: Make sure to don't add the variables for exception metadata in your new exception class.
+Keep the exception class clear.
+Because, the framework does provide another way to provide the metadata in <<stacksaga_exception_wrapping,NonRetryableExecutorException>>
+
 [source,java]
 ----
 @SagaException(name = "UserInactiveException") //<1>
 public class UserInactiveException extends RuntimeException {
+    //for just throw an exception.
     public UserInactiveException() {
     }
 
+    //for just throw an exception with message.
     public UserInactiveException(String message) {
         super(message);
     }
 
+    //for wrapping the exception.
     public UserInactiveException(String message, Throwable cause) {
         super(message, cause);
     }
@@ -31,13 +40,15 @@ However, At this moment the exception class that caused the exception does not e
 
 you can use the following methods that `NonRetryableExecutorException` does provide for checking the exception in the revert process.
 
-* `checkExceptionEqualTo(String exceptionClassName, boolean checkFullPath)`
-* `checkExceptionEqualToSagaException(Class<? extends Throwable> exceptionClass)`
-* `isExceptionEqualTo(String exceptionClassName, boolean checkFullPath)`
-* `isExceptionEqualTo(String exceptionClassName, boolean checkFullPath)`
-* `isExceptionEqualToSagaException(Class<? extends Throwable> exceptionClass)`
+. `getRealExceptionName()`: Get the name with the path of the exception class that was thrown.
+(This name is provided by the framework when the exception is thrown).
+. `getRealExceptionSimpleName()`: Get just the name of the exception class that was thrown.
+(This name is provided by the framework when the exception is thrown).
+. `*getRealSagaExceptionName()*`: Get the name that has been given with `@SagaException` annotation.
 
-Here you can see an example of how you can use that exception in the revert process.
+NOTE: You can get the `Real Saga Exception Name` only if you have annotated with `@SagaException` annotation.
+
+Here you can see an example of how you can use `SagaException` in the revert process.
 
 [source,java]
 ----
@@ -67,17 +78,22 @@ public class UpdateStockExecutor implements CommandExecutor<PlaceOrderAggregator
             RevertHintStore revertHintStore
     ) throws RetryableExecutorException {
 
-        // <1>
-        Optional<Map<String, Object>> exceptionData = realException.checkExceptionEqualToSagaException(UserInactiveException.class);
-        exceptionData.ifPresent(exceptionMtaData -> {
-            String orDefault = (String) exceptionMtaData.getOrDefault("reason", null);
-            if (orDefault.equalsIgnoreCase("BadRequest")) {
-                //do the revert process
+        realException.getRealSagaExceptionName().ifPresent(realSagaExceptionName -> {// <1>
+            if (realSagaExceptionName.equals("UserInactiveException")) {// <2>
+                // <3>
+                realException.get("reason").ifPresent(reason -> {
+                    if (reason.equalsIgnoreCase("BadRequest")) {
+                        //do the revert process
+                    }
+                });
             }
         });
-
     }
 }
 ----
 
-<1>
+<1> You can get the `RealSagaExceptionName` by calling `getRealSagaExceptionName()` method.
+And if you have annotated the exception class with `@SagaException` annotation when the exception was thrown, it will return a `Optional<String>` object with the name that has been mentioned in the `@SagaException` annotation.
+Or otherwise, the object will be empty.
+<2> check the equality of Saga exception name with the exception that you want.
+<3> due to that, the exception is the exact same, you can get and check the metadata of the exception that you have given at the moment the exception was thrown.

@@ -48,12 +48,14 @@ include::retryable_executor_exception.adoc[]
 
 include::non_retryable_executor_exception.adoc[]
 
-=== @SagaException Annotation  [[saga_exception_annotation]]
-
-include::saga_exception_annotation.adoc[]
-
 === Usage of Executors[Q&C] With Exceptions  [[usage_of_exceptions]]
 
 include::usage_of_exceptions.adoc[]
 
-=== RevertHintStore
+=== @SagaException Annotation  [[saga_exception_annotation]]
+
+include::saga_exception_annotation.adoc[]
+
+=== RevertHintStore [[saga_revert_hint_store]]
+
+include::saga_revert_hint_store.adoc[]

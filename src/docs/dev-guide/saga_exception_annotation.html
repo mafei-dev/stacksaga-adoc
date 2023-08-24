@@ -480,68 +480,93 @@ However, At this moment the exception class that caused the exception does not e
 <div class="ulist">
 <ul>
 <li>
-<p>```java
-checkExceptionEqualTo(String exceptionClassName, boolean checkFullPath)</p>
+<p><code>getRealExceptionName()</code>: Get the name with the path of the exception class that was thrown.
+(This name is provided by the framework when the exception is thrown).</p>
+</li>
+<li>
+<p><code>getRealExceptionSimpleName()</code>: Get just the name of the exception class that was thrown.
+(This name is provided by the framework when the exception is thrown).</p>
+</li>
+<li>
+<p><code><strong>getRealSagaExceptionName()</strong></code>: Get the name that has been given with <code>@SagaException</code> annotation.</p>
 </li>
 </ul>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+You can get the <code>RealSagaExceptionName</code> only if you have annotated with <code>@SagaException</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Here you can see an example of how you can use that exception in the revert process.</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>* `checkExceptionEqualToSagaException(Class&lt;? extends Throwable&gt; exceptionClass)`
-* `isExceptionEqualTo(String exceptionClassName, boolean checkFullPath)`
-* `isExceptionEqualTo(String exceptionClassName, boolean checkFullPath)`
-* `isExceptionEqualToSagaException(Class&lt;? extends Throwable&gt; exceptionClass)`
-
-Here you can see an example of how you can use that exception in the revert process.
-
-[source,java]
-----
-@SagaExecutor(
-        executeFor = &quot;stock-management-service&quot;,
-        liveCheck = true,
-        value = &quot;UpdateStockExecutor&quot;
+<pre class="CodeRay highlight"><code data-lang="java"><span style="color:#007">@SagaExecutor</span>(
+        executeFor = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">stock-management-service</span><span style="color:#710">&quot;</span></span>,
+        liveCheck = <span style="color:#069">true</span>,
+        value = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">UpdateStockExecutor</span><span style="color:#710">&quot;</span></span>
 )
-@AllArgsConstructor
-public class UpdateStockExecutor implements CommandExecutor&lt;PlaceOrderAggregator&gt; {
+<span style="color:#007">@AllArgsConstructor</span>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">UpdateStockExecutor</span> <span style="color:#088;font-weight:bold">implements</span> CommandExecutor&lt;PlaceOrderAggregator&gt; {
 
 
-    @Override
-    public ProcessStepManager&lt;PlaceOrderAggregator&gt; doProcess(
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> ProcessStepManager&lt;PlaceOrderAggregator&gt; doProcess(
             ProcessStack processStack,
             PlaceOrderAggregator aggregator,
             ProcessStepManagerUtil&lt;PlaceOrderAggregator&gt; stepManager
-    ) throws RetryableExecutorException, NonRetryableExecutorException {
+    ) <span style="color:#088;font-weight:bold">throws</span> RetryableExecutorException, NonRetryableExecutorException {
         ...
     }
 
-    @Override
-    public void doRevert(
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> doRevert(
             ProcessStack previousProcessStack,
             NonRetryableExecutorException realException,
             PlaceOrderAggregator finalAggregateState,
             RevertHintStore revertHintStore
-    ) throws RetryableExecutorException {
+    ) <span style="color:#088;font-weight:bold">throws</span> RetryableExecutorException {
 
-        // <b class="conum">(1)</b>
-        Optional&lt;Map&lt;String, Object&gt;&gt; exceptionData = realException.checkExceptionEqualToSagaException(UserInactiveException.class);
-        exceptionData.ifPresent(exceptionMtaData -&gt; {
-            String orDefault = (String) exceptionMtaData.getOrDefault(&quot;reason&quot;, null);
-            if (orDefault.equalsIgnoreCase(&quot;BadRequest&quot;)) {
-                //do the revert process
+        realException.getRealSagaExceptionName().ifPresent(realSagaExceptionName -&gt; {// <b class="conum">(1)</b>
+            <span style="color:#080;font-weight:bold">if</span> (realSagaExceptionName.equals(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">UserInactiveException</span><span style="color:#710">&quot;</span></span>)) {// <b class="conum">(2)</b>
+                // <b class="conum">(3)</b>
+                realException.get(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">reason</span><span style="color:#710">&quot;</span></span>).ifPresent(reason -&gt; {
+                    <span style="color:#080;font-weight:bold">if</span> (reason.equalsIgnoreCase(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">BadRequest</span><span style="color:#710">&quot;</span></span>)) {
+                        <span style="color:#777">//do the revert process</span>
+                    }
+                });
             }
         });
-
     }
-}
-----
-
-<b class="conum">(1)</b></code></pre>
+}</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>You can get the <code>RealSagaExceptionName</code> by calling <code>getRealSagaExceptionName()</code> method.
+And if you have annotated the exception class with <code>@SagaException</code> annotation when the exception was thrown, it will return a <code>Optional&lt;String&gt;</code> object with the name that has been mentioned in the <code>@SagaException</code> annotation.</p>
+</li>
+<li>
+<p>check the equality of Saga exception name.</p>
+</li>
+<li>
+<p>due to that, the exception is the exact same, you can check the metadata of the exception that you have given at the moment of the exception was thrown.</p>
+</li>
+</ol>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-24 15:43:48 +0530
+Last updated 2023-08-24 18:11:32 +0530
 </div>
 </div>
 </body>

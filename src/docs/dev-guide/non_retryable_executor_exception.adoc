@@ -80,7 +80,7 @@ public class CheckUserExecutor implements QueryExecutor<PlaceOrderAggregator> {
 ----
 
 <1> *NonRetryableExecutorException* is thrown due to the exception is a `BadRequest`. specially `NonRetryableExecutorException` provides a way to add the metadata regarding the exception.
-<2> Put the metadata regarding exception as a key and value.
+<2> Put the metadata regarding exception as a key and value. [[stacksaga_exception_wrapping]]
 
 NOTE: In java, we usually pass the data regarding the exception with the exception object.
 But in the StackSaga it is *not recommended*.
