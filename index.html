@@ -1793,12 +1793,91 @@ If you don&#8217;t want to continue the execution of the transaction to forward,
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>According to the example, the executor will throw and exception if the user is inactive.
-Therefore, a new exception class is created.
-And also if you think the package if the execution class will be changed in some cases in the future, you can set a fixed name for the exception.
+<td>According to the <a href="#usage_of_exceptions">usage of exceptions example</a>, you can see this exception is used to throw if the user is inactive.
+And also if you think the package of the exception class will be changed in some cases in the future, you can set a fixed name for the exception.
 By annotating <code>@SagaException</code>.</td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>At the first glance, you might think that there is no point in annotating by <code>@SagaException</code> when it is thrown.
+However, it is important when it is used in the revert executions (revert execution of the <a href="#command_executor">command executors</a> or <a href="#revert_after_executor">revert after</a> or <a href="#revert_before_executor">revert before</a>).
+As you know, the revert process goes through revert method of each and every <a href="#command_executor">command executors</a> that successfully executed in the past regarding the transaction.
+Then you have to check what is the real exception that was thrown, and what is the metadata that you want to make the decisions.
+As an example, just imagine that there is an event in the event-store to be executed.
+While the event is in the event-store, a new version is released of the particular service.
+And also the exception class has been moved to another package by mistake, or as a requirement.
+But while then, the old event is trying to be invoked through the StackSaga engine with old data.
+However, At this moment the exception class that caused the exception does not exist in the path when the exception was thrown initially.</p>
+</div>
+<div class="paragraph">
+<p>you can use the following methods that <code>NonRetryableExecutorException</code> does provide for checking the exception in the revert process.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>checkExceptionEqualTo(String exceptionClassName, boolean checkFullPath)</code></p>
+</li>
+<li>
+<p><code>checkExceptionEqualToSagaException(Class&lt;? extends Throwable&gt; exceptionClass)</code></p>
+</li>
+<li>
+<p><code>isExceptionEqualTo(String exceptionClassName, boolean checkFullPath)</code></p>
+</li>
+<li>
+<p><code>isExceptionEqualTo(String exceptionClassName, boolean checkFullPath)</code></p>
+</li>
+<li>
+<p><code>isExceptionEqualToSagaException(Class&lt;? extends Throwable&gt; exceptionClass)</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here you can see an example of how you can use that exception in the revert process.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight nowrap"><code data-lang="java"><span style="color:#007">@SagaExecutor</span>(
+        executeFor = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">stock-management-service</span><span style="color:#710">&quot;</span></span>,
+        liveCheck = <span style="color:#069">true</span>,
+        value = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">UpdateStockExecutor</span><span style="color:#710">&quot;</span></span>
+)
+<span style="color:#007">@AllArgsConstructor</span>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">UpdateStockExecutor</span> <span style="color:#088;font-weight:bold">implements</span> CommandExecutor&lt;PlaceOrderAggregator&gt; {
+
+
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> ProcessStepManager&lt;PlaceOrderAggregator&gt; doProcess(
+            ProcessStack processStack,
+            PlaceOrderAggregator aggregator,
+            ProcessStepManagerUtil&lt;PlaceOrderAggregator&gt; stepManager
+    ) <span style="color:#088;font-weight:bold">throws</span> RetryableExecutorException, NonRetryableExecutorException {
+        ...
+    }
+
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">void</span> doRevert(
+            ProcessStack previousProcessStack,
+            NonRetryableExecutorException realException,
+            PlaceOrderAggregator finalAggregateState,
+            RevertHintStore revertHintStore
+    ) <span style="color:#088;font-weight:bold">throws</span> RetryableExecutorException {
+
+        <i class="conum" data-value="1"></i><b>(1)</b>
+        Optional&lt;<span style="color:#0a8;font-weight:bold">Map</span>&lt;<span style="color:#0a8;font-weight:bold">String</span>, <span style="color:#0a8;font-weight:bold">Object</span>&gt;&gt; exceptionData = realException.checkExceptionEqualToSagaException(UserInactiveException.class);
+        exceptionData.ifPresent(exceptionMtaData -&gt; {
+            <span style="color:#0a8;font-weight:bold">String</span> orDefault = (<span style="color:#0a8;font-weight:bold">String</span>) exceptionMtaData.getOrDefault(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">reason</span><span style="color:#710">&quot;</span></span>, <span style="color:#069">null</span>);
+            <span style="color:#080;font-weight:bold">if</span> (orDefault.equalsIgnoreCase(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">BadRequest</span><span style="color:#710">&quot;</span></span>)) {
+                <span style="color:#777">//do the revert process</span>
+            }
+        });
+
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&lt;1&gt;</p>
 </div>
 </div>
 <div class="sect2">

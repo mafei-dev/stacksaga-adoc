@@ -15,8 +15,69 @@ public class UserInactiveException extends RuntimeException {
 }
 ----
 
-<1> According to the example, the executor will throw and exception if the user is inactive.
-Therefore, a new exception class is created.
-And also if you think the package if the execution class will be changed in some cases in the future, you can set a fixed name for the exception.
+<1> According to the <<usage_of_exceptions,usage of exceptions example>>, you can see this exception is used to throw if the user is inactive.
+And also if you think the package of the exception class will be changed in some cases in the future, you can set a fixed name for the exception.
 By annotating `@SagaException`.
 
+At the first glance, you might think that there is no point in annotating by `@SagaException` when it is thrown.
+However, it is important when it is used in the revert executions (revert execution of the <<command_executor,command executors>> or <<revert_after_executor,revert after>> or <<revert_before_executor,revert before>>).
+As you know, the revert process goes through revert method of each and every <<command_executor,command executors>> that successfully executed in the past regarding the transaction.
+Then you have to check what is the real exception that was thrown, and what is the metadata that you want to make the decisions.
+As an example, just imagine that there is an event in the event-store to be executed.
+While the event is in the event-store, a new version is released of the particular service.
+And also the exception class has been moved to another package by mistake, or as a requirement.
+But while then, the old event is trying to be invoked through the StackSaga engine with old data.
+However, At this moment the exception class that caused the exception does not exist in the path when the exception was thrown initially.
+
+you can use the following methods that `NonRetryableExecutorException` does provide for checking the exception in the revert process.
+
+* `checkExceptionEqualTo(String exceptionClassName, boolean checkFullPath)`
+* `checkExceptionEqualToSagaException(Class<? extends Throwable> exceptionClass)`
+* `isExceptionEqualTo(String exceptionClassName, boolean checkFullPath)`
+* `isExceptionEqualTo(String exceptionClassName, boolean checkFullPath)`
+* `isExceptionEqualToSagaException(Class<? extends Throwable> exceptionClass)`
+
+Here you can see an example of how you can use that exception in the revert process.
+
+[source,java]
+----
+@SagaExecutor(
+        executeFor = "stock-management-service",
+        liveCheck = true,
+        value = "UpdateStockExecutor"
+)
+@AllArgsConstructor
+public class UpdateStockExecutor implements CommandExecutor<PlaceOrderAggregator> {
+
+
+    @Override
+    public ProcessStepManager<PlaceOrderAggregator> doProcess(
+            ProcessStack processStack,
+            PlaceOrderAggregator aggregator,
+            ProcessStepManagerUtil<PlaceOrderAggregator> stepManager
+    ) throws RetryableExecutorException, NonRetryableExecutorException {
+        ...
+    }
+
+    @Override
+    public void doRevert(
+            ProcessStack previousProcessStack,
+            NonRetryableExecutorException realException,
+            PlaceOrderAggregator finalAggregateState,
+            RevertHintStore revertHintStore
+    ) throws RetryableExecutorException {
+
+        // <1>
+        Optional<Map<String, Object>> exceptionData = realException.checkExceptionEqualToSagaException(UserInactiveException.class);
+        exceptionData.ifPresent(exceptionMtaData -> {
+            String orDefault = (String) exceptionMtaData.getOrDefault("reason", null);
+            if (orDefault.equalsIgnoreCase("BadRequest")) {
+                //do the revert process
+            }
+        });
+
+    }
+}
+----
+
+<1>
