@@ -844,9 +844,8 @@ And those executions you van create as the methods in your application anywhere.
 </li>
 </ol>
 </div>
-</div>
-<div class="sect2">
-<h3 id="query_executor">Query Executor.</h3>
+<div class="sect3">
+<h4 id="query_executor">Query Executor.</h4>
 <div class="paragraph">
 <p>You can create any number of your custom Query-Executors regarding the Aggregator.
 Here you can see how you can create a Query-Executor for your <code><a href="#creating_aggregator_class">PlaceOrderAggregator</a></code>.</p>
@@ -903,8 +902,8 @@ The executor is identified with this value by StackSaga engine. after configurin
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="command_executor">Command Executor.</h3>
+<div class="sect3">
+<h4 id="command_executor">Command Executor.</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">// <b class="conum">(1)</b>
@@ -1003,8 +1002,8 @@ According to the example, the revert after execution will be started from <a hre
 </div>
 <hr>
 </div>
-<div class="sect2">
-<h3 id="revert_before_executor">Revert Before Executor.</h3>
+<div class="sect3">
+<h4 id="revert_before_executor">Revert Before Executor.</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">//<b class="conum">(1)</b>
@@ -1083,8 +1082,8 @@ That is the method is executed by the StackSaga engine.</p>
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="revert_after_executor">Revert After Executor.</h3>
+<div class="sect3">
+<h4 id="revert_after_executor">Revert After Executor.</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">//<b class="conum">(1)</b>
@@ -1161,6 +1160,7 @@ That is the method is executed by the StackSaga engine.</p>
 <p><strong>complete()</strong>: If you don&#8217;t have any revert-after-executor to be executed as next regarding the command-executor, you can return <code>revertStepManagerUtil.complete()</code>.</p>
 </li>
 </ol>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1994,23 +1994,26 @@ Even though <code>SagaTemplate&lt;A&gt;</code> can be autowired anywhere in the 
 <div class="sect2">
 <h3 id="custom_thread_pool_configuration">Custom Thread-pool configuration</h3>
 <div class="paragraph">
-<p>In StackSaga framework, there are several thread-pools are used behind the scene with default configurations.</p>
+<p>In StackSaga framework, there are several thread-pools are used behind the scene with default configurations.
+All the executions are not executed with a single thread-pool to ensure the resiliency of the application.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. Thread-pools in StackSaga framework</caption>
 <colgroup>
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1112%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">pool-name</th>
+<th class="tableblock halign-left valign-top">Provider Interface</th>
 <th class="tableblock halign-left valign-top">dependency</th>
 <th class="tableblock halign-left valign-top">default-implementation</th>
 <th class="tableblock halign-left valign-top">prefix</th>
@@ -2022,7 +2025,8 @@ Even though <code>SagaTemplate&lt;A&gt;</code> can be autowired anywhere in the 
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SagaDiscoveryTransactionTaskExecutor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#saga_discovery_transaction_task_executor"><code>SagaDiscoveryTransactionTaskExecutor</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SagaDiscoveryTransactionTaskExecutorProvider</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="nowrap"><code>stacksaga-spring-boot-starter-core</code></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>SagaDiscoveryTransactionTaskExecutorProviderDefault</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="nowrap"><strong>saga-tx-</strong></span></p></td>
@@ -2032,7 +2036,8 @@ Even though <code>SagaTemplate&lt;A&gt;</code> can be autowired anywhere in the 
 <td class="tableblock halign-left valign-top"><p class="tableblock">True</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SagaEventExecutorProvider</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#saga_event_task_executor"><code>SagaEventTaskExecutor</code></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SagaEventTaskExecutorProvider</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="nowrap"><code>stacksaga-spring-boot-starter-core</code></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>SagaEventExecutorProviderDefault</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="nowrap"><strong>saga-event-</strong></span></p></td>
@@ -2042,6 +2047,7 @@ Even though <code>SagaTemplate&lt;A&gt;</code> can be autowired anywhere in the 
 <td class="tableblock halign-left valign-top"><p class="tableblock">True</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#saga_admin_task_executor"><code>SagaAdminTaskExecutor</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>SagaAdminTaskExecutorProvider</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="nowrap"><code>stacksaga-spring-boot-starter-discovery</code></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>SagaAdminTaskExecutorProviderDefault</code></p></td>
@@ -2052,6 +2058,7 @@ Even though <code>SagaTemplate&lt;A&gt;</code> can be autowired anywhere in the 
 <td class="tableblock halign-left valign-top"><p class="tableblock">True</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#saga_discovery_file_task_executor"><code>SagaDiscoveryFileTaskExecutor</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>SagaDiscoveryFileTaskExecutorProvider</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="nowrap"><code>stacksaga-spring-boot-starter-discovery</code></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>SagaDiscoveryFileTaskExecutorProviderDefault</code></p></td>
@@ -2062,6 +2069,7 @@ Even though <code>SagaTemplate&lt;A&gt;</code> can be autowired anywhere in the 
 <td class="tableblock halign-left valign-top"><p class="tableblock">True</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#saga_discovery_retry_transaction_task_executor"><code>SagaDiscoveryRetryTransactionTaskExecutor</code></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>SagaDiscoveryRetryTransactionTaskExecutorProvider</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><span class="nowrap"><code>stacksaga-spring-boot-starter-discovery</code></span></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>SagaDiscoveryRetryTransactionTaskExecutorProviderDefault</code></p></td>
@@ -2078,42 +2086,356 @@ Even though <code>SagaTemplate&lt;A&gt;</code> can be autowired anywhere in the 
 </div>
 <div class="sect3">
 <h4 id="saga_discovery_transaction_task_executor">Saga Discovery Transaction TaskExecutor</h4>
+<div class="paragraph">
+<p><code>SagaDiscoveryTransactionTaskExecutor</code> is the main pool. because this thread-pool is used for starting your transaction when it is called the <a href="#saga_template"><code>SagaTemplate.process()</code></a> method. after starting the transaction, this thread-pool will handle all the executions of the executors.</p>
+</div>
+<div class="paragraph">
+<p>— In case if you want to customize the default configuration, you can update the default configuration as follows:</p>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span style="color:#007">@Component</span>
-<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CustomDiscoveryTransactionTaskExecutor</span> <span style="color:#088;font-weight:bold">implements</span> SagaDiscoveryTransactionTaskExecutorProvider {
+<pre class="CodeRay highlight"><code data-lang="java"><span style="color:#007">@Component</span> //<b class="conum">(1)</b>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CustomSagaDiscoveryTransactionTaskExecutor</span>
+    <span style="color:#088;font-weight:bold">implements</span> SagaDiscoveryTransactionTaskExecutorProvider { //<b class="conum">(2)</b>
+
     <span style="color:#007">@Override</span>
-    <span style="color:#088;font-weight:bold">public</span> ThreadPoolTaskExecutor getSagaTransactionTaskExecutor() {
+    <span style="color:#088;font-weight:bold">public</span> ThreadPoolTaskExecutor getTaskExecutor() {
+        //<b class="conum">(3)</b>
         ThreadPoolTaskExecutor executor = <span style="color:#080;font-weight:bold">new</span> ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(<span style="color:#00D">100</span>);
+        executor.setCorePoolSize(<span style="color:#0a8;font-weight:bold">Runtime</span>.getRuntime().availableProcessors() * <span style="color:#00D">5</span>);
         ...
         return executor;
     }
 }</code></pre>
 </div>
 </div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Mark the class as a spring <code>@Component</code> (bean).</p>
+</li>
+<li>
+<p>Implement the custom task-executor provider class from <code>SagaDiscoveryTransactionTaskExecutorProvider</code> and override the <code>getTaskExecutor()</code> method.</p>
+</li>
+<li>
+<p>Provide your custom task-executor configurations by creating a new instance of <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/concurrent/ThreadPoolTaskExecutor.html"><code>ThreadPoolTaskExecutor</code></a>.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Even though you change the prefix of the thread-pool when the task-executor is created, the prefix is restored for maintaining the thread-name uniqueness. <a href="#custom_thread_pool_configuration">See the prefix of each thread-pool</a>.
+</td>
+</tr>
+</table>
+</div>
+<hr>
 </div>
 <div class="sect3">
-<h4 id="saga_event_executor">Saga Event TaskExecutor</h4>
-
+<h4 id="saga_event_task_executor">Saga Event TaskExecutor</h4>
+<div class="paragraph">
+<p>— In case if you want to customize the default configuration, you can update the default configuration as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span style="color:#007">@Component</span> //<b class="conum">(1)</b>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CustomSagaEventTaskExecutor</span> <span style="color:#088;font-weight:bold">implements</span> SagaEventTaskExecutorProvider { //<b class="conum">(2)</b>
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> ThreadPoolTaskExecutor getTaskExecutor() {
+        // <b class="conum">(3)</b>
+        ThreadPoolTaskExecutor executor = <span style="color:#080;font-weight:bold">new</span> ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(<span style="color:#0a8;font-weight:bold">Runtime</span>.getRuntime().availableProcessors() * <span style="color:#00D">5</span>);
+        ...
+        return executor;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Mark the class as a spring <code>@Component</code> (bean).</p>
+</li>
+<li>
+<p>Implement the custom task-executor provider class from <code>SagaEventTaskExecutorProvider</code> and override the <code>getTaskExecutor()</code> method.</p>
+</li>
+<li>
+<p>Provide your custom task-executor configurations by creating a new instance of <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/concurrent/ThreadPoolTaskExecutor.html"><code>ThreadPoolTaskExecutor</code></a>.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Even though you change the prefix of the thread-pool when the task-executor is created, the prefix is restored for maintaining the thread-name uniqueness. <a href="#custom_thread_pool_configuration">See the prefix of each thread-pool</a>.
+</td>
+</tr>
+</table>
+</div>
+<hr>
 </div>
 <div class="sect3">
 <h4 id="saga_admin_task_executor">Saga Admin TaskExecutor</h4>
+<div class="paragraph">
+<p>— In case if you want to customize the default configuration, you can update the default configuration as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span style="color:#007">@Component</span> //<b class="conum">(1)</b>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CustomSagaAdminTaskExecutor</span>
+    <span style="color:#088;font-weight:bold">implements</span> SagaAdminTaskExecutorProvider {//<b class="conum">(2)</b>
 
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> ThreadPoolTaskExecutor getTaskExecutor() {
+        //<b class="conum">(3)</b>
+        ThreadPoolTaskExecutor executor = <span style="color:#080;font-weight:bold">new</span> ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(<span style="color:#0a8;font-weight:bold">Runtime</span>.getRuntime().availableProcessors() * <span style="color:#00D">5</span>);
+        ...
+        return executor;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Mark the class as a spring <code>@Component</code> (bean).</p>
+</li>
+<li>
+<p>Implement the custom task-executor provider class from <code>SagaAdminTaskExecutorProvider</code> and override the <code>getTaskExecutor()</code> method.</p>
+</li>
+<li>
+<p>Provide your custom task-executor configurations by creating a new instance of <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/concurrent/ThreadPoolTaskExecutor.html"><code>ThreadPoolTaskExecutor</code></a>.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Even though you change the prefix of the thread-pool when the task-executor is created, the prefix is restored for maintaining the thread-name uniqueness. <a href="#custom_thread_pool_configuration">See the prefix of each thread-pool</a>.
+</td>
+</tr>
+</table>
+</div>
+<hr>
 </div>
 <div class="sect3">
 <h4 id="saga_discovery_file_task_executor">Saga Discovery File TaskExecutor</h4>
+<div class="paragraph">
+<p>— In case if you want to customize the default configuration, you can update the default configuration as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span style="color:#007">@Component</span> //<b class="conum">(1)</b>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CustomSagaDiscoveryFileTaskExecutor</span>
+    <span style="color:#088;font-weight:bold">implements</span> SagaDiscoveryFileTaskExecutorProvider { //<b class="conum">(2)</b>
 
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> ThreadPoolTaskExecutor getTaskExecutor() {
+        //<b class="conum">(3)</b>
+        ThreadPoolTaskExecutor executor = <span style="color:#080;font-weight:bold">new</span> ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(<span style="color:#0a8;font-weight:bold">Runtime</span>.getRuntime().availableProcessors() * <span style="color:#00D">5</span>);
+        ...
+        return executor;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Mark the class as a spring <code>@Component</code> (bean).</p>
+</li>
+<li>
+<p>Implement the custom task-executor provider class from <code>SagaDiscoveryFileTaskExecutorProvider</code> and override the <code>getTaskExecutor()</code> method.</p>
+</li>
+<li>
+<p>Provide your custom task-executor configurations by creating a new instance of <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/concurrent/ThreadPoolTaskExecutor.html"><code>ThreadPoolTaskExecutor</code></a>.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Even though you change the prefix of the thread-pool when the task-executor is created, the prefix is restored for maintaining the thread-name uniqueness. <a href="#custom_thread_pool_configuration">See the prefix of each thread-pool</a>.
+</td>
+</tr>
+</table>
+</div>
+<hr>
 </div>
 <div class="sect3">
 <h4 id="saga_discovery_retry_transaction_task_executor">Saga Discovery Retry Transaction TaskExecutor</h4>
-
+<div class="paragraph">
+<p>Even though the transaction is started by the <a href="#saga_discovery_transaction_task_executor"><code>SagaDiscoveryTransactionTaskExecutor</code></a>
+thread-pool, if the transaction is paused due a <a href="#retryable_executor_exception"><code>RetryableExecutorException</code></a>, the transaction should be retried again after some time (configured schedule).
+For those executions, the <code>SagaDiscoveryRetryTransactionTaskExecutor</code> thread-pool is used.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+It ensures the application&#8217;s resiliency.
+And also the application can receive the new transaction without interrupting the transaction retry-bulk.
+The summary is that the retry execution does not disturb to the brand-new transaction.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>— In case if you want to customize the default configuration, you can update the default configuration as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span style="color:#007">@Component</span> //<b class="conum">(1)</b>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CustomSagaDiscoveryRetryTransactionTaskExecutor</span>
+    <span style="color:#088;font-weight:bold">implements</span> SagaDiscoveryRetryTransactionTaskExecutorProvider {//<b class="conum">(2)</b>
+
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> ThreadPoolTaskExecutor getTaskExecutor() {
+        //<b class="conum">(3)</b>
+        ThreadPoolTaskExecutor executor = <span style="color:#080;font-weight:bold">new</span> ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(<span style="color:#0a8;font-weight:bold">Runtime</span>.getRuntime().availableProcessors() * <span style="color:#00D">5</span>);
+        ...
+        return executor;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Mark the class as a spring <code>@Component</code> (bean).</p>
+</li>
+<li>
+<p>Implement the custom task-executor provider class from <code>SagaDiscoveryRetryTransactionTaskExecutorProvider</code> and override the <code>getTaskExecutor()</code> method.</p>
+</li>
+<li>
+<p>Provide your custom task-executor configurations by creating a new instance of <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/concurrent/ThreadPoolTaskExecutor.html"><code>ThreadPoolTaskExecutor</code></a>.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Even though you change the prefix of the thread-pool when the task-executor is created, the prefix is restored for maintaining the thread-name uniqueness. <a href="#custom_thread_pool_configuration">See the prefix of each thread-pool</a>.
+</td>
+</tr>
+</table>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="custom_admin_connect_resttemplate_configuration">Custom Admin Connector configuration</h3>
+<div class="paragraph">
+<p>As per the architecture, all the StackSaga clients connect to the StackSaga admin server initially (<strong>for submitting the instance metadata</strong>) and as well as during the StackSaga-client is being run (<strong>for submitting the terminated transaction data</strong>).</p>
+</div>
+<div class="paragraph">
+<p>IF you want to connect your service with the StackSaga admin server, you have to have a <strong>service-account</strong> that has been created by the StackSaga admin.
+IF you have a <strong>service-account</strong>, you can provide your service-account username and password for the basic authentication purpose.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+In the microservice architecture, you will have hundreds of instances running on.
+It is enough to have a one service-account for one service-name.
+(The <code>spring.application.name</code> is considered as the service-name.)
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>After creating the <code>service-account</code>, you will have the basic authentication for the registered service.
+Those basic authentication can be provided as follows in the configuration property file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="properties">stacksaga.connect.admin-url=http://localhost:4444
+stacksaga.connect.admin-username=order-service
+stacksaga.connect.admin-password=*****************</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition to that, if you want to provide more complex configurations for the http client (RestTemplate) like enable custom SSL configurations, You can provide your own <code>RestTemplate</code> for the StackSaga framework to use when the client connects to the admin-server.
+Then the default configuration (<code>SagaAdminConnectRestTemplateProviderDefault</code>) will be overridden with your custom configurations.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span style="color:#007">@Component</span> //<b class="conum">(1)</b>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CustomAdminConnectRestTemplate</span> <span style="color:#088;font-weight:bold">implements</span> SagaAdminConnectRestTemplateProvider {//<b class="conum">(2)</b>
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> RestTemplate getRestTemplate() {
+        //<b class="conum">(3)</b>
+        RestTemplate restTemplate = <span style="color:#080;font-weight:bold">new</span> RestTemplate();
+        <span style="color:#777">//provide your custom configurations</span>
+        <span style="color:#080;font-weight:bold">return</span> restTemplate;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Annotate the <code>CustomAdminConnectRestTemplate</code> class with spring <code>@Component</code> annotation.</p>
+</li>
+<li>
+<p>Implement the custom RestTemplate provider class from <code>SagaAdminConnectRestTemplateProvider</code> and override the <code>getRestTemplate()</code> method.</p>
+</li>
+<li>
+<p>Provide the custom RestTemplate with your own configurations.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+Make sure to add the <code>rootUri</code> of the Admin-server to the new restTemplate
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="custom_service_communication_resttemplate_configuration">Custom Service Communication configuration</h3>
+
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-25 17:48:10 +0530
+Last updated 2023-08-26 00:35:00 +0530
 </div>
 </div>
 </body>

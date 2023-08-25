@@ -80,7 +80,7 @@ include::custom_thread_pool_configuration.adoc[]
 
 include::saga_discovery_transaction_task_executor.adoc[]
 
-==== Saga Event TaskExecutor [[saga_event_executor]]
+==== Saga Event TaskExecutor [[saga_event_task_executor]]
 
 include::saga_event_task_executor.adoc[]
 
@@ -96,6 +96,17 @@ include::saga_discovery_file_task_executor.adoc[]
 
 include::saga_discovery_retry_transaction_task_executor.adoc[]
 
+=== Connect Admin [[connect_admin]]
+
+include::connect_admin.adoc[]
+
+==== Custom Admin Connector configuration [[custom_admin_connect_resttemplate_configuration]]
+
+include::custom_admin_connect_resttemplate_configuration.adoc[]
+
+=== Custom Service Communication configuration [[custom_service_communication_resttemplate_configuration]]
+
+include::custom_service_communication_resttemplate_configuration.adoc[]
 
 
 

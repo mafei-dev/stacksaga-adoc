@@ -438,55 +438,84 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="paragraph">
-<p>The handler is where the transaction is initiated as well as you&#8217;re notified about each and every action while the process by the SEC.
-As an example, you hand over your transaction to the stack saga by mentioning the starting point.
-After handing over, the framework will invoke your executors one by one.
-This process happens from the base microservice.
-(The application that you are working on) So base microservice is the responsible service to update the status of each sub process.
-According to the example, after doing the payment successfully, the order status should be updated as payment successful.
-How can you get notified about that?
-Handler is the place you get notified about the event after executing each and every sub process.
-Likewise, there are many callback functions are there to be notified about some events by the framework.
-The following table will show you what they&#8217;re.</p>
+<p>As per the architecture, all the StackSaga clients connect to the StackSaga admin server initially (<strong>for submitting the instance metadata</strong>) and as well as during the StackSaga-client is being run (<strong>for submitting the terminated transaction data</strong>).</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><code><strong>onEachProcessPerformed</strong></code></p>
-<div class="ulist">
-<ul>
-<li>
-<p>This method will be invoked after executing each sub process successfully.
-— Just think about our example.
-After payment process success, the order status should be updated as payment successful and also after successfully dispatched the order, the order status should be updated as order dispatched.
-And just think, you want to update your customer by sending an email after the payment process and after dispatching the process.
-Handler is the place that you can invoke your processes.</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>IF you want to connect your service with the StackSaga admin server, you have to have a <strong>service-account</strong> that has been created by the StackSaga admin.
+IF you have a <strong>service-account</strong>, you can provide your service-account username and password for the basic authentication purpose.</p>
 </div>
-</li>
-<li>
-<p><code><strong>onEachRevertPerformed</strong></code></p>
-<div class="ulist">
-<ul>
-<li>
-<p>This is the opposite of the onEachProcess.
-That works after every successful process.
-If the whole transaction has to be reverted at some point, the compensation process starts from that point.
-Then the revert method of each executed executor starts to be executed as the compensations.
-If you want to get notified after each compensation, onEachRevert method will be invoked by the framework with all the data that you want.<br>
- According to the example, if the payment process is failed, you have to update the order status as payment failed.
-This kind of execution can be proceeded in this method.</p>
-</li>
-</ul>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+In the microservice architecture, you will have hundreds of instances running on.
+It is enough to have a one service-account for one service-name.
+(The <code>spring.application.name</code> is considered as the service-name.)
+</td>
+</tr>
+</table>
 </div>
+<div class="paragraph">
+<p>After creating the <code>service-account</code>, you will have the basic authentication for the registered service.
+Those basic authentication can be provided as follows in the configuration property file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="properties">stacksaga.connect.admin-url=http://localhost:4444
+stacksaga.connect.admin-username=order-service
+stacksaga.connect.admin-password=*****************</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In addition to that, if you want to provide more complex configurations for the http client (RestTemplate) like enable custom SSL configurations, You can provide your own <code>RestTemplate</code> for the StackSaga framework to use when the client connects to the admin-server.
+Then the default configuration (<code>SagaAdminConnectRestTemplateProviderDefault</code>) will be overridden with your custom configurations.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span style="color:#007">@Component</span> //<b class="conum">(1)</b>
+<span style="color:#088;font-weight:bold">public</span> <span style="color:#339;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">CustomAdminConnectRestTemplate</span> <span style="color:#088;font-weight:bold">implements</span> SagaAdminConnectRestTemplateProvider {//<b class="conum">(2)</b>
+    <span style="color:#007">@Override</span>
+    <span style="color:#088;font-weight:bold">public</span> RestTemplate getRestTemplate() {
+        //<b class="conum">(3)</b>
+        RestTemplate restTemplate = <span style="color:#080;font-weight:bold">new</span> RestTemplate();
+        <span style="color:#777">//provide your custom configurations</span>
+        <span style="color:#080;font-weight:bold">return</span> restTemplate;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<ol>
+<li>
+<p>Annotate the <code>CustomAdminConnectRestTemplate</code> class with spring <code>@Component</code> annotation.</p>
+</li>
+<li>
+<p>Implement the custom RestTemplate provider class from <code>SagaAdminConnectRestTemplateProvider</code> and override the <code>getRestTemplate()</code> method.</p>
+</li>
+<li>
+<p>Provide the custom RestTemplate with your own configurations.</p>
 </li>
 </ol>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+Make sure to add the <code>rootUri</code> of the Admin-server to the new restTemplate
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-25 11:42:34 +0530
+Last updated 2023-08-26 01:44:15 +0530
 </div>
 </div>
 </body>

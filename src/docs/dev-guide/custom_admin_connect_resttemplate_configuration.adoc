@@ -1,0 +1,26 @@
+In addition to the default configurations, if you want to provide more complex configurations for the http client (RestTemplate) like enable custom SSL configurations, You can provide your own `RestTemplate` for the StackSaga framework to use when the client connects to the admin-server.
+Then the default configuration (`SagaAdminConnectRestTemplateProviderDefault`) will be overridden with your custom configurations.
+
+— you can provide your custom configuration like below:
+
+[source,java]
+----
+@Component //<1>
+public class CustomAdminConnectRestTemplate implements SagaAdminConnectRestTemplateProvider {//<2>
+    @Override
+    public RestTemplate getRestTemplate() {
+        //<3>
+        RestTemplate restTemplate = new RestTemplate();
+        //provide your custom configurations
+        return restTemplate;
+    }
+}
+----
+
+<1> Annotate the `CustomAdminConnectRestTemplate` class with spring `@Component` annotation.
+<2> Implement the custom RestTemplate provider class from `SagaAdminConnectRestTemplateProvider` and override the `getRestTemplate()` method.
+<3> Provide the custom RestTemplate with your own configurations.
+
+WARNING: Make sure to add the `rootUri` of the Admin-server to the new restTemplate.
+
+TIP: If you want to get the admin-server connection configuration from the configuration file for your `CustomAdminConnectRestTemplate` class, you can autowire `StackSagaAdminConfiguration` and get the configurations from it.

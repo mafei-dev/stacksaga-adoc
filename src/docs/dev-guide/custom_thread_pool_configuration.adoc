@@ -1,10 +1,12 @@
 In StackSaga framework, there are several thread-pools are used behind the scene with default configurations.
+All the executions are not executed with a single thread-pool to ensure the resiliency of the application.
 
 .Thread-pools in StackSaga framework
 |===
-|pool-name |dependency |default-implementation |prefix |core pool size |max pool size |Queue Capacity |WaitOnShutdown
+|pool-name |Provider Interface|dependency |default-implementation |prefix |core pool size |max pool size |Queue Capacity |WaitOnShutdown
 
-|`SagaDiscoveryTransactionTaskExecutor`
+|<<saga_discovery_transaction_task_executor,`SagaDiscoveryTransactionTaskExecutor`>>
+|`SagaDiscoveryTransactionTaskExecutorProvider`
 |[nowrap]#`stacksaga-spring-boot-starter-core`#
 |`SagaDiscoveryTransactionTaskExecutorProviderDefault`
 |[nowrap]#*saga-tx-*#
@@ -13,7 +15,8 @@ In StackSaga framework, there are several thread-pools are used behind the scene
 |Default
 |True
 
-|`SagaEventExecutorProvider`
+|<<saga_event_task_executor,`SagaEventTaskExecutor`>>
+|`SagaEventTaskExecutorProvider`
 |[nowrap]#`stacksaga-spring-boot-starter-core`#
 |`SagaEventExecutorProviderDefault`
 |[nowrap]#*saga-event-*#
@@ -22,6 +25,7 @@ In StackSaga framework, there are several thread-pools are used behind the scene
 |Default
 |True
 
+|<<saga_admin_task_executor,`SagaAdminTaskExecutor`>>
 |`SagaAdminTaskExecutorProvider`
 |[nowrap]#`stacksaga-spring-boot-starter-discovery`#
 |`SagaAdminTaskExecutorProviderDefault`
@@ -32,6 +36,7 @@ In StackSaga framework, there are several thread-pools are used behind the scene
 |True
 
 
+|<<saga_discovery_file_task_executor,`SagaDiscoveryFileTaskExecutor`>>
 |`SagaDiscoveryFileTaskExecutorProvider`
 |[nowrap]#`stacksaga-spring-boot-starter-discovery`#
 |`SagaDiscoveryFileTaskExecutorProviderDefault`
@@ -42,6 +47,7 @@ In StackSaga framework, there are several thread-pools are used behind the scene
 |True
 
 
+|<<saga_discovery_retry_transaction_task_executor,`SagaDiscoveryRetryTransactionTaskExecutor`>>
 |`SagaDiscoveryRetryTransactionTaskExecutorProvider`
 |[nowrap]#`stacksaga-spring-boot-starter-discovery`#
 |`SagaDiscoveryRetryTransactionTaskExecutorProviderDefault`

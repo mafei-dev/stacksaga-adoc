@@ -9,7 +9,7 @@
 :page-layout: docs
 :linkattrs:
 :experimental:
-:source-highlighter: coderay
+:source-highlighter: rouge
 :appendix-caption: appendix-caption
 :sectanchors:
 // :stylesheet: resources/css/styles.css
