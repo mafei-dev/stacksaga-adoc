@@ -22,19 +22,19 @@ include::pages/complex_aggrgator.adoc[]
 
 include::pages/saga_executors.adoc[]
 
-=== Query Executor. [[query_executor]]
+==== Query Executor. [[query_executor]]
 
 include::pages/query_executor.adoc[]
 
-=== Command Executor. [[command_executor]]
+==== Command Executor. [[command_executor]]
 
 include::pages/command_executor.adoc[]
 
-=== Revert Before Executor. [[revert_before_executor]]
+==== Revert Before Executor. [[revert_before_executor]]
 
 include::pages/revert_before_executor.adoc[]
 
-=== Revert After Executor. [[revert_after_executor]]
+==== Revert After Executor. [[revert_after_executor]]
 
 include::pages/revert_after_executor.adoc[]
 
@@ -71,5 +71,31 @@ include::saga_template.adoc[]
 === TrashFileListener [[saga_trash_listener]]
 
 include::saga_trash_listener.adoc[]
+
+=== Custom Thread-pool configuration [[custom_thread_pool_configuration]]
+
+include::custom_thread_pool_configuration.adoc[]
+
+==== Saga Discovery Transaction TaskExecutor [[saga_discovery_transaction_task_executor]]
+
+include::saga_discovery_transaction_task_executor.adoc[]
+
+==== Saga Event TaskExecutor [[saga_event_executor]]
+
+include::saga_event_task_executor.adoc[]
+
+==== Saga Admin TaskExecutor [[saga_admin_task_executor]]
+
+include::saga_admin_task_executor.adoc[]
+
+==== Saga Discovery File TaskExecutor [[saga_discovery_file_task_executor]]
+
+include::saga_discovery_file_task_executor.adoc[]
+
+==== Saga Discovery Retry Transaction TaskExecutor [[saga_discovery_retry_transaction_task_executor]]
+
+include::saga_discovery_retry_transaction_task_executor.adoc[]
+
+
 
 

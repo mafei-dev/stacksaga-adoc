@@ -14,7 +14,7 @@ public class PlaceOrderSagaController {
 
     private final SagaTemplate<PlaceOrderAggregator> sagaTemplate; //<1>
 
-    @GetMapping
+    @PostMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Map<String, String> placeOrder() {
         //<2>
@@ -51,4 +51,4 @@ It will be the transaction id for the entire transaction.
 
 '''
 
-TIP: Even though `SagaTemplate<A>` can be autowired anywhere in the application, As the best practice it is recommended to use `SagaTemplate<A>` instead of the `EventHandler` class according to the StackSaga design pattern called <<test,CHES>>.
+TIP: Even though `SagaTemplate<A>` can be autowired anywhere in the application, As the best practice it is recommended to use `SagaTemplate<A>` inside of an `EventHandler` class according to the StackSaga design pattern called <<test,CHES>>.

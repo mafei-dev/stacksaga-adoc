@@ -1,0 +1,58 @@
+In StackSaga framework, there are several thread-pools are used behind the scene with default configurations.
+
+.Thread-pools in StackSaga framework
+|===
+|pool-name |dependency |default-implementation |prefix |core pool size |max pool size |Queue Capacity |WaitOnShutdown
+
+|`SagaDiscoveryTransactionTaskExecutor`
+|[nowrap]#`stacksaga-spring-boot-starter-core`#
+|`SagaDiscoveryTransactionTaskExecutorProviderDefault`
+|[nowrap]#*saga-tx-*#
+|[nowrap]#Available Processors * 1#
+|[nowrap]#Available Processors * 3#
+|Default
+|True
+
+|`SagaEventExecutorProvider`
+|[nowrap]#`stacksaga-spring-boot-starter-core`#
+|`SagaEventExecutorProviderDefault`
+|[nowrap]#*saga-event-*#
+|[nowrap]#Available Processors * 1#
+|[nowrap]#Available Processors * 2#
+|Default
+|True
+
+|`SagaAdminTaskExecutorProvider`
+|[nowrap]#`stacksaga-spring-boot-starter-discovery`#
+|`SagaAdminTaskExecutorProviderDefault`
+|[nowrap]#*saga-admin-*#
+|2
+|5
+|Default
+|True
+
+
+|`SagaDiscoveryFileTaskExecutorProvider`
+|[nowrap]#`stacksaga-spring-boot-starter-discovery`#
+|`SagaDiscoveryFileTaskExecutorProviderDefault`
+|[nowrap]#*saga-file-*#
+|[nowrap]#Available Processors * 1#
+|[nowrap]#Available Processors * 2#
+|Default
+|True
+
+
+|`SagaDiscoveryRetryTransactionTaskExecutorProvider`
+|[nowrap]#`stacksaga-spring-boot-starter-discovery`#
+|`SagaDiscoveryRetryTransactionTaskExecutorProviderDefault`
+|[nowrap]#*saga-R-tx-*#
+|[nowrap]#Available Processors * 1#
+|[nowrap]#Available Processors * 2#
+|Default
+|True
+
+
+
+|===
+
+In case if you want to change the default configuration, you can do it by implementing following

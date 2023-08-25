@@ -2,8 +2,17 @@
 :icons: font
 :prewrap!:
 :toc: left
-:toc-levels: 4
+:toclevels: 5
 :docinfo: shared
+:sectnumlevels: 5
+:sectnums:
+:page-layout: docs
+:linkattrs:
+:experimental:
+:source-highlighter: coderay
+:appendix-caption: appendix-caption
+:sectanchors:
+// :stylesheet: resources/css/styles.css
 
 toc::[]
 
@@ -18,3 +27,4 @@ include::architecture/index.adoc[]
 == Developer Guide
 
 include::dev-guide/index.adoc[]
+
