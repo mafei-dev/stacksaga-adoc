@@ -59,3 +59,17 @@ include::saga_exception_annotation.adoc[]
 === RevertHintStore [[saga_revert_hint_store]]
 
 include::saga_revert_hint_store.adoc[]
+
+=== Saga Execution Event Listener  [[saga_event_handler]]
+
+include::saga_event_handler.adoc[]
+
+=== SagaTemplate<A> [[saga_template]]
+
+include::saga_template.adoc[]
+
+=== TrashFileListener [[saga_trash_listener]]
+
+include::saga_trash_listener.adoc[]
+
+

@@ -1,0 +1,1 @@
+`TrashFileListener` is used to be notified about the *Trash-Files*.
