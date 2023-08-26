@@ -1,0 +1,14 @@
+According to the behaviors of the transaction, we can mainly identify 3 transaction types that can be happened when we use saga.
+
+* *Fully success transaction*
+* *Rollback/Compensation/Revert success transaction*
+* *Rollback/Compensation/Revert failed transaction*
+
+
+include::fully_success_transaction.adoc[]
+
+include::revert_success_transaction.adoc[]
+
+include::revert_failed_transaction.adoc[]
+
+include::classification_of_saga_translations.adoc[]

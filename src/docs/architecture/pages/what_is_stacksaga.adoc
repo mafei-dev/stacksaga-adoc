@@ -56,15 +56,30 @@ image::resources/img/revert-failed-transaction-intro.svg[alt="StackSaga revert f
 
 *How StackSaga framework helps to overcome this problem?*
 
-StackSaga provides a code block (<<command_executor_architecture,Command Executor>>,<<query_executor_architecture, Query Executor>>) to provide your atomic operations that you did same in the place-order transaction.
-The only thing that you have to do is to provide the execution-process inside the code-block and notify the exception type whether it is retryable or not.
+StackSaga provides a *Codespaces* (Those called as <<command_executor_architecture,Command Executor>>,<<query_executor_architecture, Query Executor>>) to provide your atomic operations that you did same in the place-order transaction.
+The only thing that you have to do is to provide the execution-process inside the *Codespaces* and notify the exception type whether it is retryable or not.
 Then the StackSaga engine will invoke each atomic transaction until the entire transaction gets succeeded (revert success or full process success).
+
+image::resources/img/stack-saga-codespacess.drawio.svg[alt=" Stacksaga Executors",height=300]
+
+In the above diagram, you can see the Codespaces for each atomic transaction.
+You already might have the code portion for making the requests to other services.
+In StackSaga, you can call those methods inside the *Codespaces*.
+Then StackSaga coordinator will invoke your code portion through the *Codespaces*.
+StackSaga does not involve your request.
+Therefore, you don't want to really on specific protocol, and you can use any protocol for making request.
+At least the endpoints should not be within the same https://spring.io/microservices[spring cloud ecosystem].
+The endpoints can be anything external or within the ecosystem.
+The only thing that you want to do is make the request part of each atomic transaction and warp up with *Codespaces* (<<executor_architecture,executors>>).
 
 StackSaga orchestration engine follows these concepts behind the scenes.
 
 . Saga design pattern
 . Event sourcing
 . Eventual consistency.
+
+
+
 
 ////
 

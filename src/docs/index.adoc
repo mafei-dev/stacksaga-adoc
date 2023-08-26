@@ -1,4 +1,3 @@
-= StackSaga [[index]]
 :toc-title: Table of Contents
 :icons: font
 :prewrap!:
@@ -13,15 +12,26 @@
 :source-highlighter: rouge
 :appendix-caption: appendix-caption
 :sectanchors:
-:stylesheet: resources/css/styles.css
+// :stylesheet: resources/css/styles.css
+:title-logo-image: image:resources/img/stacksaga-logo.jpg[top=25%,align=center,pdfwidth=0.5in]
+
+include::logo.adoc[]
 
 toc::[]
+
+
+
 
 == Introduction To Microservices
 
 include::introduction/index.adoc[]
 
-== Architecture
+== Introduction to Saga
+
+include::saga/index.adoc[]
+
+
+== StackSaga Architecture
 
 include::architecture/index.adoc[]
 

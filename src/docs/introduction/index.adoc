@@ -10,5 +10,18 @@ include::pages/microservice_architecture.adoc[]
 
 include::pages/database_per_service_pattern.adoc[]
 
+=== Distributed Transaction
+
+include::pages/distributed_transaction.adoc[] [[distributed_transaction]]
+
+=== Challenges of Distributed Transaction
+
+include::pages/challenges_of_distributed_transaction.adoc[] [[challenges_of_distributed_transaction]]
+
+
+
+
+
+
 
 

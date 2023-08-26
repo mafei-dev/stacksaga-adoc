@@ -1,0 +1,19 @@
+=== What Is Saga Architecture Pattern? [[what_is_saga_architecture_pattern]]
+
+include::what_is_saga_architecture_pattern.adoc[]
+
+=== Saga Orchestration Pattern [[saga_orchestration_pattern]]
+
+include::saga_orchestration_pattern.adoc[]
+
+=== Eventual Consistency [[eventual_consistency]]
+
+include::eventual_consistency.adoc[]
+
+=== Classification of SAGA transactions [[classification_of_saga_transactions]]
+
+include::classification_of_saga_transactions.adoc[]
+
+
+
+

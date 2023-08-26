@@ -1,0 +1,1 @@
+image::resources/img/stacksaga-logo.jpg[alt="StackSaga Logo",width=300]

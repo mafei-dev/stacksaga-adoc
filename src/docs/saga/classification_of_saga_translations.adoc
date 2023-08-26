@@ -1,0 +1,16 @@
+==== Classification of SAGA translations — Summary
+
+*Fully success transaction*
+
+image::resources/img/fully-success-transaction-summary.svg[alt="Fully Success Transaction Summary",height=300]
+
+*Rollback/Compensation/Revert success transaction*
+
+image::resources/img/revert-success-transaction-summary.svg[alt="Revert Success Transaction Summary",height=300]
+
+*Rollback/Compensation/Revert failed transaction*
+
+image::resources/img/revert-failed-transaction-summary.svg[alt="Revert Failed Transaction Summary",height=300]
+
+
+

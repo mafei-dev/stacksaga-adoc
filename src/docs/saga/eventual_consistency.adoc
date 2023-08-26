@@ -1,0 +1,1 @@
+Eventual consistency is a technique that ensures data consistency and availability by asynchronous communication and ensuring that when an error occurs in a specific process, the error will be resolved eventually without having to roll back the whole process.

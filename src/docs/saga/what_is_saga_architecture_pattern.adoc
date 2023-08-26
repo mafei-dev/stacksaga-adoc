@@ -1,0 +1,5 @@
+The Saga architecture pattern provides transaction management using a sequence of local transactions. A local transaction is the unit of work performed by a saga participant. Every operation that is part of the Saga can be rolled back by a compensating transaction. Further, the Saga pattern guarantees that either all operations are complete successfully or the corresponding compensation transactions are run to undo the work previously completed. In the Saga pattern, a compensating transaction must be important and retryable. These two principles ensure that a transaction can be managed without any manual intervention. The Saga Execution Coordinator (SEC) ensures guarantees these principles:
+
+image::resources/img/compensating-transaction.svg[alt="distributed transaction",height=300]
+
+The above diagram shows how to visualize the Saga pattern for the previously discussed online order processing scenario.

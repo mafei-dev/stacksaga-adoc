@@ -1,0 +1,8 @@
+==== Rollback/Compensation/Revert failed transaction [[revert_failed_transaction]]
+
+image::resources/img/rollback-compensation-revert-failed-transaction.svg[alt="rollback compensation revert failed transaction",height=300]
+
+In this time, the coordinator tries to execute the transactions one by one.
+But while doing the execution, an error occurred after doing some executions, and the coordinator gets started to execute all the revert processes that regard to the microservices that previously executed.
+But unfortunately, while doing the revert executions, an error gets occurred because of a network issues.
+(Network issues means it can be happened because there is no endpoint in active at that time or kind of actual network problems)
