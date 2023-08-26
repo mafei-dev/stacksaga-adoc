@@ -1,0 +1,37 @@
+If you ara using `stacksaga-spring-boot-starter-discovery`, To communicate with the slaves, the master instance uses a `RestTemplate` internally with the following configurations.
+
+— Here you can see the required configurations with default values.
+
+[source,properties]
+----
+#<1>
+eureka.instance.metadata-map.stacksagaManagementScheme=http
+#<2>
+eureka.instance.metadata-map.stacksagaManagementBasePath=/actuator
+#<3>
+eureka.instance.metadata-map.stacksagaRegion=defaultRegion
+#<4>
+eureka.instance.metadata-map.stacksagaZone=defaultZone
+#<5>
+eureka.instance.metadata-map.stacksagaManagementPort=0
+----
+
+<1> *stacksagaManagementScheme*: Scheme of the management service.
++
+The default value is *http*.
+If you want to enable *https*, you have to provide it through the configuration here.
+
+<2> *stacksagaManagementBasePath*: Base path of the management service.
++
+The default value is */actuator*.
+If you change the default value of the actuator(`management.endpoints.web.base-path`), make sure to provide it for Stacksaga as well.
+<3> *stacksagaRegion*: Which is the region that the instance is currently running on.
+The default value is *defaultRegion*.
+
+<4> *stacksagaZone*: Which is the zone that the instance is currently running on.
+The default value is *defaultZone*.
+
+<5> *stacksagaManagementPort*: The management service port.
+If you change the default management port in actuator (`management.server.port`) you have to provide it for Stacksaga as well.
++
+NOTE: By default, the server port and the management service port will be the same in spring.

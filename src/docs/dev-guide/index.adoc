@@ -104,7 +104,15 @@ include::connect_admin.adoc[]
 
 include::custom_admin_connect_resttemplate_configuration.adoc[]
 
-=== Custom Service Communication configuration [[custom_service_communication_resttemplate_configuration]]
+=== Internal Service Communication [[service_communication]]
+
+include::service_communication.adoc[]
+
+==== Eureka configuration for StackSaga [[eureka_configuration_for_stacksaga]]
+
+include::eureka_configuration_for_stacksaga.adoc[]
+
+===== Custom Service Communication configuration [[custom_service_communication_resttemplate_configuration]]
 
 include::custom_service_communication_resttemplate_configuration.adoc[]
 

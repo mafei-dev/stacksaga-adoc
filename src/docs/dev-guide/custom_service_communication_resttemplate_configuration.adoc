@@ -1,0 +1,28 @@
+In case if you want to have more complex configurations more than default configurations like enabling custom SSL, adding authentication, you can provide your own RestTemplate for the framework like below:
+
+[source,java]
+----
+@Component //<1>
+public class CustomServiceCommunicationRestTemplate implements SagaServiceCommunicationRestTemplateProvider { //<2>
+    private final RestTemplateBuilder restTemplateBuilder;
+
+    //<3>
+    @Override
+    public RestTemplate getRestTemplate() {
+        //<4>
+        //provide your custom configurations
+        RestTemplate restTemplate = this.restTemplateBuilder
+                ...
+                .build();
+        return restTemplate;
+    }
+}
+----
+
+<1> Annotate your custom class as a spring been with `@Component` annotation.
+<2> Implement the custom class from `SagaServiceCommunicationRestTemplateProvider` interface.
+<3> Override the `getRestTemplate()` method.
+<4> Provide your `RestTemplate` with your own custom configurations.
+
+WARNING: Make sure to not provide `rootUri` with your `RestTemplate` configurations.
+Because the URL is built based on the <<eureka_configuration_for_stacksaga,configuration properties>> and Eureka service-registry internally.

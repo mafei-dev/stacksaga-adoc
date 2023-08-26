@@ -611,7 +611,15 @@ pre.rouge .gs {
 <li><a href="#custom_admin_connect_resttemplate_configuration">3.17.1. Custom Admin Connector configuration</a></li>
 </ul>
 </li>
-<li><a href="#custom_service_communication_resttemplate_configuration">3.18. Custom Service Communication configuration</a></li>
+<li><a href="#service_communication">3.18. Internal Service Communication</a>
+<ul class="sectlevel3">
+<li><a href="#eureka_configuration_for_stacksaga">3.18.1. Eureka configuration for StackSaga</a>
+<ul class="sectlevel4">
+<li><a href="#custom_service_communication_resttemplate_configuration">3.18.1.1. Custom Service Communication configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -2986,8 +2994,152 @@ If you want to get the admin-server connection configuration from the configurat
 </div>
 </div>
 <div class="sect2">
-<h3 id="custom_service_communication_resttemplate_configuration"><a class="anchor" href="#custom_service_communication_resttemplate_configuration"></a>3.18. Custom Service Communication configuration</h3>
+<h3 id="service_communication"><a class="anchor" href="#service_communication"></a>3.18. Internal Service Communication</h3>
+<div class="paragraph">
+<p>As per the StackSaga architecture, Internally (<strong>within the same zone</strong>) each instance should be able to communicate with other instances at any time.
+Because, Any instance can be the Master instance and then the Master instance should have to make requests to other slaves to notify the retry-allocations.
+The communication is done by based on the service registry cache of the current master.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Nature of Communication: If your microservices communicate with each other only within a trusted network (such as an internal data center with <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">VPC network</a>), the need for SSL might be reduced.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="eureka_configuration_for_stacksaga"><a class="anchor" href="#eureka_configuration_for_stacksaga"></a>3.18.1. Eureka configuration for StackSaga</h4>
+<div class="paragraph">
+<p>If you ara using <code>stacksaga-spring-boot-starter-discovery</code>, To communicate with the slaves, the master instance uses a <code>RestTemplate</code> internally with the following configurations.</p>
+</div>
+<div class="paragraph">
+<p>— Here you can see the required configurations with default values.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight nowrap"><code data-lang="properties"><i class="conum" data-value="1"></i><b>(1)</b>
+<span class="py">eureka.instance.metadata-map.stacksagaManagementScheme</span><span class="p">=</span><span class="s">http</span>
+<i class="conum" data-value="2"></i><b>(2)</b>
+<span class="py">eureka.instance.metadata-map.stacksagaManagementBasePath</span><span class="p">=</span><span class="s">/actuator</span>
+<i class="conum" data-value="3"></i><b>(3)</b>
+<span class="py">eureka.instance.metadata-map.stacksagaRegion</span><span class="p">=</span><span class="s">defaultRegion</span>
+<i class="conum" data-value="4"></i><b>(4)</b>
+<span class="py">eureka.instance.metadata-map.stacksagaZone</span><span class="p">=</span><span class="s">defaultZone</span>
+<i class="conum" data-value="5"></i><b>(5)</b>
+<span class="py">eureka.instance.metadata-map.stacksagaManagementPort</span><span class="p">=</span><span class="s">0</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><strong>stacksagaManagementScheme</strong>: Scheme of the management service.
+<div class="paragraph">
+<p>The default value is <strong>http</strong>.
+If you want to enable <strong>https</strong>, you have to provide it through the configuration here.</p>
+</div></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><strong>stacksagaManagementBasePath</strong>: Base path of the management service.
+<div class="paragraph">
+<p>The default value is <strong>/actuator</strong>.
+If you change the default value of the actuator(<code>management.endpoints.web.base-path</code>), make sure to provide it for Stacksaga as well.</p>
+</div></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><strong>stacksagaRegion</strong>: Which is the region that the instance is currently running on.
+The default value is <strong>defaultRegion</strong>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><strong>stacksagaZone</strong>: Which is the zone that the instance is currently running on.
+The default value is <strong>defaultZone</strong>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td><strong>stacksagaManagementPort</strong>: The management service port.
+If you change the default management port in actuator (<code>management.server.port</code>) you have to provide it for Stacksaga as well.
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+By default, the server port and the management service port will be the same in spring.
+</td>
+</tr>
+</table>
+</div></td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="custom_service_communication_resttemplate_configuration"><a class="anchor" href="#custom_service_communication_resttemplate_configuration"></a>3.18.1.1. Custom Service Communication configuration</h5>
+<div class="paragraph">
+<p>In case if you want to have more complex configurations more than default configurations like enabling custom SSL, adding authentication, you can provide your own RestTemplate for the framework like below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight nowrap"><code data-lang="java"><span class="nd">@Component</span> <i class="conum" data-value="1"></i><b>(1)</b>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomServiceCommunicationRestTemplate</span> <span class="kd">implements</span> <span class="nc">SagaServiceCommunicationRestTemplateProvider</span> <span class="o">{</span> <i class="conum" data-value="2"></i><b>(2)</b>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">RestTemplateBuilder</span> <span class="n">restTemplateBuilder</span><span class="o">;</span>
 
+    <i class="conum" data-value="3"></i><b>(3)</b>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">RestTemplate</span> <span class="nf">getRestTemplate</span><span class="o">()</span> <span class="o">{</span>
+        <i class="conum" data-value="4"></i><b>(4)</b>
+        <span class="c1">//provide your custom configurations</span>
+        <span class="nc">RestTemplate</span> <span class="n">restTemplate</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">restTemplateBuilder</span>
+                <span class="o">...</span>
+                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">restTemplate</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Annotate your custom class as a spring been with <code>@Component</code> annotation.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Implement the custom class from <code>SagaServiceCommunicationRestTemplateProvider</code> interface.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Override the <code>getRestTemplate()</code> method.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Provide your <code>RestTemplate</code> with your own custom configurations.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Make sure to not provide <code>rootUri</code> with your <code>RestTemplate</code> configurations.
+Because the URL is built based on the <a href="#eureka_configuration_for_stacksaga">configuration properties</a> and Eureka service-registry internally.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
