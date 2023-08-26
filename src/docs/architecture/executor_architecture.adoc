@@ -1,0 +1,25 @@
+According to the saga design pattern, sub processes (atomic executions) can have two executions called process execution and compensation execution.
+And those executions you van create as the methods in your application anywhere.
+But the framework has to know about exactly what is the process execution an is the compensation/revert execution method to be executed when running the whole process.
+As an example in your application can have a service called payment service, and that payment service class can have hundreds of methods for many tasks.
+Its also have the make payment process method and its revert/compensation method.
+But you have to inform those are the methods that you use when the process is executed.
+To overcome that, the framework provides a template for you.
+That is called as the executor.
+According to the framework, the executors are two types.
+
+. Query executors
+- If some atomic process has no compensation (query execution), those kinds of processes are used in a query executor.
++
+*Example*: If you want to check, the user is active at the time of the transaction happen, and you want to keep the user's activeness until the end of the transaction.
+See the implementation.
+. Command executors
+- If some atomic process has a compensation (command execution), those kinds of processes are used in a command executor.
++
+*Example*: Think that you want to create an order and order process is done successfully.
+But after the make-payment process is failed.
+Then the compensation process will be started.
+Now you must have a compensation against the creating order.
+So create an order process is a command process, and it goes to a command executor.
+
+image::resources/img/stack-saga-e-store-example-executor-types-in-stacksaga.drawio.svg[alt=" Stacksaga Executors",height=300]

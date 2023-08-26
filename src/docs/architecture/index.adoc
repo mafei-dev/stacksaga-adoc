@@ -10,7 +10,23 @@ include::key_processes_of_ecosystem.adoc[]
 
 include::pages/aggregator.adoc[]
 
-==== Aggregator and Executors [[aggregator_and_executors]]
+=== Executor [[executor_architecture]]
+
+include::executor_architecture.adoc[]
+
+==== Query Executor [[query_executor_architecture]]
+
+include::query_executor_architecture.adoc[]
+
+==== Command Executor [[command_executor_architecture]]
+
+include::command_executor_architecture.adoc[]
+
+==== How Executors Behave In The Application.
+
+include::how_executors_behave_in_the_application.adoc[]
+
+=== Relationship between Aggregator and Executors [[aggregator_and_executors]]
 
 include::pages/aggregator_and_executors.adoc[]
 
@@ -18,3 +34,18 @@ include::pages/aggregator_and_executors.adoc[]
 
 include::pages/aggregator_usage_with_executor.adoc[]
 
+=== Version Casting [[version_casting_architecture]]
+
+include::version_casting_architecture.adoc[]
+
+==== Aggregator-Oriented casting [[aggregator_oriented_casting_architecture]]
+
+include::aggregator_oriented_casting_architecture.adoc[]
+
+==== Executor-Oriented Casting [[executor_oriented_casting_architecture]]
+
+include::executor_oriented_casting_architecture.adoc[]
+
+=== Dual-Consistency problem of SEC in microservice. [[dual_consistency_problem_of_sec_in_microservice]]
+
+include::dual_consistency_problem_of_sec_in_microservice.adoc[]

@@ -1,0 +1,1 @@
+image::resources/img/stack-saga-e-store-example-what-is-executor-in-stacksaga.drawio.svg[alt=" Stacksaga Executors",height=300]

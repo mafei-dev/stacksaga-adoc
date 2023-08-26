@@ -1,0 +1,23 @@
+All the newly added changes to the aggregator of the new version are called as` aggregator-oriented changes.
+And then, as a developer, you have to do some casting /mapping between those aggregator versions to avoid that conflict.
+But it is not a complicated task because that, the framework uses the Jackson library for serialization.
+(Storing events in the database.) Therefore, you can follow the same effort what you have been doing with Jackson mapping as usual.
+
+For instance, the old version's aggregator has 3 fields, and the new version can have 4 fields or more than that, or else, the new version can have 2 fields.
+That means the aggregator has got changed relatively to the old version.
+If the new aggregator has more values than the previous one, those kinds of updates are called as upcasting.
+According to the example, the event-store might have the old events consisting of 2 fields.
+And if the new version has a less number of fields than the old one, it is called as down-casting.
+Now those remaining events are going to be executed through the new version.
+And the framework tries to build the new aggregator object by using the old event's binaries.
+This is the time the casting is been worked on.
+You have to modify and annotate the aggregator so as not to conflict while building the object by the framework.
+Here you can see the best practices related to the casting of aggregators.
+
+. *Up-Casting*
+
+image::resources/img/Architecture-Stacksaga-aggregator-version-up-casting.drawio.svg[alt=" Stacksaga aggregator version up-casting",height=300]
+
+. *Down-Casting*
+
+image::resources/img/Architecture-Stacksaga-aggregator-version-down-casting.drawio.svg[alt=" Stacksaga aggregator version down-casting",height=300]
