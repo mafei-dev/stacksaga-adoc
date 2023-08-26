@@ -1,3 +1,7 @@
+=== Introduction To StackSaga [[what_is_stacksaga]]
+
+include::pages/what_is_stacksaga.adoc[]
+
 === StackSaga in High-level
 
 include::pages/high_level_architecture.adoc[]

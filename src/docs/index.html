@@ -2226,36 +2226,37 @@ pre.rouge .gs {
 </li>
 <li><a href="#_architecture">2. Architecture</a>
 <ul class="sectlevel2">
-<li><a href="#_stacksaga_in_high_level">2.1. StackSaga in High-level</a></li>
-<li><a href="#stacksaga_components">2.2. StackSaga Components</a>
+<li><a href="#what_is_stacksaga">2.1. Introduction To StackSaga</a></li>
+<li><a href="#_stacksaga_in_high_level">2.2. StackSaga in High-level</a></li>
+<li><a href="#stacksaga_components">2.3. StackSaga Components</a>
 <ul class="sectlevel3">
-<li><a href="#stacksaga_admin">2.2.1. StackSaga Admin</a></li>
-<li><a href="#stacksaga_core">2.2.2. StackSaga Starter Core</a></li>
-<li><a href="#stacksaga_starter_db">2.2.3. StackSaga Starter DB</a></li>
-<li><a href="#stacksaga_starter_discovery">2.2.4. StackSaga Starter Discovery</a></li>
+<li><a href="#stacksaga_admin">2.3.1. StackSaga Admin</a></li>
+<li><a href="#stacksaga_core">2.3.2. StackSaga Starter Core</a></li>
+<li><a href="#stacksaga_starter_db">2.3.3. StackSaga Starter DB</a></li>
+<li><a href="#stacksaga_starter_discovery">2.3.4. StackSaga Starter Discovery</a></li>
 </ul>
 </li>
-<li><a href="#key_processes_of_ecosystem">2.3. Key Processes of ecosystem</a></li>
-<li><a href="#aggregator_architecture">2.4. Aggregator</a></li>
-<li><a href="#executor_architecture">2.5. Executor</a>
+<li><a href="#key_processes_of_ecosystem">2.4. Key Processes of ecosystem</a></li>
+<li><a href="#aggregator_architecture">2.5. Aggregator</a></li>
+<li><a href="#executor_architecture">2.6. Executor</a>
 <ul class="sectlevel3">
-<li><a href="#query_executor_architecture">2.5.1. Query Executor</a></li>
-<li><a href="#command_executor_architecture">2.5.2. Command Executor</a></li>
-<li><a href="#_how_executors_behave_in_the_application">2.5.3. How Executors Behave In The Application.</a></li>
+<li><a href="#query_executor_architecture">2.6.1. Query Executor</a></li>
+<li><a href="#command_executor_architecture">2.6.2. Command Executor</a></li>
+<li><a href="#_how_executors_behave_in_the_application">2.6.3. How Executors Behave In The Application.</a></li>
 </ul>
 </li>
-<li><a href="#aggregator_and_executors">2.6. Relationship between Aggregator and Executors</a>
+<li><a href="#aggregator_and_executors">2.7. Relationship between Aggregator and Executors</a>
 <ul class="sectlevel3">
-<li><a href="#aggregator_usage_with_executor">2.6.1. How the Aggregator is used through the Executors</a></li>
+<li><a href="#aggregator_usage_with_executor">2.7.1. How the Aggregator is used through the Executors</a></li>
 </ul>
 </li>
-<li><a href="#version_casting_architecture">2.7. Version Casting</a>
+<li><a href="#version_casting_architecture">2.8. Version Casting</a>
 <ul class="sectlevel3">
-<li><a href="#aggregator_oriented_casting_architecture">2.7.1. Aggregator-Oriented casting</a></li>
-<li><a href="#executor_oriented_casting_architecture">2.7.2. Executor-Oriented Casting</a></li>
+<li><a href="#aggregator_oriented_casting_architecture">2.8.1. Aggregator-Oriented casting</a></li>
+<li><a href="#executor_oriented_casting_architecture">2.8.2. Executor-Oriented Casting</a></li>
 </ul>
 </li>
-<li><a href="#dual_consistency_problem_of_sec_in_microservice">2.8. Dual-Consistency problem of SEC in microservice.</a></li>
+<li><a href="#dual_consistency_problem_of_sec_in_microservice">2.9. Dual-Consistency problem of SEC in microservice.</a></li>
 </ul>
 </li>
 <li><a href="#stacksaga_admin_index">3. StackSaga Admin</a>
@@ -2370,7 +2371,141 @@ In the next section, let us examine the challenge of distributed transaction man
 <h2 id="_architecture"><a class="anchor" href="#_architecture"></a>2. Architecture</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_stacksaga_in_high_level"><a class="anchor" href="#_stacksaga_in_high_level"></a>2.1. StackSaga in High-level</h3>
+<h3 id="what_is_stacksaga"><a class="anchor" href="#what_is_stacksaga"></a>2.1. Introduction To StackSaga</h3>
+<div class="paragraph">
+<p>StackSaga is an echo system that helps you to manage and monitor your distributed transactions in microservice' architecture.</p>
+</div>
+<div class="paragraph">
+<p>As you saw in the &#8230;&#8203;. Section, There&#8217;s a distributed transaction problem in microservice' architecture.
+So managing distributed transaction is very complicated without a framework.
+StackSaga Saga provides a better and resilient architecture as an <strong>orchestration engine framework</strong> to overcome that problem with a lot of additional features as well.</p>
+</div>
+<div class="paragraph">
+<p>StackSaga mainly consists of two parts.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong><a href="#stacksaga_admin">StackSaga Admin</a>.</strong><br>
+StackSaga admin mainly provides the monitoring facilities of the transactions and manages the security.</p>
+</li>
+<li>
+<p><strong>StackSaga Framework</strong>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>StackSaga Framework provides orchestration engine support for your distributed transactions in your service.</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Quick Understanding:</strong></p>
+</div>
+<div class="paragraph">
+<p>Just imagine that you have a business domain for placing an order in microservice architecture.
+So you can have multiple services, and you have to visit all over the services to complete the place-odder transaction.</p>
+</div>
+<div class="paragraph">
+<p>The services might be as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Order-service</p>
+</li>
+<li>
+<p>Payment-service</p>
+</li>
+<li>
+<p>Cart-service</p>
+</li>
+<li>
+<p>Delivery-Service and many more.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>IF you execute the place order process, you have to go through each and every service one by one after competing each of them.
+There is no issue with that if the entire process is completed successfully all the time.
+But in microservice architecture, it is not possible and there is a possibility to have an at least connection issue.
+Just think all the past services are done successfully, but the last execution is failed due to insufficient balance or payment-service&#8217;s failure.
+Then you have to revert (compensation-transaction) all the past executions <strong>one by one as the same-order</strong>
+that those services were executed to overcome the eventual consistency according to the Saga design pattern.
+It is very complicated if you are going to do manually.
+Other than that, just imagine you are able to handle and bare the last failed execution, and you started to revert all the past executions one by one.
+Just imagine very unfortunately, you are getting a connection error at the last revert process.</p>
+</div>
+<div class="paragraph">
+<p><strong>Oops!</strong>
+Now your in a big trouble with your data consistency.
+Because your both transaction Forward-process and Revert-process are failed at this moment.
+You can do nothing in this kind of situation.</p>
+</div>
+<div class="paragraph">
+<p>You were unable to reach the target end execution to forward.
+Therefore, you stated revert-process for all the past executions one by one (Last-In, First-Out order [<strong>LIFO</strong>] ).
+But unfortunately, You were unable to reach the target final revert as well due to a network issue.</p>
+</div>
+<div class="paragraph">
+<p>Here you can see What happened to your place-order transaction with a diagram.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="resources/img/revert-failed-transaction-intro.svg" alt="StackSaga revert failed transaction" height="300">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>You Started the place-order transaction there.</p>
+</li>
+<li>
+<p>Stopped the place-order transaction due to not sufficient balance.</p>
+</li>
+<li>
+<p>Your target transaction ending for a successful transaction.</p>
+</li>
+<li>
+<p>Started revert process due the transaction was stopped unsuccessfully.</p>
+</li>
+<li>
+<p>The revert process was stopped due to a connection error.</p>
+</li>
+<li>
+<p>The target revert process ending for a successful revert transaction.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>How StackSaga framework helps to overcome this problem?</strong></p>
+</div>
+<div class="paragraph">
+<p>StackSaga provides a code block (<a href="#command_executor_architecture">Command Executor</a>,<a href="#query_executor_architecture">Query Executor</a>) to provide your atomic operations that you did same in the place-order transaction.
+The only thing that you have to do is to provide the execution-process inside the code-block and notify the exception type whether it is retryable or not.
+Then the StackSaga engine will invoke each atomic transaction until the entire transaction gets succeeded (revert success or full process success).</p>
+</div>
+<div class="paragraph">
+<p>StackSaga orchestration engine follows these concepts behind the scenes.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Saga design pattern</p>
+</li>
+<li>
+<p>Event sourcing</p>
+</li>
+<li>
+<p>Eventual consistency.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_stacksaga_in_high_level"><a class="anchor" href="#_stacksaga_in_high_level"></a>2.2. StackSaga in High-level</h3>
 <div class="paragraph">
 <p>in the introduction, we got a clear idea of how microservice architecture works, and what are the challenges that we have to face when implementing the microservice. here, we are going to explain how the stack saga works together with typical microservice architecture. here we have demonstrated a spring boot microservice architecture and how the StackSaga framework provides the Saga execution coordinator (SEC) capabilities without bothering to the default architecture.</p>
 </div>
@@ -2413,9 +2548,9 @@ But as the best practice, one database per service is recommended.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="stacksaga_components"><a class="anchor" href="#stacksaga_components"></a>2.2. StackSaga Components</h3>
+<h3 id="stacksaga_components"><a class="anchor" href="#stacksaga_components"></a>2.3. StackSaga Components</h3>
 <div class="sect3">
-<h4 id="stacksaga_admin"><a class="anchor" href="#stacksaga_admin"></a>2.2.1. StackSaga Admin</h4>
+<h4 id="stacksaga_admin"><a class="anchor" href="#stacksaga_admin"></a>2.3.1. StackSaga Admin</h4>
 <div class="paragraph">
 <p>StackSaga Admin Server is the monitoring dashboard of the StackSaga framework.</p>
 </div>
@@ -2433,20 +2568,20 @@ Event though StackSaga framework can be run without the admin-server, it is reco
 </div>
 </div>
 <div class="sect3">
-<h4 id="stacksaga_core"><a class="anchor" href="#stacksaga_core"></a>2.2.2. StackSaga Starter Core</h4>
+<h4 id="stacksaga_core"><a class="anchor" href="#stacksaga_core"></a>2.3.2. StackSaga Starter Core</h4>
 
 </div>
 <div class="sect3">
-<h4 id="stacksaga_starter_db"><a class="anchor" href="#stacksaga_starter_db"></a>2.2.3. StackSaga Starter DB</h4>
+<h4 id="stacksaga_starter_db"><a class="anchor" href="#stacksaga_starter_db"></a>2.3.3. StackSaga Starter DB</h4>
 
 </div>
 <div class="sect3">
-<h4 id="stacksaga_starter_discovery"><a class="anchor" href="#stacksaga_starter_discovery"></a>2.2.4. StackSaga Starter Discovery</h4>
+<h4 id="stacksaga_starter_discovery"><a class="anchor" href="#stacksaga_starter_discovery"></a>2.3.4. StackSaga Starter Discovery</h4>
 
 </div>
 </div>
 <div class="sect2">
-<h3 id="key_processes_of_ecosystem"><a class="anchor" href="#key_processes_of_ecosystem"></a>2.3. Key Processes of ecosystem</h3>
+<h3 id="key_processes_of_ecosystem"><a class="anchor" href="#key_processes_of_ecosystem"></a>2.4. Key Processes of ecosystem</h3>
 <div class="paragraph">
 <p>To understand the relation of those components whole process can be summarised as follows.</p>
 </div>
@@ -2532,7 +2667,7 @@ You will be able to see the transaction data.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="aggregator_architecture"><a class="anchor" href="#aggregator_architecture"></a>2.4. Aggregator</h3>
+<h3 id="aggregator_architecture"><a class="anchor" href="#aggregator_architecture"></a>2.5. Aggregator</h3>
 <div class="paragraph">
 <p>An <strong>aggregator</strong> is the main location that all the data should be kept for the entire transaction.
 According to the StackSaga example, the entire process has set pf sub processes.
@@ -2576,7 +2711,7 @@ If you want to keep some metadata while your revert/compensation processes, you 
 </div>
 </div>
 <div class="sect2">
-<h3 id="executor_architecture"><a class="anchor" href="#executor_architecture"></a>2.5. Executor</h3>
+<h3 id="executor_architecture"><a class="anchor" href="#executor_architecture"></a>2.6. Executor</h3>
 <div class="paragraph">
 <p>According to the saga design pattern, sub processes (atomic executions) can have two executions called process execution and compensation execution.
 And those executions you van create as the methods in your application anywhere.
@@ -2629,7 +2764,7 @@ So create an order process is a command process, and it goes to a command execut
 </div>
 </div>
 <div class="sect3">
-<h4 id="query_executor_architecture"><a class="anchor" href="#query_executor_architecture"></a>2.5.1. Query Executor</h4>
+<h4 id="query_executor_architecture"><a class="anchor" href="#query_executor_architecture"></a>2.6.1. Query Executor</h4>
 <div class="paragraph">
 <p>In the query executor, you only have a one method to do your atomic execution.
 It&#8217;s called as atomic process execution.
@@ -2650,7 +2785,7 @@ Or, if your process is completed from this execution, you can notify about that 
 </div>
 </div>
 <div class="sect3">
-<h4 id="command_executor_architecture"><a class="anchor" href="#command_executor_architecture"></a>2.5.2. Command Executor</h4>
+<h4 id="command_executor_architecture"><a class="anchor" href="#command_executor_architecture"></a>2.6.2. Command Executor</h4>
 <div class="paragraph">
 <p>In the command executor, you will have two methods to be implemented.
 One for the process the transaction forward.
@@ -2688,7 +2823,7 @@ Because the framework knows the order of the revert executions, and you can&#821
 </div>
 </div>
 <div class="sect3">
-<h4 id="_how_executors_behave_in_the_application"><a class="anchor" href="#_how_executors_behave_in_the_application"></a>2.5.3. How Executors Behave In The Application.</h4>
+<h4 id="_how_executors_behave_in_the_application"><a class="anchor" href="#_how_executors_behave_in_the_application"></a>2.6.3. How Executors Behave In The Application.</h4>
 <div class="imageblock">
 <div class="content">
 <img src="resources/img/stack-saga-e-store-example-what-is-executor-in-stacksaga.drawio.svg" alt=" Stacksaga Executors" height="300">
@@ -2697,7 +2832,7 @@ Because the framework knows the order of the revert executions, and you can&#821
 </div>
 </div>
 <div class="sect2">
-<h3 id="aggregator_and_executors"><a class="anchor" href="#aggregator_and_executors"></a>2.6. Relationship between Aggregator and Executors</h3>
+<h3 id="aggregator_and_executors"><a class="anchor" href="#aggregator_and_executors"></a>2.7. Relationship between Aggregator and Executors</h3>
 <div class="paragraph">
 <p>Here you can see all the sub sets of processes are connected with the aggregator.
 Each sub process wants the aggregator to get run.
@@ -2711,7 +2846,7 @@ You can see the executor-introduction or the real implementation of the example 
 </div>
 </div>
 <div class="sect3">
-<h4 id="aggregator_usage_with_executor"><a class="anchor" href="#aggregator_usage_with_executor"></a>2.6.1. How the Aggregator is used through the Executors</h4>
+<h4 id="aggregator_usage_with_executor"><a class="anchor" href="#aggregator_usage_with_executor"></a>2.7.1. How the Aggregator is used through the Executors</h4>
 <div class="imageblock">
 <div class="content">
 <img src="resources/img/stack-saga-e-store-example-aggregator-state.drawio.svg" alt="StackSaga Aggregator And Executors" height="300">
@@ -2720,7 +2855,7 @@ You can see the executor-introduction or the real implementation of the example 
 </div>
 </div>
 <div class="sect2">
-<h3 id="version_casting_architecture"><a class="anchor" href="#version_casting_architecture"></a>2.7. Version Casting</h3>
+<h3 id="version_casting_architecture"><a class="anchor" href="#version_casting_architecture"></a>2.8. Version Casting</h3>
 <div class="paragraph">
 <p>All the applications will be updated by changing their versions from time to time.
 When a new version is deployed, the old version will be replaced by the new version (if you are not going to use service-mesh).
@@ -2761,7 +2896,7 @@ But the new version doesn&#8217;t allow the old events, and then the event will 
 </ol>
 </div>
 <div class="sect3">
-<h4 id="aggregator_oriented_casting_architecture"><a class="anchor" href="#aggregator_oriented_casting_architecture"></a>2.7.1. Aggregator-Oriented casting</h4>
+<h4 id="aggregator_oriented_casting_architecture"><a class="anchor" href="#aggregator_oriented_casting_architecture"></a>2.8.1. Aggregator-Oriented casting</h4>
 <div class="paragraph">
 <p>All the newly added changes to the aggregator of the new version are called as` aggregator-oriented changes.
 And then, as a developer, you have to do some casting /mapping between those aggregator versions to avoid that conflict.
@@ -2806,7 +2941,7 @@ Here you can see the best practices related to the casting of aggregators.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="executor_oriented_casting_architecture"><a class="anchor" href="#executor_oriented_casting_architecture"></a>2.7.2. Executor-Oriented Casting</h4>
+<h4 id="executor_oriented_casting_architecture"><a class="anchor" href="#executor_oriented_casting_architecture"></a>2.8.2. Executor-Oriented Casting</h4>
 <div class="paragraph">
 <p>According to the framework, one aggregator can have multiple executors based on your use case.
 When you update the version of the service, you might want to remove existing executors or add new executors based on the update that should be done.
@@ -2841,7 +2976,7 @@ To avoid conflict in this way, the framework provides a feature to skip the old 
 </div>
 </div>
 <div class="sect2">
-<h3 id="dual_consistency_problem_of_sec_in_microservice"><a class="anchor" href="#dual_consistency_problem_of_sec_in_microservice"></a>2.8. Dual-Consistency problem of SEC in microservice.</h3>
+<h3 id="dual_consistency_problem_of_sec_in_microservice"><a class="anchor" href="#dual_consistency_problem_of_sec_in_microservice"></a>2.9. Dual-Consistency problem of SEC in microservice.</h3>
 <div class="paragraph">
 <p>In the microservice architecture, we have concerned highly about the data consistency. As a result of that, you have to move in to the Saga design pattern. But there is the problem can be happened in rare when using SEC. Because the SEC also uses a database to store the state and other stuff. Then the frame has the responsibility to keep the data consistency of the main transaction&#8217;s data and the storing data. Just think the process is being executed, and while after saving successfully, some executors and the event-store database go down. Then the framework is failed to provide the data consistency of their side. In the stack saga framework, to avoid this consistency issue, a solution is provided.</p>
 </div>

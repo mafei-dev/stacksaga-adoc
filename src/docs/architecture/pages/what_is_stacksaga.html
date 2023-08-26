@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.20">
-<title>Introduction To StackSaga</title>
+<title>Untitled</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -437,8 +437,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 </div>
 <div id="content">
-<div class="sect2">
-<h3 id="what_is_stacksaga">Introduction To StackSaga</h3>
 <div class="paragraph">
 <p>StackSaga is an echo system that helps you to manage and monitor your distributed transactions in microservice' architecture.</p>
 </div>
@@ -498,7 +496,7 @@ So you can have multiple services, and you have to visit all over the services t
 <p>IF you execute the place order process, you have to go through each and every service one by one after competing each of them.
 There is no issue with that if the entire process is completed successfully all the time.
 But in microservice architecture, it is not possible and there is a possibility to have an at least connection issue.
-Just think all the past services are done successfully, but the last execution is failed due to a connection issue.
+Just think all the past services are done successfully, but the last execution is failed due to insufficient balance or payment-service&#8217;s failure.
 Then you have to revert (compensation-transaction) all the past executions <strong>one by one as the same-order</strong>
 that those services were executed to overcome the eventual consistency according to the Saga design pattern.
 It is very complicated if you are going to do manually.
@@ -511,519 +509,33 @@ Now your in a big trouble with your data consistency.
 Because your both transaction Forward-process and Revert-process are failed at this moment.
 You can do nothing in this kind of situation.</p>
 </div>
-<div class="imageblock">
-<div class="content">
-<img src="resources/img/revert-failed-transaction-summary.svg" alt="StackSaga revert failed transaction" height="300">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_stacksaga_in_high_level">StackSaga in High-level</h3>
 <div class="paragraph">
-<p>in the introduction, we got a clear idea of how microservice architecture works, and what are the challenges that we have to face when implementing the microservice. here, we are going to explain how the stack saga works together with typical microservice architecture. here we have demonstrated a spring boot microservice architecture and how the StackSaga framework provides the Saga execution coordinator (SEC) capabilities without bothering to the default architecture.</p>
+<p>Here you can see What happened to your place-order transaction.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="resources/img/stack-saga-high-level-diagram.svg" alt="StackSaga High-level architecture" height="300">
+<img src="resources/img/revert-failed-transaction-intro.svg" alt="StackSaga revert failed transaction" height="300">
 </div>
 </div>
-<div class="paragraph">
-<p>After adding stack saga in the microservice architecture, you can see there are some additional components in the high-level architecture diagram.
-In the diagram, the gray color components and lines are related to the general microservice architecture and additional stacksaga related components and lines have been colored by green color.
-Let&#8217;s discuss all the components and how they are interacted with general architecture.
-When you use StackSaga, you have to provide the facilities to create a database in addition to the database that you use for each microservice.
-This is also the same as the database per service design pattern.
-A service group (multiple instances of one service) uses one database to store the events of the executions.
-The only thing is newly added an extra schema.
-If you like to use one database for all microservices for StackSaga, it doesn&#8217;t matter you can use one database as the event-store.
-But as the best practice, one database per service is recommended.</p>
-</div>
-<div class="paragraph">
-<p>As a summary of the image above, you can identify mainly 4 components as new.in the next image below you can see those new components how to interact with the general components.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="colist arabic">
+<ol>
 <li>
-<p>StackSaga Coordinator (A Library) and StackSaga Connector (A Library) is located in the individual services.</p>
+<p>test</p>
 </li>
 <li>
-<p>StackSaga Shield (A Library) is located in the API gateway.</p>
-</li>
-<li>
-<p>StackSaga Server (A Standalone Application) is one separate unit that provides a dashboard.</p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="resources/img/architecture-stacksaga-products.drawio.svg" alt="StackSaga High-level architecture" height="300">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="stacksaga_components">StackSaga Components</h3>
-<div class="sect3">
-<h4 id="stacksaga_admin">StackSaga Admin</h4>
-<div class="paragraph">
-<p>StackSaga Admin Server is the monitoring dashboard of the StackSaga framework.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-Event though StackSaga framework can be run without the admin-server, it is recommended to connect the admin-server with other StackSaga clients.
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="stacksaga_core">StackSaga Starter Core</h4>
-
-</div>
-<div class="sect3">
-<h4 id="stacksaga_starter_db">StackSaga Starter DB</h4>
-
-</div>
-<div class="sect3">
-<h4 id="stacksaga_starter_discovery">StackSaga Starter Discovery</h4>
-
-</div>
-</div>
-<div class="sect2">
-<h3 id="key_processes_of_ecosystem">Key Processes of ecosystem</h3>
-<div class="paragraph">
-<p>To understand the relation of those components whole process can be summarised as follows.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Initialize the admin server with super admin.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>As the first step, you have to create initialize the admin server.
-See the initialization steps.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Register API gateways with admin server</p>
-<div class="ulist">
-<ul>
-<li>
-<p>To connect the StackSaga, your API gateway should provide an API-gateway-user credentials.
-Therefore, super Admin should create a user with API gateway authorization (role).
-After creating the API gateway user, the api gateway can be run because StackSaga Shield will check your credentials connecting with the admin server.
-For this process, StackSaga server and StackSaga Shield were involved.
-See the implementation to see more in detail.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Register each microservice with admin server.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>To register the services in the admin server, the super admin or admin has to create a user for service with service privileges.
-As a best-practice, the StackSaga team recommends you to create one user for one service group.
-(A service group can have multiple instances, but the service names are the same.) For instance, order-service should have a service user called order-service-general-user.
-And payment service should have a service user called payment-service-general-user.
-At the start-up, the connector will verify your service credentials and let you the access to register and run the service.
-For this process, StackSaga Server and StackSaga Connector were involved.
-See the implementation to see more in detail.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Execute a transaction.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>This is the main part that you are willing to see.
-The request comes through the API gateway as usual, and the StackSaga coordinator will obtain the request data that you pass, and the coordinator will handle all the process and executions as you have guided the framework.
-For this process only StackSaga coordinator was involved.
-Read the implementation Or read how stack saga execution types work to see more, in detail.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Monitor transactions execution data.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>To see the execution data, you should have to have a user account on the admin server.
-If you are the super admin, the super admin can see all the details.
-But as a best-practice, make sure to create a separate individual account for each user that wat to access the admin server to see the transaction data.
-After login to the dashboard, you have to give the access path of the API gateway that you want to access the services.
-You will be able to see the transaction data.</p>
-</li>
-</ul>
-</div>
+<p>test2</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>For this process, StackSaga server, StackSaga Shield and StackSaga Connector were involved.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="resources/img/architecture_stacksaga_how_admin_dashboard_access_stacksaga_endpoint.drawio.svg" alt="StackSaga High-level architecture" height="300">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="aggregator_architecture">Aggregator</h3>
-<div class="paragraph">
-<p>An <strong>aggregator</strong> is the main location that all the data should be kept for the entire transaction.
-According to the StackSaga example, the entire process has set pf sub processes.
-Create order, check user activeness, make payment, increase points and dispatch the order.
-While those processes, you have to keep some data regarding the transaction.
-For instance, the process is started from creating order.
-After creating the order, you have a data to be kept.
-As a response, you will get the order id.
-You have to keep it, and you have to reuse it in your whole process.
-After creating the order, you check the user activeness.
-Then the user service is called and get the response of user&#8217;s activeness and keep that data as user is active at the time of the process started.
-Likewise, each and every process will return you to data.
-Those data you have to keep in one location.
-That location called as the aggregator.
-At the start, you have to declare the variables, and after doing each process, you can update the values in the aggregator.
-On the other hand, we can say it is the data bucket that you bring the data to each executor.</p>
-</div>
-<div class="paragraph">
-<p>Another special thing is that the aggregator is used as the key of your entire transaction.
-That means the executors are identified by the aggregator class that you use.
-Because your entire transaction can have only one aggregator.
-Therefore, the aggregator class is used in each and every time by representing the transaction.
-For instance, according to the StackSaga example, the place order is the entire process.
-It contains many sub processes like create order, check user ect.
-Each process is introduced to the framework by using executors.
-So, for each process have separate executors.
-When you create each executor, you should mention what ks the aggregator that you want to use in that executor.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-You can store/update the data in the aggregator by using the process execution only (doProcess()).
-If you want to keep some metadata while your revert/compensation processes, you can use the hint-store that the framework provides.
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="executor_architecture">Executor</h3>
-<div class="paragraph">
-<p>According to the saga design pattern, sub processes (atomic executions) can have two executions called process execution and compensation execution.
-And those executions you van create as the methods in your application anywhere.
-But the framework has to know about exactly what is the process execution an is the compensation/revert execution method to be executed when running the whole process.
-As an example in your application can have a service called payment service, and that payment service class can have hundreds of methods for many tasks.
-Its also have the make payment process method and its revert/compensation method.
-But you have to inform those are the methods that you use when the process is executed.
-To overcome that, the framework provides a template for you.
-That is called as the executor.
-According to the framework, the executors are two types.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Query executors</p>
-<div class="ulist">
-<ul>
-<li>
-<p>If some atomic process has no compensation (query execution), those kinds of processes are used in a query executor.</p>
-<div class="paragraph">
-<p><strong>Example</strong>: If you want to check, the user is active at the time of the transaction happen, and you want to keep the user&#8217;s activeness until the end of the transaction.
-See the implementation.</p>
-</div>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Command executors</p>
-<div class="ulist">
-<ul>
-<li>
-<p>If some atomic process has a compensation (command execution), those kinds of processes are used in a command executor.</p>
-<div class="paragraph">
-<p><strong>Example</strong>: Think that you want to create an order and order process is done successfully.
-But after the make-payment process is failed.
-Then the compensation process will be started.
-Now you must have a compensation against the creating order.
-So create an order process is a command process, and it goes to a command executor.</p>
-</div>
-</li>
-</ul>
-</div>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="resources/img/stack-saga-e-store-example-executor-types-in-stacksaga.drawio.svg" alt=" Stacksaga Executors" height="300">
-</div>
-</div>
-<div class="sect3">
-<h4 id="query_executor_architecture">Query Executor</h4>
-<div class="paragraph">
-<p>In the query executor, you only have a one method to do your atomic execution.
-It&#8217;s called as atomic process execution.
-Upon the aggregator that you provided you will have the aggregator as a parameter.
-That is the aggregator object which runs for the entire transaction.
-In the method, you are permitted to read write and update the values from that object.
-And you can invoke your atomic execution inside the method body by using the values of given aggregator.
-According to the StackSaga example, just think we are going to check the user status.
-To do this part, you already have the service class and the function.
-For here, the only thing that you do is introduction that method and get the relevant data from the given aggregator.
-The framework is responsible for invoking that method you mentioned. ** In one executor, you can introduce one atomic process only.</p>
-</div>
-<div class="paragraph">
-<p>Finally, you have to return what is the next executor that you want to execute.
-It is totally runtime.
-You can decide it the data by using the given aggregator or by anything else.
-Or, if your process is completed from this execution, you can notify about that by complete single.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="command_executor_architecture">Command Executor</h4>
-<div class="paragraph">
-<p>In the command executor, you will have two methods to be implemented.
-One for the process the transaction forward.
-And another one for its compensation.
-Now you know what you can do inside the doProcess.
-Let&#8217;s talk about the doRevert method.
-This is the location that you can execute your compensation atomic transaction.
-For here, you will have the final status of the aggregator.
-What is the final status of the aggregator?
-It means the aggregator will change on each and every executor&#8217;s doProcess method.
-Some values are added and some values can be changed.
-Just think the aggregator was used for 10 sub processes.
-But the target processes are 20.
-But the process can&#8217;t be executed further more due to the error that occurred at step number 10. That means old 9 steps (sub executions/ sub transactions) have been done successfully.
-But 10 was failed.
-The framework ignores the changes of the step number 10.
-Because the atomic transaction is failed and updated data is not valid due to the failure.
-Therefore, in the <code><strong>doRevert</strong></code> method, you will get the aggregator object that was before going to be executed at step number 10.
-For instance, if you change the value of xyz variable as 2, but in the step number 9, the value of xyz is null.
-Because you have set the value then.
-Then step number 10 is failed.
-So the final aggregator that you will be given is xyz = null.
-In the revert method, you are not permitted to change the data.
-Because it is the final status of the aggregator.
-It should be immutable and all the revert methods should use the data to process the compensation.
-Due to having the getters and setters, you can set the values and change the values by using the reference.
-But the framework ignores those updates.
-Another special thing is that the <strong><code>revert</code></strong> method doesn&#8217;t have a return.
-Because the framework knows the order of the revert executions, and you can&#8217;t change the direction.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="resources/img/Architecture-Stacksaga-command-executor-with-revert-executors.drawio.svg" alt=" Stacksaga Executors" height="300">
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_how_executors_behave_in_the_application">How Executors Behave In The Application.</h4>
-<div class="imageblock">
-<div class="content">
-<img src="resources/img/stack-saga-e-store-example-what-is-executor-in-stacksaga.drawio.svg" alt=" Stacksaga Executors" height="300">
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="aggregator_and_executors">Relationship between Aggregator and Executors</h3>
-<div class="paragraph">
-<p>Here you can see all the sub sets of processes are connected with the aggregator.
-Each sub process wants the aggregator to get run.
-That means the data that executor wants to execute the sub process, is located at the aggregator.
-If some executor is not linked with the aggregator, it is not configured in the framework.
-You can see the executor-introduction or the real implementation of the example to learn more about the executors.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="resources/img/stack-saga-e-store-example-aggregator-and-executors.drawio.svg" alt="StackSaga Aggregator And Executors" height="400">
-</div>
-</div>
-<div class="sect3">
-<h4 id="aggregator_usage_with_executor">How the Aggregator is used through the Executors</h4>
-<div class="imageblock">
-<div class="content">
-<img src="resources/img/stack-saga-e-store-example-aggregator-state.drawio.svg" alt="StackSaga Aggregator And Executors" height="300">
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="version_casting_architecture">Version Casting</h3>
-<div class="paragraph">
-<p>All the applications will be updated by changing their versions from time to time.
-When a new version is deployed, the old version will be replaced by the new version (if you are not going to use service-mesh).
-But in the event-based architecture, some events can have been waiting to be executed when the new version is being deployed or after deployed as well.
-Then the old event should be mapped with the previous version.
-And if you don&#8217;t consider the old version’s execution, when developing the new version, the events will be conflicted or crashed.
-Because, the old version&#8217;s event is going to be executed by using the new version of the same service.
-But the new version doesn&#8217;t allow the old events, and then the event will face for an exception due to that the event&#8217;s data is not mapped with different versions to be executed smoothly.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><a href="#aggregator_oriented_casting_architecture">Aggregator-Oriented casting</a></p>
-<div class="olist lowerroman">
-<ol class="lowerroman" type="i">
-<li>
-<p>Aggregator upcast</p>
-</li>
-<li>
-<p>Aggregator downcast</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><a href="#executor_oriented_casting_architecture">Executor-Oriented casting</a></p>
-<div class="olist lowerroman">
-<ol class="lowerroman" type="i">
-<li>
-<p>Executor upcast</p>
-</li>
-<li>
-<p>Executor downcast</p>
-</li>
-</ol>
-</div>
-</li>
-</ol>
-</div>
-<div class="sect3">
-<h4 id="aggregator_oriented_casting_architecture">Aggregator-Oriented casting</h4>
-<div class="paragraph">
-<p>All the newly added changes to the aggregator of the new version are called as` aggregator-oriented changes.
-And then, as a developer, you have to do some casting /mapping between those aggregator versions to avoid that conflict.
-But it is not a complicated task because that, the framework uses the Jackson library for serialization.
-(Storing events in the database.) Therefore, you can follow the same effort what you have been doing with Jackson mapping as usual.</p>
-</div>
-<div class="paragraph">
-<p>For instance, the old version&#8217;s aggregator has 3 fields, and the new version can have 4 fields or more than that, or else, the new version can have 2 fields.
-That means the aggregator has got changed relatively to the old version.
-If the new aggregator has more values than the previous one, those kinds of updates are called as upcasting.
-According to the example, the event-store might have the old events consisting of 2 fields.
-And if the new version has a less number of fields than the old one, it is called as down-casting.
-Now those remaining events are going to be executed through the new version.
-And the framework tries to build the new aggregator object by using the old event&#8217;s binaries.
-This is the time the casting is been worked on.
-You have to modify and annotate the aggregator so as not to conflict while building the object by the framework.
-Here you can see the best practices related to the casting of aggregators.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Up-Casting</strong></p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="resources/img/Architecture-Stacksaga-aggregator-version-up-casting.drawio.svg" alt=" Stacksaga aggregator version up-casting" height="300">
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Down-Casting</strong></p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="resources/img/Architecture-Stacksaga-aggregator-version-down-casting.drawio.svg" alt=" Stacksaga aggregator version down-casting" height="300">
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="executor_oriented_casting_architecture">Executor-Oriented Casting</h4>
-<div class="paragraph">
-<p>According to the framework, one aggregator can have multiple executors based on your use case.
-When you update the version of the service, you might want to remove existing executors or add new executors based on the update that should be done.
-If you are going to add more additional executors to the existing aggregator that is called as <strong>executor-oriented upcasting</strong>.
-And the opposite of that, if you remove some existing executors from the aggregator, that form is called as <strong>executor-oriented-down-casting</strong>.
-Adding more is not a problem when the old event executors at all.
-Just think, for instance, the old aggregator had 3 executors and the new aggregator has 4 executors due to the additional one, which has been added.
-And after deploying the new version, the old events are executed through the new version.
-That execution is not conflicted because, all the necessary executors are in the new version.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-IF there is an executor down-cast scenario, This time is not just like Executor-oriented-down-casting because the old event should have all the expected executors to be executed as you plan that event should be executed upon the old version&#8217;s use case.
-But in the new version, if one or more executors do not exist, most of the time the execution can be crashed.
-(In rare cases, it might not be affected upon your update) by the way, even though you want to use some executors for the previous version and for the new version that executor is not used, that kind of situation is called as executor-oriented down-casting changes.
-To avoid conflict in this way, the framework provides a feature to skip the old executor from the latest version, and the old executor is retained only for the remaining old events as it&#8217;s.
-== up-casting
-</td>
-</tr>
-</table>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="resources/img/Architecture-Stacksaga-executor-oriented-version-up-casting.drawio.svg" alt="Architecture Stacksaga executor-oriented version up-casting" height="400">
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="dual_consistency_problem_of_sec_in_microservice">Dual-Consistency problem of SEC in microservice.</h3>
-<div class="paragraph">
-<p>In the microservice architecture, we have concerned highly about the data consistency. As a result of that, you have to move in to the Saga design pattern. But there is the problem can be happened in rare when using SEC. Because the SEC also uses a database to store the state and other stuff. Then the frame has the responsibility to keep the data consistency of the main transaction&#8217;s data and the storing data. Just think the process is being executed, and while after saving successfully, some executors and the event-store database go down. Then the framework is failed to provide the data consistency of their side. In the stack saga framework, to avoid this consistency issue, a solution is provided.</p>
-</div>
-<div class="paragraph">
-<p>The solution the frame provides. As mentioned above, if the database goes down when executing an executor and tries to save the state in the event-store, the framework doesn&#8217;t give up the process due to the database error. Because, the framework has the responsibility to keep the data consistency anytime. Because the framework is also built to take care of the data consistency, then the framework can&#8217;t forget their data consistency as well.</p>
-</div>
-<div class="paragraph">
-<p>Then, after trying to save the event-data in the event store,
-the SCE gets known the there is a database connection loss.
-Then SCE convert the whole dataset (the dataset
-that tried
-to save in the database) regarding the event to binary file in the application scope&#8217;s file system (in spring boot,
-it can be the resource folder) to keep data in persist.
-The file is saved as temporary.
-After saving the temporary file,
-the SEC transfers that file into the admin database through the Redis server immediately.
-Because in the microservice' architecture, the server instance does not persist.
-The reason is that the server instance is built automatically based on the load in the individual containers.
-That&#8217;s why the saved file immediately transfers to the admin database.
-Then that file will be saved in the database as binary.</p>
-</div>
-<div class="paragraph">
-<p>After saving the data file in to the admin database, the admin server tries to invoke by using another randomly selected same microservice. The instance is not a problem here because one service can have the same multiple instances. Then one of the same services can invoke that data file if the database connection is successful. If there is no any instance instead of that, the admin server keeps waiting for connection is successful. After that, the connection is back to normal, the admin server will push the file in to one of the services and invoke the file. After invoking the file data successfully, the particular service will push a message to the admin server to delete the saved file. Because after invoking the file, there is no point in saving that file in the admin server. It should be deleted. Because if the file data exists in the admin database, the admin server try to invoke it again. That&#8217;s how the framework handles its data consistency while keeping the client&#8217;s data consistency as well. It is true that the possibility is very rare but just think that if it happens, that issue the transaction processes will not be complete and the transaction can&#8217;t archive the eventual consistency as well. As a programmer, I think this is the main advantage of using StackSaga framework. Now, if you have a doubt, what happens if the admin server is not up and running? It doesn&#8217;t matter. If it occurred that kind of situation and one of the services try to send a file into admin server while the admin server is down, the file is kept by the relevant instance until the admin server is up. When the admin server goes up, the instance will know about and then the instance will push the file into the admin server as usual. Now you can have a problem in your mind. What happens if the admin server is down and the relevant instance is also going to be down. Then what will happen to that saved file? The framework has considered that as well. Normally, the instances are down by stopping the application server. Then the framework doesn&#8217;t give a chance to stop the server until push that kind of saved files are transferred. The server keeps waiting until the admin server goes up. Those files can be missing only you kill the application by forcing.</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>+</pre>
-</div>
-</div>
+<p>You were unable to reach the target end execution to forward.
+Therefore, you stated revert-process for all the past executions one by one (Last-In, First-Out order [<strong>LIFO</strong>] ).
+But unfortunately, You were unable to reach the target final revert as well due to a network issue.</p>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-26 19:34:59 +0530
+Last updated 2023-08-26 22:44:10 +0530
 </div>
 </div>
 </body>
