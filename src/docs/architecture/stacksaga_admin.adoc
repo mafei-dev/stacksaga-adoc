@@ -1,0 +1,5 @@
+
+
+StackSaga Admin Server is the monitoring dashboard of the StackSaga framework.
+
+NOTE: Event though StackSaga framework can be run without the admin-server, it is recommended to connect the admin-server with other StackSaga clients.

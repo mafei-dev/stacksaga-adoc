@@ -1,3 +1,4 @@
+= StackSaga [[index]]
 :toc-title: Table of Contents
 :icons: font
 :prewrap!:
@@ -24,7 +25,11 @@ include::introduction/index.adoc[]
 
 include::architecture/index.adoc[]
 
-== Developer Guide
+== StackSaga Admin [[stacksaga_admin_index]]
+
+include::dev-guide/admin/index.adoc[]
+
+== StackSaga Starter Core
 
 include::dev-guide/index.adoc[]
 

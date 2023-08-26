@@ -1,0 +1,23 @@
+==== StackSaga Admin Jar [[stacksaga_admin_jar]]
+
+icon:download[2x]
+Here is the standalone version of StackSaga admin server.
+You can download the *stack-saga-admin-server.zip*.
+
+*Downloads*
+
+* https://mega.nz/folder/w8lRXYyI#q5CFtVrNTCJtqYUuDzPPkA[StackSaga Admin Server - MySQL]
+
+*Minimum Requirements*
+
+* Java java 8 or upper
+* Selected Database
+
+After unzipping the file, you will see the jar file. To run the jar file, run the `+START.sh+` file or the following code below. Before run the jar, make sure to config your custom configuration in the `+application.properties+` file.
+
+
+*> Run on the console*
+[source,shell]
+----
+java -jar stack-saga-admin-1.0-SNAPSHOT.jar --spring.config.location=file:application.properties
+----

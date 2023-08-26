@@ -1,3 +1,4 @@
+
 === Aggregator Introduction
 
 include::pages/intro.adoc[]
