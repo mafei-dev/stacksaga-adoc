@@ -489,7 +489,7 @@ In the diagram, the <strong>Gray</strong> color components and lines are related
 <ol class="arabic">
 <li>
 <p>At first glance, you can see a major difference in database architecture.
-Due to the fact that StackSaga <a href="#SEC">SEC</a> uses <strong>event sourcing</strong> for managing your <a href="#aggregator_architecture">aggregator state</a> for each <a href="#executor_architecture">executor</a>.
+The reason is StackSaga <a href="#SEC">SEC</a> uses <strong>event sourcing</strong> for managing your <a href="#aggregator_architecture">aggregator state</a> for each <a href="#executor_architecture">executor</a>.
 In brief, StackSaga internally uses a database to string your execution data as events.
 Therefore, If you are using StackSaga, you have to provide a database as the <a href="#event_store">event-store</a>.</p>
 <div class="admonitionblock tip">
@@ -504,6 +504,20 @@ Even though the diagram shows event-store per service, It can be configured as a
 </tr>
 </table>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+It is recommended to use one of the StackSaga-DB implementations equal to the primary database for the particular service.
+Because, you don&#8217;t need to configure another separate database and complicate the architecture.<br>
+As an example, If the order-service uses <strong>MYSQL</strong> databases as the <strong>primary database</strong>, you can use the <code>StackSaga-MYSQL</code> implementation for the event-store.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>The event-store is accessed by the StackSaga framework.
 Therefore, The <code>StackSaga-Core</code> library (StackSaga <a href="#SEC">SEC</a> is located in this library) should be added to your application.</p>
@@ -513,9 +527,6 @@ Therefore, The <code>StackSaga-Core</code> library (StackSaga <a href="#SEC">SEC
 <p>Even though it is enough for the event-sourcing, StackSaga provides more additional functionalities like avoiding <a href="#dual_consistency_problem_of_sec_in_microservice">Dual-Consistency Problem</a>, <a href="#stacksaga_admin">Monitoring Trace,</a> etc.
 Therefore, another library should be added to your application called <code>StackSaga-Discovery</code>.
 It will interact with your <strong>service-registry</strong> and get to know about the service availability.</p>
-</li>
-</ol>
-</div>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -528,19 +539,38 @@ Currently, StackSaga only supports for <a href="https://spring.io/projects/sprin
 </tr>
 </table>
 </div>
+</li>
+<li>
+<p>Next, Let&#8217;s have a look at <a href="#stacksaga_admin">StackSaga Admin</a>.
+Admin provides a lot of facilities in the framework.
+Primarily feature is monitoring and tracking the transaction&#8217;s flow and trace.
+For monitoring your transactions, Admin should be able to retrieve the transaction data from each event-store.
+Internally, <code>StackSaga-Discovery</code> library provides and exposes the endpoints for that.</p>
+</li>
+<li>
+<p>StackSaga provides a library called <code>StackSaga-Gateway-Shield</code> for secure your transaction-endpoints that <code>StackSaga-Discovery</code> library provides. <code>StackSaga-Gateway-Shield</code> is added as a dependency for your <a href="https://spring.io/projects/spring-cloud-gateway">Spring-Cloud API-Gateway</a>.</p>
+</li>
+</ol>
+</div>
 <div class="paragraph">
-<p>As a summary of the image above, you can identify mainly 4 components as new.in the next image below you can see those new components how to interact with the general components.</p>
+<p>According to the high-level architecture diagram and the brief explanation, you can identify one application and 4 libraries are involved for StackSaga.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>StackSaga Coordinator (A Library) and StackSaga Connector (A Library) is located in the individual services.</p>
+<p><code>StackSaga-Core</code> (library).</p>
 </li>
 <li>
-<p>StackSaga Shield (A Library) is located in the API gateway.</p>
+<p><code>StackSaga-Discovery</code> (library).</p>
 </li>
 <li>
-<p>StackSaga Server (A Standalone Application) is one separate unit that provides a dashboard.</p>
+<p><code>StackSaga-DB</code> (library).</p>
+</li>
+<li>
+<p><code>StackSaga-Gateway-Shield</code> (library).</p>
+</li>
+<li>
+<p><code>StackSaga-Admin-Server</code> (Application).</p>
 </li>
 </ol>
 </div>
@@ -549,10 +579,53 @@ Currently, StackSaga only supports for <a href="https://spring.io/projects/sprin
 <img src="resources/img/architecture-stacksaga-products.drawio.svg" alt="StackSaga High-level architecture" height="300">
 </div>
 </div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>StackSaga-Core</code> , <code>StackSaga-Discovery</code> and <code>StackSaga-DB</code> dependencies are used for the individual service that you want to use the service as an <strong>orchestrator</strong>.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+No need to add StackSaga for all the services in the ecosystem.
+It can be added freely only to the services that you want to use.
+If There is no any complex business domain in some services, there is no point in adding StackSaga for that particular service and keep it as it is in the ecosystem.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><code>StackSaga-Gateway-Shield</code> is used for protecting the event-store endpoints that provide by the <code>StackSaga-Discovery</code>.</p>
+</li>
+<li>
+<p><code>StackSaga-Admin-Server</code> Can be run as a standalone server.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Currently, StackSaga-Admin does support only for MYSQL.
+It does not bother other services.
+StackSaga-Admin&#8217;s Database is used only for saving the <strong>User&#8217;s-Credentials</strong> and the <strong>Terminated Transactions'</strong> metadata.
+<mark>Other data that you can see in the StackSaga-Admin dashboard are obtained from each service&#8217;s event-store endpoints.
+</mark>
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-28 00:11:16 +0530
+Last updated 2023-08-28 02:41:21 +0530
 </div>
 </div>
 </body>

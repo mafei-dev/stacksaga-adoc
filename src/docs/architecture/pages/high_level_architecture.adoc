@@ -20,11 +20,15 @@ TIP: In the diagram, the *Gray* color components and lines are related to the ty
 Let's have a look at all the components and how they are interacted with each other.
 
 . At first glance, you can see a major difference in database architecture.
-Due to the fact that StackSaga <<SEC,SEC>> uses *event sourcing* for managing your <<aggregator_architecture,aggregator state>> for each <<executor_architecture,executor>>.
+The reason is StackSaga <<SEC,SEC>> uses *event sourcing* for managing your <<aggregator_architecture,aggregator state>> for each <<executor_architecture,executor>>.
 In brief, StackSaga internally uses a database to string your execution data as events.
 Therefore, If you are using StackSaga, you have to provide a database as the <<event_store,event-store>>.
 +
 TIP: Even though the diagram shows event-store per service, It can be configured as a single event-store for all services if the application is currently not a large one. <<event_store,Read more>>.
++
+TIP: It is recommended to use one of the StackSaga-DB implementations equal to the primary database for the particular service.
+Because, you don't need to configure another separate database and complicate the architecture. +
+As an example, If the order-service uses *MYSQL* databases as the *primary database*, you can use the `StackSaga-MYSQL` implementation for the event-store.
 +
 The event-store is accessed by the StackSaga framework.
 Therefore, The `StackSaga-Core` library (StackSaga <<SEC,SEC>> is located in this library) should be added to your application.
@@ -44,11 +48,34 @@ Internally, `StackSaga-Discovery` library provides and exposes the endpoints for
 
 . StackSaga provides a library called `StackSaga-Gateway-Shield` for secure your transaction-endpoints that `StackSaga-Discovery` library provides. `StackSaga-Gateway-Shield` is added as a dependency for your https://spring.io/projects/spring-cloud-gateway[Spring-Cloud API-Gateway].
 
-As a summary of the image above, you can identify mainly 4 components as new.in the next image below you can see those new components how to interact with the general components.
+According to the high-level architecture diagram and the brief explanation, you can identify one application and 4 libraries are involved for StackSaga.
 
-. StackSaga Coordinator (A Library) and StackSaga Connector (A Library) is located in the individual services.
-. StackSaga Shield (A Library) is located in the API gateway.
-. StackSaga Server (A Standalone Application) is one separate unit that provides a dashboard.
-
+. `StackSaga-Core` (library).
+. `StackSaga-Discovery` (library).
+. `StackSaga-DB` (library).
+. `StackSaga-Gateway-Shield` (library).
+. `StackSaga-Admin-Server` (Application).
 
 image::resources/img/architecture-stacksaga-products.drawio.svg[alt="StackSaga High-level architecture",height=300]
+
+* `StackSaga-Core`, `StackSaga-DB` and `StackSaga-Discovery` dependencies are used for the individual service that you want to use the service as an *orchestrator*.
++
+NOTE: No need to add StackSaga for all the services in the ecosystem.
+It can be added freely only to the services that you want to use.
+If There is no any complex business domain in some services, there is no point in adding StackSaga for that particular service and keep it as it is in the ecosystem.
+* `StackSaga-Gateway-Shield` is used for protecting the event-store endpoints that provide by the `StackSaga-Discovery`.
+* `StackSaga-Admin-Server` Can be run as a standalone server.
++
+NOTE: Currently, StackSaga-Admin does support only for MYSQL.
+It does not bother other services.
+// TODO: add a link [facilities]
+StackSaga-Admin's Database is used only for saving the *User's-Credentials* and the *Terminated Transactions'* metadata.
+##Other data that you can see in the StackSaga-Admin dashboard are obtained from each service's event-store endpoints.
+##
+
+We had a quit a simple idea over this high-level overview.
+It is recommended to fallow the following architectures in detailed to have a better understanding.
+
+. How <<SEC,SEC>> does work with help of `StackSaga-Core` and `StackSaga-DB` inside the individual services. [<<SEC,Read in detailed>>]
+. How StackSaga Overcomes the <<dual_consistency_problem_of_sec_in_microservice,Dual-Consistency Problem>> with help of `StackSaga-Discovery`. [<<dual_consistency_problem_of_sec_in_microservice,Read in detailed>>]
+. How StackSaga Admin communicates with each service's event-store endpoints with help of `StackSaga-Discovery` and `StackSaga-Gateway-Shield`. [<<SEC,Read in detailed>>]
