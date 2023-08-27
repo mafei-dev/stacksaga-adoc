@@ -2,7 +2,7 @@
 
 include::pages/what_is_stacksaga.adoc[]
 
-=== StackSaga in High-level
+=== StackSaga in High-level [[stacksaga_high_level]]
 
 include::pages/high_level_architecture.adoc[]
 

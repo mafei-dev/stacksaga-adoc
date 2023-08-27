@@ -581,7 +581,7 @@ pre.rouge .gs {
 <li><a href="#_stacksaga_architecture">3. StackSaga Architecture</a>
 <ul class="sectlevel2">
 <li><a href="#what_is_stacksaga">3.1. Introduction To StackSaga</a></li>
-<li><a href="#_stacksaga_in_high_level">3.2. StackSaga in High-level</a></li>
+<li><a href="#stacksaga_high_level">3.2. StackSaga in High-level</a></li>
 <li><a href="#key_processes_of_ecosystem">3.3. Key Processes of ecosystem</a></li>
 <li><a href="#stacksaga_components">3.4. StackSaga Components</a>
 <ul class="sectlevel3">
@@ -1026,14 +1026,37 @@ The only thing that you want to do is make the request part of each atomic trans
 </div>
 </div>
 <div class="sect2">
-<h3 id="_stacksaga_in_high_level"><a class="anchor" href="#_stacksaga_in_high_level"></a>3.2. StackSaga in High-level</h3>
+<h3 id="stacksaga_high_level"><a class="anchor" href="#stacksaga_high_level"></a>3.2. StackSaga in High-level</h3>
 <div class="paragraph">
-<p>in the introduction, we got a clear idea of how microservice architecture works, and what are the challenges that we have to face when implementing the microservice. here, we are going to explain how the stack saga works together with typical microservice architecture. here we have demonstrated a spring boot microservice architecture and how the StackSaga framework provides the Saga execution coordinator (SEC) capabilities without bothering to the default architecture.</p>
+<p>In the <a href="#what_is_stacksaga">introduction section</a>, We got a clear idea of how microservice architecture works, and what are the challenges that we have to face when implementing the microservice in traditional way.</p>
 </div>
+<div class="paragraph">
+<p>Here, we are going to see how the StackSaga works together with typical microservice architecture.
+Here it is demonstrated a <a href="https://spring.io/microservices">spring boot microservice architecture</a>
+and what kind of impact is caused on it by StackSaga.</p>
+</div>
+<div class="paragraph">
+<p>For your convenience, both <strong>Spring Microservice Architecture</strong> and <strong>Spring Microservice Architecture With StackSaga</strong> diagrams are added here.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Spring Microservice Architecture</strong><br></p>
+<div class="imageblock">
+<div class="content">
+<img src="resources/img/microservice-high-level-diagram.svg" alt="Microservice High Level Diagram" height="300">
+</div>
+</div>
+</li>
+<li>
+<p><strong>Spring Microservice Architecture With StackSaga</strong></p>
 <div class="imageblock">
 <div class="content">
 <img src="resources/img/stack-saga-high-level-diagram.svg" alt="StackSaga High-level architecture" height="300">
 </div>
+</div>
+</li>
+</ol>
 </div>
 <div class="paragraph">
 <p>After adding stack saga in the microservice architecture, you can see there are some additional components in the high-level architecture diagram.
@@ -4184,7 +4207,7 @@ Because the URL is built based on the <a href="#eureka_configuration_for_stacksa
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-27 13:38:48 +0530
+Last updated 2023-08-27 18:35:35 +0530
 </div>
 </div>
 </body>

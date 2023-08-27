@@ -30,7 +30,6 @@ include::introduction/index.adoc[]
 
 include::saga/index.adoc[]
 
-
 == StackSaga Architecture
 
 include::architecture/index.adoc[]

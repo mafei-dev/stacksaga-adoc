@@ -1,5 +1,17 @@
-in the introduction, we got a clear idea of how microservice architecture works, and what are the challenges that we have to face when implementing the microservice. here, we are going to explain how the stack saga works together with typical microservice architecture. here we have demonstrated a spring boot microservice architecture and how the StackSaga framework provides the Saga execution coordinator (SEC) capabilities without bothering to the default architecture.
+In the <<what_is_stacksaga,introduction section>>, We got a clear idea of how microservice architecture works, and what are the challenges that we have to face when implementing the microservice in traditional way.
 
+Here, we are going to see how the StackSaga works together with typical microservice architecture.
+Here it is demonstrated a https://spring.io/microservices[spring boot microservice architecture]
+and what kind of impact is caused on it by StackSaga.
+
+For your convenience, both *Spring Microservice Architecture* and **Spring Microservice Architecture With StackSaga** diagrams are added here.
+
+. *Spring Microservice Architecture* +
++
+image::resources/img/microservice-high-level-diagram.svg[alt="Microservice High Level Diagram",height=300]
+
+. **Spring Microservice Architecture With StackSaga**
++
 image::resources/img/stack-saga-high-level-diagram.svg[alt="StackSaga High-level architecture",height=300]
 
 After adding stack saga in the microservice architecture, you can see there are some additional components in the high-level architecture diagram.
