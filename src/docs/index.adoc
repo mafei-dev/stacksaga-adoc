@@ -13,7 +13,7 @@
 :appendix-caption: appendix-caption
 :sectanchors:
 // :stylesheet: resources/css/styles.css
-:title-logo-image: image:resources/img/stacksaga-logo.jpg[top=25%,align=center,pdfwidth=0.5in]
+// :title-logo-image: image:resources/img/stacksaga-logo.jpg[top=25%,align=center,pdfwidth=0.5in]
 
 include::logo.adoc[]
 

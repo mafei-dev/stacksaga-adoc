@@ -30,6 +30,14 @@ include::stacksaga_starter_discovery.adoc[]
 
 include::key_processes_of_ecosystem.adoc[]
 
+=== Saga execution coordinator (SEC) [[SEC]]
+
+include::pages/SEC.adoc[]
+
+=== Event Store [[event_store]]
+
+include::pages/event_store.adoc[]
+
 === Aggregator [[aggregator_architecture]]
 
 include::pages/aggregator.adoc[]

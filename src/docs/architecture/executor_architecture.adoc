@@ -8,12 +8,12 @@ To overcome that, the framework provides a template for you.
 That is called as the executor.
 According to the framework, the executors are two types.
 
-. Query executors
+. <<query_executor_architecture,Query executors>>
 - If some atomic process has no compensation (query execution), those kinds of processes are used in a query executor.
 +
 *Example*: If you want to check, the user is active at the time of the transaction happen, and you want to keep the user's activeness until the end of the transaction.
 See the implementation.
-. Command executors
+. <<command_executor_architecture,Command executors>>
 - If some atomic process has a compensation (command execution), those kinds of processes are used in a command executor.
 +
 *Example*: Think that you want to create an order and order process is done successfully.
