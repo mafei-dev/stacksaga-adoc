@@ -1079,7 +1079,7 @@ In the diagram, the <strong>Gray</strong> color components and lines are related
 <ol class="arabic">
 <li>
 <p>At first glance, you can see a major difference in database architecture.
-Due to the fact that StackSaga <a href="#SEC">SEC</a> uses <strong>event sourcing</strong> for managing your <a href="#aggregator_architecture">aggregator state</a> for each <a href="#executor_architecture">executor</a>.
+The reason is StackSaga <a href="#SEC">SEC</a> uses <strong>event sourcing</strong> for managing your <a href="#aggregator_architecture">aggregator state</a> for each <a href="#executor_architecture">executor</a>.
 In brief, StackSaga internally uses a database to string your execution data as events.
 Therefore, If you are using StackSaga, you have to provide a database as the <a href="#event_store">event-store</a>.</p>
 <div class="admonitionblock tip">
@@ -1090,6 +1090,20 @@ Therefore, If you are using StackSaga, you have to provide a database as the <a 
 </td>
 <td class="content">
 Even though the diagram shows event-store per service, It can be configured as a single event-store for all services if the application is currently not a large one. <a href="#event_store">Read more</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+It is recommended to use one of the StackSaga-DB implementations equal to the primary database for the particular service.
+Because, you don&#8217;t need to configure another separate database and complicate the architecture.<br>
+As an example, If the order-service uses <strong>MYSQL</strong> databases as the <strong>primary database</strong>, you can use the <code>StackSaga-MYSQL</code> implementation for the event-store.
 </td>
 </tr>
 </table>
@@ -1129,18 +1143,24 @@ Internally, <code>StackSaga-Discovery</code> library provides and exposes the en
 </ol>
 </div>
 <div class="paragraph">
-<p>As a summary of the image above, you can identify mainly 4 components as new.in the next image below you can see those new components how to interact with the general components.</p>
+<p>According to the high-level architecture diagram and the brief explanation, you can identify one application and 4 libraries are involved for StackSaga.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>StackSaga Coordinator (A Library) and StackSaga Connector (A Library) is located in the individual services.</p>
+<p><code>StackSaga-Core</code> (library).</p>
 </li>
 <li>
-<p>StackSaga Shield (A Library) is located in the API gateway.</p>
+<p><code>StackSaga-Discovery</code> (library).</p>
 </li>
 <li>
-<p>StackSaga Server (A Standalone Application) is one separate unit that provides a dashboard.</p>
+<p><code>StackSaga-DB</code> (library).</p>
+</li>
+<li>
+<p><code>StackSaga-Gateway-Shield</code> (library).</p>
+</li>
+<li>
+<p><code>StackSaga-Admin-Server</code> (Application).</p>
 </li>
 </ol>
 </div>
@@ -1148,6 +1168,66 @@ Internally, <code>StackSaga-Discovery</code> library provides and exposes the en
 <div class="content">
 <img src="resources/img/architecture-stacksaga-products.drawio.svg" alt="StackSaga High-level architecture" height="300">
 </div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>StackSaga-Core</code>, <code>StackSaga-DB</code> and <code>StackSaga-Discovery</code> dependencies are used for the individual service that you want to use the service as an <strong>orchestrator</strong>.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+No need to add StackSaga for all the services in the ecosystem.
+It can be added freely only to the services that you want to use.
+If There is no any complex business domain in some services, there is no point in adding StackSaga for that particular service and keep it as it is in the ecosystem.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><code>StackSaga-Gateway-Shield</code> is used for protecting the event-store endpoints that provide by the <code>StackSaga-Discovery</code>.</p>
+</li>
+<li>
+<p><code>StackSaga-Admin-Server</code> Can be run as a standalone server.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Currently, StackSaga-Admin does support only for MYSQL.
+It does not bother other services.
+StackSaga-Admin&#8217;s Database is used only for saving the <strong>User&#8217;s-Credentials</strong> and the <strong>Terminated Transactions'</strong> metadata.
+<mark>Other data that you can see in the StackSaga-Admin dashboard are obtained from each service&#8217;s event-store endpoints.
+</mark>
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We had a quit a simple idea over this high-level overview.
+It is recommended to fallow the following architectures in detailed to have a better understanding.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>How <a href="#SEC">SEC</a> does work with help of <code>StackSaga-Core</code> and <code>StackSaga-DB</code> inside the individual services. [<a href="#SEC">Read in detailed</a>]</p>
+</li>
+<li>
+<p>How StackSaga Overcomes the <a href="#dual_consistency_problem_of_sec_in_microservice">Dual-Consistency Problem</a> with help of <code>StackSaga-Discovery</code>. [<a href="#dual_consistency_problem_of_sec_in_microservice">Read in detailed</a>]</p>
+</li>
+<li>
+<p>How StackSaga Admin communicates with each service&#8217;s event-store endpoints with help of <code>StackSaga-Discovery</code> and <code>StackSaga-Gateway-Shield</code>. [<a href="#SEC">Read in detailed</a>]</p>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect2">
