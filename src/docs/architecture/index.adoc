@@ -6,6 +6,10 @@ include::pages/what_is_stacksaga.adoc[]
 
 include::pages/high_level_architecture.adoc[]
 
+=== Key Processes of ecosystem [[key_processes_of_ecosystem]]
+
+include::key_processes_of_ecosystem.adoc[]
+
 === StackSaga Components [[stacksaga_components]]
 
 include::stacksaga_components.adoc[]
@@ -25,10 +29,6 @@ include::stacksaga_starter_db.adoc[]
 ==== StackSaga Starter Discovery [[stacksaga_starter_discovery]]
 
 include::stacksaga_starter_discovery.adoc[]
-
-=== Key Processes of ecosystem [[key_processes_of_ecosystem]]
-
-include::key_processes_of_ecosystem.adoc[]
 
 === Saga execution coordinator (SEC) [[SEC]]
 
