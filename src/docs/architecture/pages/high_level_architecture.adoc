@@ -1,12 +1,11 @@
 In the <<what_is_stacksaga,introduction section>>, We got a clear idea of how microservice architecture works, and what are the challenges that we have to face when implementing the microservice in traditional way.
 
 Here, we are going to see how the StackSaga works together with typical microservice architecture.
-Here it is demonstrated a https://spring.io/microservices[spring boot microservice architecture]
-and what kind of impact is caused on it by StackSaga.
+It shows how StackSaga does impact on the default https://spring.io/microservices[spring boot microservice architecture].
 
-For your convenience, both *Spring Microservice Architecture* and **Spring Microservice Architecture With StackSaga** diagrams are added here.
+For your convenience, both *Spring Microservice Architecture* and **Spring Microservice Architecture With StackSaga** diagrams have been added here.
 
-* *Spring Microservice Architecture* +
+* *Spring Microservice Architecture* [[spring_microservice_architecture]] +
 +
 image::resources/img/microservice-high-level-diagram.svg[alt="Microservice High Level Diagram",height=300]
 
@@ -15,14 +14,35 @@ image::resources/img/microservice-high-level-diagram.svg[alt="Microservice High 
 image::resources/img/stack-saga-high-level-diagram.svg[alt="StackSaga High-level architecture",height=300]
 
 After adding stack saga in the microservice architecture, you can see there are some additional components in the high-level architecture diagram.
-In the diagram, the gray color components and lines are related to the general microservice architecture and additional stacksaga related components and lines have been colored by green color.
-Let's discuss all the components and how they are interacted with general architecture.
-When you use StackSaga, you have to provide the facilities to create a database in addition to the database that you use for each microservice.
-This is also the same as the database per service design pattern.
-A service group (multiple instances of one service) uses one database to store the events of the executions.
-The only thing is newly added an extra schema.
-If you like to use one database for all microservices for StackSaga, it doesn't matter you can use one database as the event-store.
-But as the best practice, one database per service is recommended.
+
+TIP: In the diagram, the *Gray* color components and lines are related to the typical microservice architecture, and additional stacksaga related components and lines have been colored by *Green* color.
+
+Let's have a look at all the components and how they are interacted with each other.
+
+. At first glance, you can see a major difference in database architecture.
+Due to the fact that StackSaga <<SEC,SEC>> uses *event sourcing* for managing your <<aggregator_architecture,aggregator state>> for each <<executor_architecture,executor>>.
+In brief, StackSaga internally uses a database to string your execution data as events.
+Therefore, If you are using StackSaga, you have to provide a database as the <<event_store,event-store>>.
++
+TIP: Even though the diagram shows event-store per service, It can be configured as a single event-store for all services if the application is currently not a large one. <<event_store,Read more>>.
++
+The event-store is accessed by the StackSaga framework.
+Therefore, The `StackSaga-Core` library (StackSaga <<SEC,SEC>> is located in this library) should be added to your application.
+. Even though it is enough for the event-sourcing, StackSaga provides more additional functionalities like avoiding <<dual_consistency_problem_of_sec_in_microservice,Dual-Consistency Problem>>, <<stacksaga_admin,Monitoring Trace,>> etc.
+Therefore, another library should be added to your application called `StackSaga-Discovery`.
+// TODO: add a link to why use eureka by the StackSaga framework.
+It will interact with your *service-registry* and get to know about the service availability.
++
+NOTE: Currently, StackSaga only supports for https://spring.io/projects/spring-cloud-netflix[Eureka Service Registry].
+
+. Next, Let's have a look at <<stacksaga_admin,StackSaga Admin>>.
+// TODO: add a link [facilities]
+Admin provides a lot of facilities in the framework.
+Primarily feature is monitoring and tracking the transaction's flow and trace.
+For monitoring your transactions, Admin should be able to retrieve the transaction data from each event-store.
+Internally, `StackSaga-Discovery` library provides and exposes the endpoints for that.
+
+. StackSaga provides a library called `StackSaga-Gateway-Shield` for secure your transaction-endpoints that `StackSaga-Discovery` library provides. `StackSaga-Gateway-Shield` is added as a dependency for your https://spring.io/projects/spring-cloud-gateway[Spring-Cloud API-Gateway].
 
 As a summary of the image above, you can identify mainly 4 components as new.in the next image below you can see those new components how to interact with the general components.
 

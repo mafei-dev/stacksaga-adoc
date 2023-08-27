@@ -442,27 +442,91 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="paragraph">
 <p>Here, we are going to see how the StackSaga works together with typical microservice architecture.
-Here it is demonstrated a <a href="https://spring.io/microservices">spring boot microservice architecture</a>
-and what kind of impact is caused by StackSaga.</p>
+It shows how StackSaga does impact on the default <a href="https://spring.io/microservices">spring boot microservice architecture</a>.</p>
 </div>
 <div class="paragraph">
-<p>how the StackSaga framework provides Saga execution coordinator (SEC) capabilities without bothering with the default architecture.</p>
+<p>For your convenience, both <strong>Spring Microservice Architecture</strong> and <strong>Spring Microservice Architecture With StackSaga</strong> diagrams have been added here.</p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Spring Microservice Architecture</strong> <a id="spring_microservice_architecture"></a><br></p>
+<div class="imageblock">
+<div class="content">
+<img src="resources/img/microservice-high-level-diagram.svg" alt="Microservice High Level Diagram" height="300">
+</div>
+</div>
+</li>
+<li>
+<p><strong>Spring Microservice Architecture With StackSaga</strong></p>
 <div class="imageblock">
 <div class="content">
 <img src="resources/img/stack-saga-high-level-diagram.svg" alt="StackSaga High-level architecture" height="300">
 </div>
 </div>
+</li>
+</ul>
+</div>
 <div class="paragraph">
-<p>After adding stack saga in the microservice architecture, you can see there are some additional components in the high-level architecture diagram.
-In the diagram, the gray color components and lines are related to the general microservice architecture and additional stacksaga related components and lines have been colored by green color.
-Let&#8217;s discuss all the components and how they are interacted with general architecture.
-When you use StackSaga, you have to provide the facilities to create a database in addition to the database that you use for each microservice.
-This is also the same as the database per service design pattern.
-A service group (multiple instances of one service) uses one database to store the events of the executions.
-The only thing is newly added an extra schema.
-If you like to use one database for all microservices for StackSaga, it doesn&#8217;t matter you can use one database as the event-store.
-But as the best practice, one database per service is recommended.</p>
+<p>After adding stack saga in the microservice architecture, you can see there are some additional components in the high-level architecture diagram.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+In the diagram, the <strong>Gray</strong> color components and lines are related to the typical microservice architecture, and additional stacksaga related components and lines have been colored by <strong>Green</strong> color.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s have a look at all the components and how they are interacted with each other.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>At first glance, you can see a major difference in database architecture.
+Due to the fact that StackSaga <a href="#SEC">SEC</a> uses <strong>event sourcing</strong> for managing your <a href="#aggregator_architecture">aggregator state</a> for each <a href="#executor_architecture">executor</a>.
+In brief, StackSaga internally uses a database to string your execution data as events.
+Therefore, If you are using StackSaga, you have to provide a database as the <a href="#event_store">event-store</a>.</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+Even though the diagram shows event-store per service, It can be configured as a single event-store for all services if the application is currently not a large one. <a href="#event_store">Read more</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The event-store is accessed by the StackSaga framework.
+Therefore, The <code>StackSaga-Core</code> library (StackSaga <a href="#SEC">SEC</a> is located in this library) should be added to your application.</p>
+</div>
+</li>
+<li>
+<p>Even though it is enough for the event-sourcing, StackSaga provides more additional functionalities like avoiding <a href="#dual_consistency_problem_of_sec_in_microservice">Dual-Consistency Problem</a>, <a href="#stacksaga_admin">Monitoring Trace,</a> etc.
+Therefore, another library should be added to your application called <code>StackSaga-Discovery</code>.
+It will interact with your <strong>service-registry</strong> and get to know about the service availability.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Currently, StackSaga only supports for <a href="https://spring.io/projects/spring-cloud-netflix">Eureka Service Registry</a>.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>As a summary of the image above, you can identify mainly 4 components as new.in the next image below you can see those new components how to interact with the general components.</p>
@@ -488,7 +552,7 @@ But as the best practice, one database per service is recommended.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-27 18:45:00 +0530
+Last updated 2023-08-28 00:11:16 +0530
 </div>
 </div>
 </body>
