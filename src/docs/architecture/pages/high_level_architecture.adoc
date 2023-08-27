@@ -6,11 +6,11 @@ and what kind of impact is caused on it by StackSaga.
 
 For your convenience, both *Spring Microservice Architecture* and **Spring Microservice Architecture With StackSaga** diagrams are added here.
 
-. *Spring Microservice Architecture* +
+* *Spring Microservice Architecture* +
 +
 image::resources/img/microservice-high-level-diagram.svg[alt="Microservice High Level Diagram",height=300]
 
-. **Spring Microservice Architecture With StackSaga**
+* **Spring Microservice Architecture With StackSaga**
 +
 image::resources/img/stack-saga-high-level-diagram.svg[alt="StackSaga High-level architecture",height=300]
 
