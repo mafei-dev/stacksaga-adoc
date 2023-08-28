@@ -17,23 +17,6 @@ include::stack_saga_admin_connect_with_event-store.adoc[]
 
 include::stacksaga_components.adoc[]
 
-==== StackSaga Admin [[stacksaga_admin]]
-
-include::stacksaga_admin.adoc[]
-
-==== StackSaga Starter Core [[stacksaga_core]]
-
-include::stacksaga_core.adoc[]
-
-==== StackSaga Starter DB [[stacksaga_starter_db]]
-
-include::stacksaga_starter_db.adoc[]
-
-==== StackSaga Starter Discovery [[stacksaga_starter_discovery]]
-
-include::stacksaga_starter_discovery.adoc[]
-
-
 include::pages/SEC.adoc[]
 
 === Event Store [[event_store]]
