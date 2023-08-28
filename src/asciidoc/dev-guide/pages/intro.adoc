@@ -1,2 +1,1 @@
-Here we are going to discuss how we can create an Aggregator and what are the configurations of the Aggregator.
 

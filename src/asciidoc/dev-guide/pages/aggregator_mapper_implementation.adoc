@@ -1,3 +1,5 @@
+=== Custom Aggregator Mapper [[aggregator_mapper_implementation]]
+
 You can decide your custom configurations of the objectMapper for your target <<creating_aggregator_class,Aggregator>>.
 By default, the system will use an https://fasterxml.github.io/jackson-databind/javadoc/2.7/com/fasterxml/jackson/databind/ObjectMapper.html[`ObjectMapper`]
 that the framework provides for the aggregator serialization and deserialization.

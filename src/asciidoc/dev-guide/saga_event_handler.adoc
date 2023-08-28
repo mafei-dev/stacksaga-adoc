@@ -1,3 +1,5 @@
+=== Saga Execution Event Listener  [[saga_event_handler]]
+
 `SagaExecutionEventListener` is the place where you're notified about each and every action during the process by the SEC.
 As an example, you hand over your transaction to the StackSaga engine by mentioning the starting executor.
 After handing over, the engine will invoke your executors one by one.

@@ -1,3 +1,5 @@
+==== Custom Admin Connector configuration [[custom_admin_connect_resttemplate_configuration]]
+
 In addition to the default configurations, if you want to provide more complex configurations for the http client (RestTemplate) like enable custom SSL configurations, You can provide your own `RestTemplate` for the StackSaga framework to use when the client connects to the admin-server.
 Then the default configuration (`SagaAdminConnectRestTemplateProviderDefault`) will be overridden with your custom configurations.
 

@@ -1,3 +1,5 @@
+=== NonRetryableExecutorException [[non_retryable_executor_exception]]
+
 If you are having an exception while processing the executor that is not temporally occurred (The exceptions that have not any point of executing again), you can throw a `NonRetryableExecutorException`.
 Then the StackSaga engine will stop the execution forward, and start reverting back, according to the configuration.
 

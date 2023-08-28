@@ -1,3 +1,5 @@
+==== Query Executor. [[query_executor]]
+
 You can create any number of your custom Query-Executors regarding the Aggregator.
 Here you can see how you can create a Query-Executor for your `<<creating_aggregator_class,PlaceOrderAggregator>>`.
 

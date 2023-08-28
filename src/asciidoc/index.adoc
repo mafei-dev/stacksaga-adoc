@@ -53,7 +53,6 @@ include::architecture/index.adoc[]
 
 include::dev-guide/admin/index.adoc[]
 
-== StackSaga Starter Core [[stacksaga_core_index]]
 
 // include::dev-guide/core/index.adoc[]
 include::dev-guide/index.adoc[]

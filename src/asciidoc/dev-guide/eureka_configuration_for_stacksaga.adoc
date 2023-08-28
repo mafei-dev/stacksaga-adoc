@@ -1,3 +1,5 @@
+==== Eureka configuration for StackSaga [[eureka_configuration_for_stacksaga]]
+
 If you ara using `stacksaga-spring-boot-starter-discovery`, To communicate with the slaves, the master instance uses a `RestTemplate` internally with the following configurations.
 
 — Here you can see the required configurations with default values.

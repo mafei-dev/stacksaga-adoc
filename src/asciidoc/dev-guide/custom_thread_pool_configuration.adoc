@@ -1,3 +1,5 @@
+=== Custom Thread-pool configuration [[custom_thread_pool_configuration]]
+
 In StackSaga framework, there are several thread-pools are used behind the scene with default configurations.
 All the executions are not executed with a single thread-pool to ensure the resiliency of the application.
 

@@ -1,3 +1,5 @@
+=== Internal Service Communication [[service_communication]]
+
 As per the StackSaga architecture, Internally (*within the same zone*) each instance should be able to communicate with other instances at any time.
 Because, Any instance can be the Master instance and then the Master instance should have to make requests to other slaves to notify the retry-allocations.
 The communication is done by based on the service registry cache of the current master.

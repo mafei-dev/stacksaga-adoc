@@ -1,3 +1,5 @@
+=== Creating Aggregator Class [[creating_aggregator_class]]
+
 The aggregator^<<aggregator_architecture,ref>>^  class does represent your business domain, and it is the container for carrying out the data for the executors.
 In side of the aggregator class, you should provide all the data regarding your entire transaction.
 

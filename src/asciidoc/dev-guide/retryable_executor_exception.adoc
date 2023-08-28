@@ -1,3 +1,5 @@
+=== RetryableExecutorException [[retryable_executor_exception]]
+
 If you are having an exception while processing the executor due to a connection issue or that kind of re-invokable error (The exceptions that can be occurred temporarily), you can throw a `RetryableExecutorException`.
 Then the StackSaga engine will temporarily pause the execution, and the transaction does expose to the next scheduler.
 Because, the engine knows that even though the executor has an exception at this moment, the execution can be retried and run again successfully due to the retractable error.

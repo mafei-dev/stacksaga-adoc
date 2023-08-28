@@ -1,3 +1,5 @@
+=== Creating SagaSerializable Class for Aggregator [[saga_serializable]]
+
 The `SagaSerializable` class provides you a method called `<T> getSamples()` to provide the sample array of objects of your real Aggregator. for each aggregator class that you made should have a separate implementation of `SagaSerializable` for validating the sample object before the application is started. that process ensures that your aggregator object will not face a serialization error while the transactions are being processed in the production.
 
 you can see a sample SagaSerializable `(PlaceOrderAggregatorSample.class)` implementation of the PlaceOrderAggregator.

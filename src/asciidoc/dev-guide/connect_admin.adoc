@@ -1,3 +1,5 @@
+=== Connect Admin [[connect_admin]]
+
 As per the architecture, all the StackSaga clients connect to the StackSaga admin server initially (*for submitting the instance metadata*) and as well as during the StackSaga-client is being run (*for submitting the terminated transaction data*).
 
 IF you want to connect your service with the StackSaga admin server, you have to have a *service-account* that has been created by the StackSaga admin.

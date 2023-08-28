@@ -1,3 +1,5 @@
+=== Saga Executors. [[saga_executors]]
+
 According to the saga design pattern, sub processes (atomic executions) can have two executions called process execution and compensation execution.
 And those executions you van create as the methods in your application anywhere.
 

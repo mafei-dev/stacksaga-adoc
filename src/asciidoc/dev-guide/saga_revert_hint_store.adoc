@@ -1,3 +1,5 @@
+=== RevertHintStore [[saga_revert_hint_store]]
+
 `RevertHintStore` does provide you a map to put the data that the revert processes want.
 After having a <<non_retryable_executor_exception,NonRetryableExecutorException>>, the engine will start the revert process by stopping to forward anymore.
 You know already, when the transaction going forward, you can update or add the data in the aggregator object.

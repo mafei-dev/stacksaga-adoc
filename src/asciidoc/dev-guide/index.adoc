@@ -1,119 +1,81 @@
+== StackSaga Starter Core [[stacksaga_core_index]]
 
-=== Aggregator Introduction
+StackSaga core dependency consists of many modules and topics like
+<<creating_aggregator_class,Aggregator>>, <<saga_executors,Executors>>, and <<saga_revert_hint_store,RevertHintStore>> many more.
+You can go through each topic to have comprehensive knowledge.
 
-include::pages/intro.adoc[]
+To use the `StackSaga core` dependency in your application you need to add the dependency in your application.
 
-=== Creating Aggregator Class [[creating_aggregator_class]]
+* Maven Dependency
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.stacksaga</groupId>
+    <artifactId>stacksaga-spring-boot-starter-core</artifactId>
+    <version>1.0-SNAPSHOT</version>
+</dependency>
+----
+
+For your convenience, all the configuration details have been mentioned here.
+
+include::pages/configuration-properties.adoc[]
 
 include::pages/create-aggregator.adoc[]
 
-=== Creating SagaSerializable Class for Aggregator [[saga_serializable]]
-
 include::pages/saga_serializable.adoc[]
-
-=== Custom Aggregator Mapper [[aggregator_mapper_implementation]]
 
 include::pages/aggregator_mapper_implementation.adoc[]
 
-=== Full Aggregate implementation. [[complex_aggrgator]]
-
 include::pages/complex_aggrgator.adoc[]
-
-=== Saga Executors. [[saga_executors]]
 
 include::pages/saga_executors.adoc[]
 
-==== Query Executor. [[query_executor]]
-
 include::pages/query_executor.adoc[]
-
-==== Command Executor. [[command_executor]]
 
 include::pages/command_executor.adoc[]
 
-==== Revert Before Executor. [[revert_before_executor]]
-
 include::pages/revert_before_executor.adoc[]
-
-==== Revert After Executor. [[revert_after_executor]]
 
 include::pages/revert_after_executor.adoc[]
 
 === ProcessStack
 
-=== RetryableExecutorException [[retryable_executor_exception]]
-
 include::retryable_executor_exception.adoc[]
-
-=== NonRetryableExecutorException [[non_retryable_executor_exception]]
 
 include::non_retryable_executor_exception.adoc[]
 
-=== Usage of Executors[Q&C] With Exceptions  [[usage_of_exceptions]]
-
 include::usage_of_exceptions.adoc[]
-
-=== @SagaException Annotation  [[saga_exception_annotation]]
 
 include::saga_exception_annotation.adoc[]
 
-=== RevertHintStore [[saga_revert_hint_store]]
-
 include::saga_revert_hint_store.adoc[]
-
-=== Saga Execution Event Listener  [[saga_event_handler]]
 
 include::saga_event_handler.adoc[]
 
-=== SagaTemplate<A> [[saga_template]]
-
 include::saga_template.adoc[]
-
-=== TrashFileListener [[saga_trash_listener]]
 
 include::saga_trash_listener.adoc[]
 
-=== Custom Thread-pool configuration [[custom_thread_pool_configuration]]
-
 include::custom_thread_pool_configuration.adoc[]
-
-==== Saga Discovery Transaction TaskExecutor [[saga_discovery_transaction_task_executor]]
 
 include::saga_discovery_transaction_task_executor.adoc[]
 
-==== Saga Event TaskExecutor [[saga_event_task_executor]]
-
 include::saga_event_task_executor.adoc[]
-
-==== Saga Admin TaskExecutor [[saga_admin_task_executor]]
 
 include::saga_admin_task_executor.adoc[]
 
-==== Saga Discovery File TaskExecutor [[saga_discovery_file_task_executor]]
-
 include::saga_discovery_file_task_executor.adoc[]
-
-==== Saga Discovery Retry Transaction TaskExecutor [[saga_discovery_retry_transaction_task_executor]]
 
 include::saga_discovery_retry_transaction_task_executor.adoc[]
 
-=== Connect Admin [[connect_admin]]
-
 include::connect_admin.adoc[]
-
-==== Custom Admin Connector configuration [[custom_admin_connect_resttemplate_configuration]]
 
 include::custom_admin_connect_resttemplate_configuration.adoc[]
 
-=== Internal Service Communication [[service_communication]]
-
 include::service_communication.adoc[]
 
-==== Eureka configuration for StackSaga [[eureka_configuration_for_stacksaga]]
-
 include::eureka_configuration_for_stacksaga.adoc[]
-
-===== Custom Service Communication configuration [[custom_service_communication_resttemplate_configuration]]
 
 include::custom_service_communication_resttemplate_configuration.adoc[]
 

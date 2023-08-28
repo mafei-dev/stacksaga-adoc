@@ -1,3 +1,5 @@
+===== Custom Service Communication configuration [[custom_service_communication_resttemplate_configuration]]
+
 In case if you want to have more complex configurations more than default configurations like enabling custom SSL, adding authentication, you can provide your own RestTemplate for the framework like below:
 
 [source,java]

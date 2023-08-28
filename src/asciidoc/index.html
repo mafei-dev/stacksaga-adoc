@@ -640,47 +640,46 @@ pre.rouge .gs {
 </li>
 <li><a href="#stacksaga_core_index">5. StackSaga Starter Core</a>
 <ul class="sectlevel2">
-<li><a href="#_aggregator_introduction">5.1. Aggregator Introduction</a></li>
-<li><a href="#creating_aggregator_class">5.2. Creating Aggregator Class</a></li>
-<li><a href="#saga_serializable">5.3. Creating SagaSerializable Class for Aggregator</a></li>
-<li><a href="#aggregator_mapper_implementation">5.4. Custom Aggregator Mapper</a></li>
-<li><a href="#complex_aggrgator">5.5. Full Aggregate implementation.</a></li>
-<li><a href="#saga_executors">5.6. Saga Executors.</a>
+<li><a href="#creating_aggregator_class">5.1. Creating Aggregator Class</a></li>
+<li><a href="#saga_serializable">5.2. Creating SagaSerializable Class for Aggregator</a></li>
+<li><a href="#aggregator_mapper_implementation">5.3. Custom Aggregator Mapper</a></li>
+<li><a href="#complex_aggrgator">5.4. Full Aggregate implementation.</a></li>
+<li><a href="#saga_executors">5.5. Saga Executors.</a>
 <ul class="sectlevel3">
-<li><a href="#query_executor">5.6.1. Query Executor.</a></li>
-<li><a href="#command_executor">5.6.2. Command Executor.</a></li>
-<li><a href="#revert_before_executor">5.6.3. Revert Before Executor.</a></li>
-<li><a href="#revert_after_executor">5.6.4. Revert After Executor.</a></li>
+<li><a href="#query_executor">5.5.1. Query Executor.</a></li>
+<li><a href="#command_executor">5.5.2. Command Executor.</a></li>
+<li><a href="#revert_before_executor">5.5.3. Revert Before Executor.</a></li>
+<li><a href="#revert_after_executor">5.5.4. Revert After Executor.</a></li>
 </ul>
 </li>
-<li><a href="#_processstack">5.7. ProcessStack</a></li>
-<li><a href="#retryable_executor_exception">5.8. RetryableExecutorException</a></li>
-<li><a href="#non_retryable_executor_exception">5.9. NonRetryableExecutorException</a></li>
-<li><a href="#usage_of_exceptions">5.10. Usage of Executors[Q&amp;C] With Exceptions </a></li>
-<li><a href="#saga_exception_annotation">5.11. @SagaException Annotation </a></li>
-<li><a href="#saga_revert_hint_store">5.12. RevertHintStore</a></li>
-<li><a href="#saga_event_handler">5.13. Saga Execution Event Listener </a></li>
-<li><a href="#saga_template">5.14. SagaTemplate&lt;A&gt;</a></li>
-<li><a href="#saga_trash_listener">5.15. TrashFileListener</a></li>
-<li><a href="#custom_thread_pool_configuration">5.16. Custom Thread-pool configuration</a>
+<li><a href="#_processstack">5.6. ProcessStack</a></li>
+<li><a href="#retryable_executor_exception">5.7. RetryableExecutorException</a></li>
+<li><a href="#non_retryable_executor_exception">5.8. NonRetryableExecutorException</a></li>
+<li><a href="#usage_of_exceptions">5.9. Usage of Executors[Q&amp;C] With Exceptions </a></li>
+<li><a href="#saga_exception_annotation">5.10. @SagaException Annotation </a></li>
+<li><a href="#saga_revert_hint_store">5.11. RevertHintStore</a></li>
+<li><a href="#saga_event_handler">5.12. Saga Execution Event Listener </a></li>
+<li><a href="#saga_template">5.13. SagaTemplate&lt;A&gt;</a></li>
+<li><a href="#saga_trash_listener">5.14. TrashFileListener</a></li>
+<li><a href="#custom_thread_pool_configuration">5.15. Custom Thread-pool configuration</a>
 <ul class="sectlevel3">
-<li><a href="#saga_discovery_transaction_task_executor">5.16.1. Saga Discovery Transaction TaskExecutor</a></li>
-<li><a href="#saga_event_task_executor">5.16.2. Saga Event TaskExecutor</a></li>
-<li><a href="#saga_admin_task_executor">5.16.3. Saga Admin TaskExecutor</a></li>
-<li><a href="#saga_discovery_file_task_executor">5.16.4. Saga Discovery File TaskExecutor</a></li>
-<li><a href="#saga_discovery_retry_transaction_task_executor">5.16.5. Saga Discovery Retry Transaction TaskExecutor</a></li>
+<li><a href="#saga_discovery_transaction_task_executor">5.15.1. Saga Discovery Transaction TaskExecutor</a></li>
+<li><a href="#saga_event_task_executor">5.15.2. Saga Event TaskExecutor</a></li>
+<li><a href="#saga_admin_task_executor">5.15.3. Saga Admin TaskExecutor</a></li>
+<li><a href="#saga_discovery_file_task_executor">5.15.4. Saga Discovery File TaskExecutor</a></li>
+<li><a href="#saga_discovery_retry_transaction_task_executor">5.15.5. Saga Discovery Retry Transaction TaskExecutor</a></li>
 </ul>
 </li>
-<li><a href="#connect_admin">5.17. Connect Admin</a>
+<li><a href="#connect_admin">5.16. Connect Admin</a>
 <ul class="sectlevel3">
-<li><a href="#custom_admin_connect_resttemplate_configuration">5.17.1. Custom Admin Connector configuration</a></li>
+<li><a href="#custom_admin_connect_resttemplate_configuration">5.16.1. Custom Admin Connector configuration</a></li>
 </ul>
 </li>
-<li><a href="#service_communication">5.18. Internal Service Communication</a>
+<li><a href="#service_communication">5.17. Internal Service Communication</a>
 <ul class="sectlevel3">
-<li><a href="#eureka_configuration_for_stacksaga">5.18.1. Eureka configuration for StackSaga</a>
+<li><a href="#eureka_configuration_for_stacksaga">5.17.1. Eureka configuration for StackSaga</a>
 <ul class="sectlevel4">
-<li><a href="#custom_service_communication_resttemplate_configuration">5.18.1.1. Custom Service Communication configuration</a></li>
+<li><a href="#custom_service_communication_resttemplate_configuration">5.17.1.1. Custom Service Communication configuration</a></li>
 </ul>
 </li>
 </ul>
@@ -2106,6 +2105,93 @@ Event though StackSaga framework can be run without the admin-server, it is reco
 </tr>
 </table>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. ROLES</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">ROLE</th>
+<th class="tableblock halign-left valign-top">Permissions</th>
+<th class="tableblock halign-left valign-top">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SUPER_ADMIN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- Manage Admin Users</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">USER_TYPE</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ADMIN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- Manage OPERATOR_ROLE<br>
+- Manage GATEWAY_ROLE<br>
+- Manage SERVICE_ROLE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">USER_TYPE</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OPERATOR_ROLE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- Monitor the transactions.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">USER_TYPE</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GATEWAY_ROLE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- Connect Gateway</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">APPLICATION_TYPE</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SERVICE_ROLE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- Connect Service</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">APPLICATION_TYPE</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+By default, super admin has an operator role as well.
+</td>
+</tr>
+</table>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Admin Service Specification</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Context</th>
+<th class="tableblock halign-left valign-top">Technology</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Backend</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spring boot with reactive</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Frontend</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Angular</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Database</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mysql with the help of spring R2DBC and liquibase</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Security</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JWT for <strong>Front Users</strong>, and  Basic authentication for <strong>Gateway Users</strong> and <strong>Service Users</strong>.</p></td>
+</tr>
+</tbody>
+</table>
 <div class="sect2">
 <h3 id="setup_the_service"><a class="anchor" href="#setup_the_service"></a>4.1. Set up The Service</h3>
 <div class="paragraph">
@@ -2424,14 +2510,35 @@ It is the credential that we want use for the shield congregation properties.<br
 <div class="sect1">
 <h2 id="stacksaga_core_index"><a class="anchor" href="#stacksaga_core_index"></a>5. StackSaga Starter Core</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_aggregator_introduction"><a class="anchor" href="#_aggregator_introduction"></a>5.1. Aggregator Introduction</h3>
 <div class="paragraph">
-<p>Here we are going to discuss how we can create an Aggregator and what are the configurations of the Aggregator.</p>
+<p>StackSaga core dependency consists of many modules and topics like
+<a href="#creating_aggregator_class">Aggregator</a>, <a href="#saga_executors">Executors</a>, and <a href="#saga_revert_hint_store">RevertHintStore</a> many more.
+You can go through each topic to have comprehensive knowledge.</p>
 </div>
+<div class="paragraph">
+<p>To use the <code>StackSaga core</code> dependency in your application you need to add the dependency in your application.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven Dependency</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight nowrap"><code data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.stacksaga<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>stacksaga-spring-boot-starter-core<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For your convenience, all the configuration details have been mentioned here.</p>
 </div>
 <div class="sect2">
-<h3 id="creating_aggregator_class"><a class="anchor" href="#creating_aggregator_class"></a>5.2. Creating Aggregator Class</h3>
+<h3 id="creating_aggregator_class"><a class="anchor" href="#creating_aggregator_class"></a>5.1. Creating Aggregator Class</h3>
 <div class="paragraph">
 <p>The aggregator<sup><a href="#aggregator_architecture">ref</a></sup>  class does represent your business domain, and it is the container for carrying out the data for the executors.
 In side of the aggregator class, you should provide all the data regarding your entire transaction.</p>
@@ -2563,7 +2670,7 @@ Therefore, it is not necessary to have inside the <strong>component scan</strong
 </div>
 </div>
 <div class="sect2">
-<h3 id="saga_serializable"><a class="anchor" href="#saga_serializable"></a>5.3. Creating SagaSerializable Class for Aggregator</h3>
+<h3 id="saga_serializable"><a class="anchor" href="#saga_serializable"></a>5.2. Creating SagaSerializable Class for Aggregator</h3>
 <div class="paragraph">
 <p>The <code>SagaSerializable</code> class provides you a method called <code>&lt;T&gt; getSamples()</code> to provide the sample array of objects of your real Aggregator. for each aggregator class that you made should have a separate implementation of <code>SagaSerializable</code> for validating the sample object before the application is started. that process ensures that your aggregator object will not face a serialization error while the transactions are being processed in the production.</p>
 </div>
@@ -2624,7 +2731,7 @@ Make sure to keep the default constructor for each SagaSerializable implementati
 </div>
 </div>
 <div class="sect2">
-<h3 id="aggregator_mapper_implementation"><a class="anchor" href="#aggregator_mapper_implementation"></a>5.4. Custom Aggregator Mapper</h3>
+<h3 id="aggregator_mapper_implementation"><a class="anchor" href="#aggregator_mapper_implementation"></a>5.3. Custom Aggregator Mapper</h3>
 <div class="paragraph">
 <p>You can decide your custom configurations of the objectMapper for your target <a href="#creating_aggregator_class">Aggregator</a>.
 By default, the system will use an <a href="https://fasterxml.github.io/jackson-databind/javadoc/2.7/com/fasterxml/jackson/databind/ObjectMapper.html"><code>ObjectMapper</code></a>
@@ -2742,7 +2849,7 @@ Currently, StackSaga framework only supports <code>ObjectMapper</code>.
 <hr>
 </div>
 <div class="sect2">
-<h3 id="complex_aggrgator"><a class="anchor" href="#complex_aggrgator"></a>5.5. Full Aggregate implementation.</h3>
+<h3 id="complex_aggrgator"><a class="anchor" href="#complex_aggrgator"></a>5.4. Full Aggregate implementation.</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight nowrap"><code data-lang="java"><span class="c1">//Aggregtor Classs</span>
@@ -2817,7 +2924,7 @@ Currently, StackSaga framework only supports <code>ObjectMapper</code>.
 </div>
 </div>
 <div class="sect2">
-<h3 id="saga_executors"><a class="anchor" href="#saga_executors"></a>5.6. Saga Executors.</h3>
+<h3 id="saga_executors"><a class="anchor" href="#saga_executors"></a>5.5. Saga Executors.</h3>
 <div class="paragraph">
 <p>According to the saga design pattern, sub processes (atomic executions) can have two executions called process execution and compensation execution.
 And those executions you van create as the methods in your application anywhere.</p>
@@ -2845,7 +2952,7 @@ If some atomic process has a compensation (revert execution), that kind of proce
 </ol>
 </div>
 <div class="sect3">
-<h4 id="query_executor"><a class="anchor" href="#query_executor"></a>5.6.1. Query Executor.</h4>
+<h4 id="query_executor"><a class="anchor" href="#query_executor"></a>5.5.1. Query Executor.</h4>
 <div class="paragraph">
 <p>You can create any number of your custom Query-Executors regarding the Aggregator.
 Here you can see how you can create a Query-Executor for your <code><a href="#creating_aggregator_class">PlaceOrderAggregator</a></code>.</p>
@@ -2910,7 +3017,7 @@ The executor is identified with this value by StackSaga engine. after configurin
 </div>
 </div>
 <div class="sect3">
-<h4 id="command_executor"><a class="anchor" href="#command_executor"></a>5.6.2. Command Executor.</h4>
+<h4 id="command_executor"><a class="anchor" href="#command_executor"></a>5.5.2. Command Executor.</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight nowrap"><code data-lang="java"><i class="conum" data-value="1"></i><b>(1)</b>
@@ -3026,7 +3133,7 @@ According to the example, the revert after execution will be started from <a hre
 <hr>
 </div>
 <div class="sect3">
-<h4 id="revert_before_executor"><a class="anchor" href="#revert_before_executor"></a>5.6.3. Revert Before Executor.</h4>
+<h4 id="revert_before_executor"><a class="anchor" href="#revert_before_executor"></a>5.5.3. Revert Before Executor.</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight nowrap"><code data-lang="java"><i class="conum" data-value="1"></i><b>(1)</b>
@@ -3120,7 +3227,7 @@ That is the method is executed by the StackSaga engine.</td>
 </div>
 </div>
 <div class="sect3">
-<h4 id="revert_after_executor"><a class="anchor" href="#revert_after_executor"></a>5.6.4. Revert After Executor.</h4>
+<h4 id="revert_after_executor"><a class="anchor" href="#revert_after_executor"></a>5.5.4. Revert After Executor.</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight nowrap"><code data-lang="java"><i class="conum" data-value="1"></i><b>(1)</b>
@@ -3215,11 +3322,11 @@ That is the method is executed by the StackSaga engine.</td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_processstack"><a class="anchor" href="#_processstack"></a>5.7. ProcessStack</h3>
+<h3 id="_processstack"><a class="anchor" href="#_processstack"></a>5.6. ProcessStack</h3>
 
 </div>
 <div class="sect2">
-<h3 id="retryable_executor_exception"><a class="anchor" href="#retryable_executor_exception"></a>5.8. RetryableExecutorException</h3>
+<h3 id="retryable_executor_exception"><a class="anchor" href="#retryable_executor_exception"></a>5.7. RetryableExecutorException</h3>
 <div class="paragraph">
 <p>If you are having an exception while processing the executor due to a connection issue or that kind of re-invokable error (The exceptions that can be occurred temporarily), you can throw a <code>RetryableExecutorException</code>.
 Then the StackSaga engine will temporarily pause the execution, and the transaction does expose to the next scheduler.
@@ -3313,7 +3420,7 @@ Therefore, it is necessary to capture and identify all the exceptions that are t
 </div>
 </div>
 <div class="sect2">
-<h3 id="non_retryable_executor_exception"><a class="anchor" href="#non_retryable_executor_exception"></a>5.9. NonRetryableExecutorException</h3>
+<h3 id="non_retryable_executor_exception"><a class="anchor" href="#non_retryable_executor_exception"></a>5.8. NonRetryableExecutorException</h3>
 <div class="paragraph">
 <p>If you are having an exception while processing the executor that is not temporally occurred (The exceptions that have not any point of executing again), you can throw a <code>NonRetryableExecutorException</code>.
 Then the StackSaga engine will stop the execution forward, and start reverting back, according to the configuration.</p>
@@ -3469,7 +3576,7 @@ If you don&#8217;t want to continue the execution of the transaction to forward,
 </div>
 </div>
 <div class="sect2">
-<h3 id="usage_of_exceptions"><a class="anchor" href="#usage_of_exceptions"></a>5.10. Usage of Executors[Q&amp;C] With Exceptions </h3>
+<h3 id="usage_of_exceptions"><a class="anchor" href="#usage_of_exceptions"></a>5.9. Usage of Executors[Q&amp;C] With Exceptions </h3>
 <div class="paragraph">
 <p>Here you can see how you can handle the <strong>success</strong>,
 <strong>failure</strong> and <strong>retryable</strong> scenario inside the <strong><a href="#query_executor">query-executor</a></strong> executor.
@@ -3553,7 +3660,7 @@ IF the <code>userService.getUserDetail()</code> service throw a <code>FeignExcep
 </div>
 </div>
 <div class="sect2">
-<h3 id="saga_exception_annotation"><a class="anchor" href="#saga_exception_annotation"></a>5.11. @SagaException Annotation </h3>
+<h3 id="saga_exception_annotation"><a class="anchor" href="#saga_exception_annotation"></a>5.10. @SagaException Annotation </h3>
 <div class="paragraph">
 <p>If you want to throw an exception as a <a href="#non_retryable_executor_exception">NonRetryableExecutorException</a>, The framework suggests you to create a new exception for that by warping the real exception and specially that can be annotated with <code>@SagaException</code> annotation like below.</p>
 </div>
@@ -3707,7 +3814,7 @@ Or otherwise, the object will be empty.</td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="saga_revert_hint_store"><a class="anchor" href="#saga_revert_hint_store"></a>5.12. RevertHintStore</h3>
+<h3 id="saga_revert_hint_store"><a class="anchor" href="#saga_revert_hint_store"></a>5.11. RevertHintStore</h3>
 <div class="paragraph">
 <p><code>RevertHintStore</code> does provide you a map to put the data that the revert processes want.
 After having a <a href="#non_retryable_executor_exception">NonRetryableExecutorException</a>, the engine will start the revert process by stopping to forward anymore.
@@ -3780,7 +3887,7 @@ This value will be helpful for the next revert process.</td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="saga_event_handler"><a class="anchor" href="#saga_event_handler"></a>5.13. Saga Execution Event Listener </h3>
+<h3 id="saga_event_handler"><a class="anchor" href="#saga_event_handler"></a>5.12. Saga Execution Event Listener </h3>
 <div class="paragraph">
 <p><code>SagaExecutionEventListener</code> is the place where you&#8217;re notified about each and every action during the process by the SEC.
 As an example, you hand over your transaction to the StackSaga engine by mentioning the starting executor.
@@ -3950,7 +4057,7 @@ And also you can create multiple listeners for the target Aggregator.
 </div>
 </div>
 <div class="sect2">
-<h3 id="saga_template"><a class="anchor" href="#saga_template"></a>5.14. SagaTemplate&lt;A&gt;</h3>
+<h3 id="saga_template"><a class="anchor" href="#saga_template"></a>5.13. SagaTemplate&lt;A&gt;</h3>
 <div class="paragraph">
 <p><code>SagaTemplate</code> is the class which is responsible for starting the StackSaga engine to invoke your transaction.
 By providing the necessary data, you can say to start the process of the transaction for StackSaga engine.
@@ -4053,19 +4160,19 @@ Even though <code>SagaTemplate&lt;A&gt;</code> can be autowired anywhere in the 
 </div>
 </div>
 <div class="sect2">
-<h3 id="saga_trash_listener"><a class="anchor" href="#saga_trash_listener"></a>5.15. TrashFileListener</h3>
+<h3 id="saga_trash_listener"><a class="anchor" href="#saga_trash_listener"></a>5.14. TrashFileListener</h3>
 <div class="paragraph">
 <p><code>TrashFileListener</code> is used to be notified about the <strong>Trash-Files</strong>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="custom_thread_pool_configuration"><a class="anchor" href="#custom_thread_pool_configuration"></a>5.16. Custom Thread-pool configuration</h3>
+<h3 id="custom_thread_pool_configuration"><a class="anchor" href="#custom_thread_pool_configuration"></a>5.15. Custom Thread-pool configuration</h3>
 <div class="paragraph">
 <p>In StackSaga framework, there are several thread-pools are used behind the scene with default configurations.
 All the executions are not executed with a single thread-pool to ensure the resiliency of the application.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. Thread-pools in StackSaga framework</caption>
+<caption class="title">Table 3. Thread-pools in StackSaga framework</caption>
 <colgroup>
 <col style="width: 11.1111%;">
 <col style="width: 11.1111%;">
@@ -4152,7 +4259,7 @@ All the executions are not executed with a single thread-pool to ensure the resi
 <p>In case if you want to change the default configuration, you can do it by implementing following</p>
 </div>
 <div class="sect3">
-<h4 id="saga_discovery_transaction_task_executor"><a class="anchor" href="#saga_discovery_transaction_task_executor"></a>5.16.1. Saga Discovery Transaction TaskExecutor</h4>
+<h4 id="saga_discovery_transaction_task_executor"><a class="anchor" href="#saga_discovery_transaction_task_executor"></a>5.15.1. Saga Discovery Transaction TaskExecutor</h4>
 <div class="paragraph">
 <p><code>SagaDiscoveryTransactionTaskExecutor</code> is the main pool. because this thread-pool is used for starting your transaction when it is called the <a href="#saga_template"><code>SagaTemplate.process()</code></a> method. after starting the transaction, this thread-pool will handle all the executions of the executors.</p>
 </div>
@@ -4207,7 +4314,7 @@ Even though you change the prefix of the thread-pool when the task-executor is c
 <hr>
 </div>
 <div class="sect3">
-<h4 id="saga_event_task_executor"><a class="anchor" href="#saga_event_task_executor"></a>5.16.2. Saga Event TaskExecutor</h4>
+<h4 id="saga_event_task_executor"><a class="anchor" href="#saga_event_task_executor"></a>5.15.2. Saga Event TaskExecutor</h4>
 <div class="paragraph">
 <p>— In case if you want to customize the default configuration, you can update the default configuration as follows:</p>
 </div>
@@ -4257,7 +4364,7 @@ Even though you change the prefix of the thread-pool when the task-executor is c
 <hr>
 </div>
 <div class="sect3">
-<h4 id="saga_admin_task_executor"><a class="anchor" href="#saga_admin_task_executor"></a>5.16.3. Saga Admin TaskExecutor</h4>
+<h4 id="saga_admin_task_executor"><a class="anchor" href="#saga_admin_task_executor"></a>5.15.3. Saga Admin TaskExecutor</h4>
 <div class="paragraph">
 <p>— In case if you want to customize the default configuration, you can update the default configuration as follows:</p>
 </div>
@@ -4309,7 +4416,7 @@ Even though you change the prefix of the thread-pool when the task-executor is c
 <hr>
 </div>
 <div class="sect3">
-<h4 id="saga_discovery_file_task_executor"><a class="anchor" href="#saga_discovery_file_task_executor"></a>5.16.4. Saga Discovery File TaskExecutor</h4>
+<h4 id="saga_discovery_file_task_executor"><a class="anchor" href="#saga_discovery_file_task_executor"></a>5.15.4. Saga Discovery File TaskExecutor</h4>
 <div class="paragraph">
 <p>— In case if you want to customize the default configuration, you can update the default configuration as follows:</p>
 </div>
@@ -4361,7 +4468,7 @@ Even though you change the prefix of the thread-pool when the task-executor is c
 <hr>
 </div>
 <div class="sect3">
-<h4 id="saga_discovery_retry_transaction_task_executor"><a class="anchor" href="#saga_discovery_retry_transaction_task_executor"></a>5.16.5. Saga Discovery Retry Transaction TaskExecutor</h4>
+<h4 id="saga_discovery_retry_transaction_task_executor"><a class="anchor" href="#saga_discovery_retry_transaction_task_executor"></a>5.15.5. Saga Discovery Retry Transaction TaskExecutor</h4>
 <div class="paragraph">
 <p>Even though the transaction is started by the <a href="#saga_discovery_transaction_task_executor"><code>SagaDiscoveryTransactionTaskExecutor</code></a>
 thread-pool, if the transaction is paused due a <a href="#retryable_executor_exception"><code>RetryableExecutorException</code></a>, the transaction should be retried again after some time (configured schedule).
@@ -4433,7 +4540,7 @@ Even though you change the prefix of the thread-pool when the task-executor is c
 </div>
 </div>
 <div class="sect2">
-<h3 id="connect_admin"><a class="anchor" href="#connect_admin"></a>5.17. Connect Admin</h3>
+<h3 id="connect_admin"><a class="anchor" href="#connect_admin"></a>5.16. Connect Admin</h3>
 <div class="paragraph">
 <p>As per the architecture, all the StackSaga clients connect to the StackSaga admin server initially (<strong>for submitting the instance metadata</strong>) and as well as during the StackSaga-client is being run (<strong>for submitting the terminated transaction data</strong>).</p>
 </div>
@@ -4479,7 +4586,7 @@ The default StackSaga-Admin-server running on port <strong>4444</strong>.
 </table>
 </div>
 <div class="sect3">
-<h4 id="custom_admin_connect_resttemplate_configuration"><a class="anchor" href="#custom_admin_connect_resttemplate_configuration"></a>5.17.1. Custom Admin Connector configuration</h4>
+<h4 id="custom_admin_connect_resttemplate_configuration"><a class="anchor" href="#custom_admin_connect_resttemplate_configuration"></a>5.16.1. Custom Admin Connector configuration</h4>
 <div class="paragraph">
 <p>In addition to the default configurations, if you want to provide more complex configurations for the http client (RestTemplate) like enable custom SSL configurations, You can provide your own <code>RestTemplate</code> for the StackSaga framework to use when the client connects to the admin-server.
 Then the default configuration (<code>SagaAdminConnectRestTemplateProviderDefault</code>) will be overridden with your custom configurations.</p>
@@ -4544,7 +4651,7 @@ If you want to get the admin-server connection configuration from the configurat
 </div>
 </div>
 <div class="sect2">
-<h3 id="service_communication"><a class="anchor" href="#service_communication"></a>5.18. Internal Service Communication</h3>
+<h3 id="service_communication"><a class="anchor" href="#service_communication"></a>5.17. Internal Service Communication</h3>
 <div class="paragraph">
 <p>As per the StackSaga architecture, Internally (<strong>within the same zone</strong>) each instance should be able to communicate with other instances at any time.
 Because, Any instance can be the Master instance and then the Master instance should have to make requests to other slaves to notify the retry-allocations.
@@ -4563,7 +4670,7 @@ Nature of Communication: If your microservices communicate with each other only 
 </table>
 </div>
 <div class="sect3">
-<h4 id="eureka_configuration_for_stacksaga"><a class="anchor" href="#eureka_configuration_for_stacksaga"></a>5.18.1. Eureka configuration for StackSaga</h4>
+<h4 id="eureka_configuration_for_stacksaga"><a class="anchor" href="#eureka_configuration_for_stacksaga"></a>5.17.1. Eureka configuration for StackSaga</h4>
 <div class="paragraph">
 <p>If you ara using <code>stacksaga-spring-boot-starter-discovery</code>, To communicate with the slaves, the master instance uses a <code>RestTemplate</code> internally with the following configurations.</p>
 </div>
@@ -4632,7 +4739,7 @@ By default, the server port and the management service port will be the same in 
 </table>
 </div>
 <div class="sect4">
-<h5 id="custom_service_communication_resttemplate_configuration"><a class="anchor" href="#custom_service_communication_resttemplate_configuration"></a>5.18.1.1. Custom Service Communication configuration</h5>
+<h5 id="custom_service_communication_resttemplate_configuration"><a class="anchor" href="#custom_service_communication_resttemplate_configuration"></a>5.17.1.1. Custom Service Communication configuration</h5>
 <div class="paragraph">
 <p>In case if you want to have more complex configurations more than default configurations like enabling custom SSL, adding authentication, you can provide your own RestTemplate for the framework like below:</p>
 </div>
@@ -4708,7 +4815,7 @@ Because the URL is built based on the <a href="#eureka_configuration_for_stacksa
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-28 22:49:41 +0530
+Last updated 2023-08-29 02:42:34 +0530
 </div>
 </div>
 </body>

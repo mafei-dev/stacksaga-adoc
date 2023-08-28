@@ -1,1 +1,3 @@
+=== TrashFileListener [[saga_trash_listener]]
+// todo: add more
 `TrashFileListener` is used to be notified about the *Trash-Files*.

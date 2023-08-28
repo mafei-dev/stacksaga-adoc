@@ -1,3 +1,5 @@
+==== Saga Discovery Transaction TaskExecutor [[saga_discovery_transaction_task_executor]]
+
 `SagaDiscoveryTransactionTaskExecutor` is the main pool. because this thread-pool is used for starting your transaction when it is called the <<saga_template,`SagaTemplate.process()`>> method. after starting the transaction, this thread-pool will handle all the executions of the executors.
 
 — In case if you want to customize the default configuration, you can update the default configuration as follows:

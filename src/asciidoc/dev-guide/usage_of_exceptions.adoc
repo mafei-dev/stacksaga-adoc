@@ -1,3 +1,5 @@
+=== Usage of Executors[Q&C] With Exceptions  [[usage_of_exceptions]]
+
 Here you can see how you can handle the *success*,
 *failure* and *retryable* scenario inside the *<<query_executor,query-executor>>* executor.
 In the same way, you can handle all things in *<<command_executor,command-executor>>* as well.

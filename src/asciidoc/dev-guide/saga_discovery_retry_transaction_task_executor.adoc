@@ -1,3 +1,5 @@
+==== Saga Discovery Retry Transaction TaskExecutor [[saga_discovery_retry_transaction_task_executor]]
+
 Even though the transaction is started by the <<saga_discovery_transaction_task_executor,`SagaDiscoveryTransactionTaskExecutor`>>
 thread-pool, if the transaction is paused due a <<retryable_executor_exception,`RetryableExecutorException`>>, the transaction should be retried again after some time (configured schedule).
 For those executions, the `SagaDiscoveryRetryTransactionTaskExecutor` thread-pool is used.

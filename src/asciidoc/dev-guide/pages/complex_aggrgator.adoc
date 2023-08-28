@@ -1,3 +1,4 @@
+=== Full Aggregate implementation. [[complex_aggrgator]]
 
 [source,java]
 ----
