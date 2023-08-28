@@ -1,3 +1,4 @@
+== StackSaga Admin [[stacksaga_admin_index]]
 
 icon:tachometer[4x]
 
@@ -9,3 +10,8 @@ include::pages/setup_the_service.adoc[]
 
 include::pages/dashboard_initialize.adoc[]
 
+include::pages/create_api_gateway_user.adoc[]
+
+include::pages/create_service_user.adoc[]
+
+include::pages/create_operater_user.adoc[]

@@ -39,8 +39,6 @@ toc::[]
 </style>
 ++++
 
-
-
 == Introduction To Microservices
 
 include::introduction/index.adoc[]
@@ -52,8 +50,6 @@ include::saga/index.adoc[]
 == StackSaga Architecture
 
 include::architecture/index.adoc[]
-
-== StackSaga Admin [[stacksaga_admin_index]]
 
 include::dev-guide/admin/index.adoc[]
 
