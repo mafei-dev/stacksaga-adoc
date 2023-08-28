@@ -1,0 +1,8 @@
+==== icon:circle[role=green,1x] Fully Success [[fully_success_transaction]]
+
+image::resources/img/transaction-success.svg[alt="distributed transaction",height=300]
+
+As we discussed earlier, we had used a number of microservices for doing one single execution.
+Just assume we have used 5 microservices to be executed and all of them have been worked without any errors.
+Then there is no revert processes have been executed.
+That means all the microservices are up and running and there haven't been occurred exceptions internally inside each microservice.

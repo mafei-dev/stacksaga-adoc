@@ -1,0 +1,63 @@
+:toc-title: Table of Contents
+:icons: font
+:prewrap!:
+:toc: left
+:toclevels: 5
+:docinfo: shared
+:sectnumlevels: 5
+:sectnums:
+:page-layout: docs
+:linkattrs:
+:experimental:
+:source-highlighter: rouge
+:appendix-caption: appendix-caption
+:sectanchors:
+// :stylesheet: resources/css/styles.css
+:title-logo-image: image:resources/img/stacksaga-logo.jpg[top=25%,align=center,pdfwidth=0.5in]
+:doctype: book
+// :imagesdir: resources/img
+
+include::logo.adoc[]
+
+toc::[]
+
+++++
+<style>
+.rounded-number {
+    background-color: #0047b3;
+    color: white;
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.5rem;
+}
+</style>
+++++
+
+
+
+== Introduction To Microservices
+
+include::introduction/index.adoc[]
+
+== Introduction to Saga
+
+include::saga/index.adoc[]
+
+== StackSaga Architecture
+
+include::architecture/index.adoc[]
+
+== StackSaga Admin [[stacksaga_admin_index]]
+
+include::dev-guide/admin/index.adoc[]
+
+== StackSaga Starter Core
+
+include::dev-guide/index.adoc[]
+
