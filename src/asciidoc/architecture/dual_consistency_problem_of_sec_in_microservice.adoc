@@ -1,21 +1,30 @@
-In the microservice architecture, we have concerned highly about the data consistency. As a result of that, you have to move in to the Saga design pattern. But there is the problem can be happened in rare when using SEC. Because the SEC also uses a database to store the state and other stuff. Then the frame has the responsibility to keep the data consistency of the main transaction's data and the storing data. Just think the process is being executed, and while after saving successfully, some executors and the event-store database go down. Then the framework is failed to provide the data consistency of their side. In the stack saga framework, to avoid this consistency issue, a solution is provided.
+In the microservice architecture, It is highly concerned about the data consistency.
+As a result of that, you had to move in to the <<introduction_to_saga,SAGA design pattern,>> and it ensures eventual consistency.
 
-The solution the frame provides. As mentioned above, if the database goes down when executing an executor and tries to save the state in the event-store, the framework doesn't give up the process due to the database error. Because, the framework has the responsibility to keep the data consistency anytime. Because the framework is also built to take care of the data consistency, then the framework can't forget their data consistency as well.
+But you know that <<SEC,SEC>> also uses a database internally for storing the event data for retry purpose in StackSaga.
+SEC is also another program that supports for your execution as a middleware framework.
+That means that all the executions are saved in the database as an event by the StackSaga framework before the real execution.
+Because, in case your atomic transaction is failed for some reason, the atomic transaction should be retried by the SEC.
+To do re-play, the old state should be in the hand of the StackSaga.
 
-Then, after trying to save the event-data in the event store,
-the SCE gets known the there is a database connection loss.
-Then SCE convert the whole dataset (the dataset
-that tried
-to save in the database) regarding the event to binary file in the application scope's file system (in spring boot,
-it can be the resource folder) to keep data in persist.
-The file is saved as temporary.
-After saving the temporary file,
-the SEC transfers that file into the admin database through the Redis server immediately.
-Because in the microservice' architecture, the server instance does not persist.
-The reason is that the server instance is built automatically based on the load in the individual containers.
-That's why the saved file immediately transfers to the admin database.
-Then that file will be saved in the database as binary.
+Just imagine that Your entire domain (<<quick_understanding_example,place order example>>) can have 5 atomic transactions inside the <<executor_architecture,executors>>.
+After calling the execution through the <<saga_template,`SagaTemplate`>>, StackSaga starts execution one by one as you configured order by the developer.
+Then, before executing the transaction, the transaction should be initialized in the event-store.
+In that case, StackSaga uses the event-store to store the event data at the 1st time in the transaction execution.
+After successfully saving the initial event data, you will have a transaction id (<<creating_aggregator_class,aggregatorTransactionId>>).
+And after that, your 1st executor will be executed by the SEC.
+After executing your 1st atomic transaction, again the updated state is saved in the event-store by SEC.
+Like so, all the time your state is saved in the event-store.
+Then just think that after executing the 2nd atomic transaction (execution) SEC going to update the event-store and then an error is occurred due to connection issues of the event-store database.
 
-After saving the data file in to the admin database, the admin server tries to invoke by using another randomly selected same microservice. The instance is not a problem here because one service can have the same multiple instances. Then one of the same services can invoke that data file if the database connection is successful. If there is no any instance instead of that, the admin server keeps waiting for connection is successful. After that, the connection is back to normal, the admin server will push the file in to one of the services and invoke the file. After invoking the file data successfully, the particular service will push a message to the admin server to delete the saved file. Because after invoking the file, there is no point in saving that file in the admin server. It should be deleted. Because if the file data exists in the admin database, the admin server try to invoke it again. That's how the framework handles its data consistency while keeping the client's data consistency as well. It is true that the possibility is very rare but just think that if it happens, that issue the transaction processes will not be complete and the transaction can't archive the eventual consistency as well. As a programmer, I think this is the main advantage of using StackSaga framework. Now, if you have a doubt, what happens if the admin server is not up and running? It doesn't matter. If it occurred that kind of situation and one of the services try to send a file into admin server while the admin server is down, the file is kept by the relevant instance until the admin server is up. When the admin server goes up, the instance will know about and then the instance will push the file into the admin server as usual. Now you can have a problem in your mind. What happens if the admin server is down and the relevant instance is also going to be down. Then what will happen to that saved file? The framework has considered that as well. Normally, the instances are down by stopping the application server. Then the framework doesn't give a chance to stop the server until push that kind of saved files are transferred. The server keeps waiting until the admin server goes up. Those files can be missing only you kill the application by forcing.
+Then the framework is failed to provide the data consistency by themselves of their side.
+But the real fact, the first reason is for choosing a framework is to overcome the data consistency.
+But If the framework is not capable of handling the data consistency by itself, there is no point in using a framework.
 
- +
+##In brief, The responsibility of protecting both data-consistency of internal event-store and your transaction's data-consistency is known as the Dual consistency problem of SEC.
+##
+
+Even though it is not possible technically to handle by the database side, StackSaga provides a best solution for that.
+It is called as *Execution Chunk Protection Mechanism * in StackSaga.
+
+include::how_execution_chunk_protection_works.adoc[]

@@ -12,7 +12,7 @@ StackSaga admin mainly provides the monitoring facilities of the transactions an
 - StackSaga Framework provides orchestration engine support for your distributed transactions in your service.
 
 
-*Quick Understanding:*
+*Quick Understanding:* [[quick_understanding_example]]
 
 Just imagine that you have a business domain for placing an order in microservice architecture.
 So you can have multiple services, and you have to visit all over the services to complete the place-odder transaction.

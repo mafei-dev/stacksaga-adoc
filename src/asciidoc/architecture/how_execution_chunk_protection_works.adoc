@@ -1,0 +1,64 @@
+==== How *Execution Chunk Protection Mechanism* works [[how_execution_chunk_protection_works]]
+
+In brief, In the Execution Chunk Protection Mechanism, chunk execution data will be stored in the shared filesystem for the particular instance.
+
+If the database connection (event-store) is failed for some reason during the execution of your executor.
+The framework doesn't give up the process due to the event-store problem.
+The event-store will be back to normal soon for sure.
+But while then, the transaction data must be kept in somewhere because your executor has already been executed.
+Those events are called as *Execution Chunk*.
+That chunk-data is stored in the file system temporally while the event-store is back to normal.
+Ones the event-store connection is back to normal, all the chunk-data files are restored in the event-store by the framework.
+After restoring the chunk-data files, the transaction is exposed to be run for the next scheduler and the transaction will be continued as usual.
+To make the chunk-data file, the entire data set is converted into the JSON format by using the <<aggregator_mapper_implementation,mapper>> that you provided for the target aggregator.
+
+NOTE: To ensure the permissions of the shared file system to write the files, StackSaga checks the permissions before the application is started.
+If there is a permission issue, the application is terminated immediately (Only the application is stated).
+
+NOTE: Execution Chunk Protection Mechanism* protects the partially executed transactions only.
+Just imagine the instance is executing a hundred of transactions at the time of the event-store connection is failed, all the transaction execution data is saved in the file storage temporally.
+But during the event-store connection is failed,
+<<saga_template,SagaTemplate>> the SEC does not accept all the new transactions that received through the SgaTemplate in to the SEC.
+IF the transaction initialization process is failed, it will throw an `TransactionInitializationFailedException` immaterially.
+
+At first glance, it is a simple solution the *Execution Chunk Protection Mechanism* will be very complicated when is it considered from the microservice architecture.
+
+In the microservice architecture, it is used as a stateless service when it is considered saving files in the storage.
+Because caching file is not recommended in microservice architecture inside the individual instance.
+The reason for that is at any time, any instance can be created or deleted based on the auto-scaling.
+In case, an instance went down with chunk-data; there is no way to recover that data at all.
+Therefore, it is used a shared common file storage for each of them.
+
+NOTE: If you are familiar with https://docs.docker.com/storage/volumes/[Docker] or https://kubernetes.io/docs/concepts/storage/persistent-volumes/[Kubernetes], the file storage that is used is called as *persistent volumes*.
+
+==== Execution Chunk Protection Mechanism With Eureka
+
+Let's have the chunk-data files are saved inside the persistent volumes with the help of eureka service registry.
+
+When the directory is created for saving the files, the following properties are considered.
+
+. *Region*: The region of the instance is located currently.
+. *Availability Zone*: The availability zone of the instance is located currently.
+. *Service-Name*: The service name of the instance (spring.application.name is used).
+. *Instance-ID*: The unique id of the instance.
+
+NOTE: You have to provide these instance-related <<stacksaga_discovery_configuration_properties,properties>> through the Eureka metadata.
+
+NOTE: You can provide the https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html[*Region* and *Availability Zone*] of the instance through the application properties.
+Or otherwise, the default value (defaultRegion and defaultZone) will be used.
+If your entire application is running on only a single region, you can keep the default value as it is.
+But if your application is running on cluster environment, you can obtain what is the current region the instance is running on and configure it through the property.
+
+One of your `order-serivices` file directory will be like this:
+
+- File Path `baseDir/#US_East#/#us-east-2#/#order-serice#/#3365ec45-51e7-470b-ba10-1ebf6a318bb6#`
+
+. If you have multiple regions and multiple availability zones with multiple instances, you can the file storage like this.
+
+
+image::resources/img/stack-saga-e-store-example-chunk-files-in-mulltiple-regions-adn-zones.drawio.svg[alt="StackSaga Chunk Files In Mulltiple Regions Adn Zones",height=300]
+
+
+The IF the service name is `order-service`, the directory is created as follows:
+
+==== StackSaga Discovery Configuration Properties [[stacksaga_discovery_configuration_properties]]
