@@ -1,3 +1,5 @@
+=== Dual-Consistency problem of SEC in microservice. [[dual_consistency_problem_of_sec_in_microservice]]
+
 In the microservice architecture, It is highly concerned about the data consistency.
 As a result of that, you had to move in to the <<introduction_to_saga,SAGA design pattern,>> and it ensures eventual consistency.
 

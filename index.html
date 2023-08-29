@@ -616,15 +616,16 @@ pre.rouge .gs {
 <li><a href="#dual_consistency_problem_of_sec_in_microservice">3.12. Dual-Consistency problem of SEC in microservice.</a>
 <ul class="sectlevel3">
 <li><a href="#how_execution_chunk_protection_works">3.12.1. How <strong>Execution Chunk Protection Mechanism</strong> works</a></li>
-<li><a href="#_execution_chunk_protection_mechanism_with_eureka">3.12.2. Execution Chunk Protection Mechanism With Eureka</a></li>
+<li><a href="#_execution_chunk_protection_mechanism_with_the_help_of_eureka_service_registry">3.12.2. Execution chunk protection mechanism with the help of eureka service registry.</a></li>
 <li><a href="#stacksaga_discovery_configuration_properties">3.12.3. StackSaga Discovery Configuration Properties</a></li>
 </ul>
 </li>
-<li><a href="#stack_saga_transaction_type">3.13. StackSaga Transaction Types</a>
+<li><a href="#replay_transaction">3.13. Transaction Replay.</a></li>
+<li><a href="#stack_saga_transaction_type">3.14. StackSaga Transaction Types</a>
 <ul class="sectlevel3">
-<li><a href="#fully_success_transaction_scenario">3.13.1. <span class="icon green"><i class="fa fa-circle"></i></span> Fully Success</a></li>
-<li><a href="#revert_success_transaction_scenario">3.13.2. <span class="icon yellow"><i class="fa fa-circle"></i></span> Compensation Success</a></li>
-<li><a href="#revert_failed_transaction_scenario">3.13.3. <span class="icon red"><i class="fa fa-circle"></i></span> Compensation Failed</a></li>
+<li><a href="#fully_success_transaction_scenario">3.14.1. <span class="icon green"><i class="fa fa-circle"></i></span> Fully Success</a></li>
+<li><a href="#revert_success_transaction_scenario">3.14.2. <span class="icon yellow"><i class="fa fa-circle"></i></span> Compensation Success</a></li>
+<li><a href="#revert_failed_transaction_scenario">3.14.3. <span class="icon red"><i class="fa fa-circle"></i></span> Compensation Failed</a></li>
 </ul>
 </li>
 </ul>
@@ -2015,9 +2016,13 @@ If you are familiar with <a href="https://docs.docker.com/storage/volumes/">Dock
 </div>
 </div>
 <div class="sect3">
-<h4 id="_execution_chunk_protection_mechanism_with_eureka"><a class="anchor" href="#_execution_chunk_protection_mechanism_with_eureka"></a>3.12.2. Execution Chunk Protection Mechanism With Eureka</h4>
+<h4 id="_execution_chunk_protection_mechanism_with_the_help_of_eureka_service_registry"><a class="anchor" href="#_execution_chunk_protection_mechanism_with_the_help_of_eureka_service_registry"></a>3.12.2. Execution chunk protection mechanism with the help of eureka service registry.</h4>
 <div class="paragraph">
-<p>Let&#8217;s have the chunk-data files are saved inside the persistent volumes with the help of eureka service registry.</p>
+<p>According to the StackSaga architecture, eureka service helps to <strong><code>Execution chunk protection</code></strong> process by providing the instance metadata for each instance.</p>
+</div>
+<div class="paragraph">
+<p>As mentioned above, one unique folder is created for each instance by the StackSaga when the application is started.
+To create the folder for each instance uniquely, the instance information that eureka provides is used as the 1st.</p>
 </div>
 <div class="paragraph">
 <p>When the directory is created for saving the files, the following properties are considered.</p>
@@ -2031,10 +2036,10 @@ If you are familiar with <a href="https://docs.docker.com/storage/volumes/">Dock
 <p><strong>Availability Zone</strong>: The availability zone of the instance is located currently.</p>
 </li>
 <li>
-<p><strong>Service-Name</strong>: The service name of the instance (spring.application.name is used).</p>
+<p><strong>Service-Name</strong>: The service name of the instance (<code>spring.application.name</code> is used).</p>
 </li>
 <li>
-<p><strong>Instance-ID</strong>: The unique id of the instance.</p>
+<p><strong>Instance-ID</strong>: The unique id of the instance. (<a href="https://cloud.spring.io/spring-cloud-netflix/multi/multi__service_discovery_eureka_clients.html#_changing_the_eureka_instance_id"><code>eureka.instance.instanceId</code></a> is used )</p>
 </li>
 </ol>
 </div>
@@ -2045,7 +2050,7 @@ If you are familiar with <a href="https://docs.docker.com/storage/volumes/">Dock
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-You have to provide these instance-related <a href="#stacksaga_discovery_configuration_properties">properties</a> through the Eureka metadata.
+Even though instance-id and service Name are provided by default by Eureka and Spring Web, You have to provide other extra instance-related <a href="#stacksaga_discovery_configuration_properties">properties</a> through the Eureka metadata.
 </td>
 </tr>
 </table>
@@ -2066,44 +2071,48 @@ But if your application is running on cluster environment, you can obtain what i
 </table>
 </div>
 <div class="paragraph">
-<p>One of your <code>order-serivices</code> file directory will be like this:</p>
+<p>Based on the above properties here you can see that how a <code>order-serivice</code> instance&#8217;s directory is created in the filesystem.</p>
 </div>
 <div class="paragraph">
-<p><strong>File Path</strong> <code>baseDir/<mark>US_East</mark>/<mark>us-east-2</mark>/<mark>order-serice</mark>/<mark>3365ec45-51e7-470b-ba10-1ebf6a318bb6</mark></code></p>
+<p><strong>Directory Path</strong> <code>baseDir/<mark>US_East</mark>/<mark>us-east-2</mark>/<mark>order-serice</mark>/<mark>3365ec45-51e7-470b-ba10-1ebf6a318bb6</mark></code></p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>This diagram shows how the file system looks like in general with default region and default zone.<br></p>
-</li>
-</ol>
-</div>
+<p>This diagram shows how the file system looks like in general with default region and default zone.</p>
 <div class="imageblock">
 <div class="content">
 <img src="resources/img/stack-saga-e-store-example-chunk-files-in-default-region-and-zone.drawio.svg" alt="StackSaga Chunk Files In default Region Adn Zone" height="300">
 </div>
 </div>
 <div class="paragraph">
-<p>+
-In this diagram, you can see two default servers called order-service and user-service with default region and default zone.
+<p>In this diagram, you can see two default servers called order-service and user-service with default region and default zone.
 That means each service has a folder, and inside the folder the instance&#8217;s folder is created.
 Here two servers have been run, and those services have had two instances.
 As well as, the instances might have chunk-files waiting to be restored.</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>If you have multiple regions and multiple availability zones with multiple instances, the file storage will be like this.<br></p>
-</li>
-</ol>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In your entire application can have multiple servers that StackSaga framework is used.
+Just imagine your entire application system has 100 services (like user-service, order-service, delivery-service etc.).
+Among them, there are 20 services use StackSaga on their services.
+Then you will have 20 folders in the root folder by that service names.
+</td>
+</tr>
+</table>
 </div>
+</li>
+<li>
+<p>If you have multiple regions and multiple availability zones with multiple instances, the file storage will be like this.</p>
 <div class="imageblock">
 <div class="content">
 <img src="resources/img/stack-saga-e-store-example-chunk-files-in-mulltiple-regions-adn-zones.drawio.svg" alt="StackSaga Chunk Files In Mulltiple Regions Adn Zones" height="300">
 </div>
-</div>
-<div class="paragraph">
-<p>+</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -2117,26 +2126,34 @@ If it is a cluster architecture, it is recommended to use zone-specific file sto
 </tr>
 </table>
 </div>
+</li>
+</ol>
+</div>
 <div class="paragraph">
 <p>Here we are going to discuss the worst case.
 Saving files inside the file system is not a considerable thing.
-But restoring the files in without a data-lose is very important.
-Then let&#8217;s see' that how can be a data-lose here.
+But restoring the files in without a data-loss is very important.
+Then let&#8217;s see' that how can be a data-loss here.
 As it is mentioned above, you know that in the microservice architecture any instance can be removed at any time.
 Just imagine some of the instances are removed due to a scale down.
 Even though those instances have been deleted, the chunk-files can be in the file storage.
 If the instance is responsible for restoring the files that the instance has added to the file storage, those directories have not responsible instance up and running at this moment due to the scale down.</p>
 </div>
 <div class="paragraph">
-<p>To avoid this issue, StackSaga does use a master and slave architecture when the chunk-files are restored.</p>
+<p>To avoid this issue, StackSaga does use a <strong>master and slave architecture</strong> when the chunk-files are restored.</p>
 </div>
 <div class="paragraph">
 <p><strong>What is master and slave architecture for chunk-files restoring?</strong></p>
 </div>
 <div class="paragraph">
 <p>This architecture is limited to the zone.
-That means that it can have a master node for each zone and other services are considered as slaves inside the zone.
-Let&#8217;s dive into the deep how this problem is solved by the master and slave architecture.
+That means that it can have a master node for each zone and other services are considered as slaves inside the zone.</p>
+</div>
+<div class="paragraph">
+<p><strong>Chunk Relocating Process By The Master node</strong></p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s dive into the deep how this problem is solved by the master and slave architecture.
 After appointing as the master service for the zone, the master server does not act like other services.
 Because, For the service that becomes as the master has different responsibilities that the slaves.
 In general, every instance tries to restore the chunk-files that inside the particular instance&#8217;s folder.
@@ -2149,14 +2166,14 @@ Then that instance will restore the files to the event-store.</p>
 </div>
 <div class="paragraph">
 <p>And specially, The master node also has a folder, and also it can have the chunk files when the schedule is triggered.
-But due to the instance is being the master node, it has another responsibility to identify and rollout the files into available instances.
+But due to the instance being the master node, it has another responsibility for <strong>relocating</strong> the files into available instances.
 Therefore, the master node doesn&#8217;t try to restore the files of the folder its own as well.</p>
 </div>
 <div class="paragraph">
 <p>The master&#8217;s folder is also considered as a folder that has no responsible instance, and those files are moved to another instance&#8217;s folder too.</p>
 </div>
 <div class="paragraph">
-<p>That means the master node changes the ownership of the files if that files has not a responsible instance up and running.</p>
+<p>That means, the master node changes the ownership of the files if those files have no a responsible-instance up and running.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -2173,23 +2190,30 @@ If the instance has the most past timestamp, that instance appoints as the maste
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>Here you can see how Chunk Relocating Process is done by StackSaga with help the of Eureka.</p>
+</div>
 <div class="imageblock">
 <div class="content">
 <img src="resources/img/stacksaga-unit-test-Trash-File-Collecting-MI-MZ.drawio.svg" alt="StackSaga Chunk Files In Mulltiple Regions Adn Zones" height="300">
 </div>
 </div>
+<div class="paragraph">
+<p>For your understanding, the image shows two zones.
+But having multiple zones is not effected to the Relocating process.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s have a look at the zone-A.</p>
+</div>
 <div class="ulist">
 <ul>
-<li>
-<p>In the above diagram, it is considered the order-service.</p>
-</li>
 <li>
 <p>The zone-A has 4 instances up and running at this moment.</p>
 </li>
 <li>
 <p>The master node is instance-1.
 And you can see in the file system there is a directory without an up and running instance.
-(It was related to the instance-5, but the instance-5 went down) That means that folder&#8217;s instance went down recently without restoring the chunk-files.</p>
+(The folder belonged to the instance-5, but the instance-5 went down rectally) That means, that folder&#8217;s instance went down recently without restoring the chunk-files.</p>
 </li>
 <li>
 <p>Therefore, the master instance moves that directory&#8217;s files to another folder that the responsible instance is up and running.</p>
@@ -2199,6 +2223,33 @@ And you can see in the file system there is a directory without an up and runnin
 </li>
 </ul>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+After relocating the files, the empty folders are deleted by the master node as well.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You can customize the scheduler as you want.
+But there is no any scheduler for Relocating process.
+You can only configure the scheduler for checking the chunk-files in the filesystem.
+But if some instance is appointed as the master that same scheduler will be used for the relocating process.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect3">
 <h4 id="stacksaga_discovery_configuration_properties"><a class="anchor" href="#stacksaga_discovery_configuration_properties"></a>3.12.3. StackSaga Discovery Configuration Properties</h4>
@@ -2206,7 +2257,34 @@ And you can see in the file system there is a directory without an up and runnin
 </div>
 </div>
 <div class="sect2">
-<h3 id="stack_saga_transaction_type"><a class="anchor" href="#stack_saga_transaction_type"></a>3.13. StackSaga Transaction Types</h3>
+<h3 id="replay_transaction"><a class="anchor" href="#replay_transaction"></a>3.13. Transaction Replay.</h3>
+<div class="paragraph">
+<p>Transaction Replay concept is help to re-invoke the transaction that stopped for some reason in the past.
+Even though all the transactions can not be re-invoked, some transactions/executions can be re-invoked.
+Specially in the microservice architecture, a transaction can be deviated in to small atomic operations.
+Therefore, that atomic process can be failed at any time for some reason.
+But we have to be careful with that error if we are in a <strong>distributed transaction</strong>.
+It is not like in a standalone application with a single database.
+After executing some atomic operations successfully, reverting that executed executions is quite complicated than doing rollback in a single database.
+Even though Saga provides the way to have the compensation, we can not give up the entire transaction easily.
+Therefore, it should be identified whether the transaction can be re-invoked or not.</p>
+</div>
+<div class="paragraph">
+<p>The following reasons are caused to Transaction Replay.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>IF the transaction executor was failed with <a href="#non_retryable_executor_exception">NonRetryableExecutorException</a>.</p>
+</li>
+<li>
+<p>IF a <a href="#dual_consistency_problem_of_sec_in_microservice">chunk-data</a> file is restored after every-store problem.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="stack_saga_transaction_type"><a class="anchor" href="#stack_saga_transaction_type"></a>3.14. StackSaga Transaction Types</h3>
 <div class="paragraph">
 <p>In this section, you will get the architecture of this framework.
 Other than that, you will get what are the limitations you have to face when you are going to use microservice architecture and how to overcome those difficulties by using StackSAGA framework.</p>
@@ -2229,7 +2307,7 @@ Let&#8217;s see one by one how the StackSaga&#8217;s execution-coordinator coord
 </ol>
 </div>
 <div class="sect3">
-<h4 id="fully_success_transaction_scenario"><a class="anchor" href="#fully_success_transaction_scenario"></a>3.13.1. <span class="icon green"><i class="fa fa-circle"></i></span> Fully Success</h4>
+<h4 id="fully_success_transaction_scenario"><a class="anchor" href="#fully_success_transaction_scenario"></a>3.14.1. <span class="icon green"><i class="fa fa-circle"></i></span> Fully Success</h4>
 <div class="paragraph">
 <p>here, the SEC has successfully executed all the executors. therefore, there is no compensation/revert execution was invoked. this is the success scenario we wish.</p>
 </div>
@@ -2277,7 +2355,7 @@ Before invoking the executor that you provided as the start-executor SEC saves t
 </div>
 </div>
 <div class="sect3">
-<h4 id="revert_success_transaction_scenario"><a class="anchor" href="#revert_success_transaction_scenario"></a>3.13.2. <span class="icon yellow"><i class="fa fa-circle"></i></span> Compensation Success</h4>
+<h4 id="revert_success_transaction_scenario"><a class="anchor" href="#revert_success_transaction_scenario"></a>3.14.2. <span class="icon yellow"><i class="fa fa-circle"></i></span> Compensation Success</h4>
 <div class="paragraph">
 <p>here, the SEC hasn&#8217;t successfully executed all the executors. an error occurred while after some processing. therefore, the transaction has a compensation/revert executions.</p>
 </div>
@@ -2344,7 +2422,7 @@ To have knowledge about how retry works of revert-processes in StackSaga, please
 </div>
 </div>
 <div class="sect3">
-<h4 id="revert_failed_transaction_scenario"><a class="anchor" href="#revert_failed_transaction_scenario"></a>3.13.3. <span class="icon red"><i class="fa fa-circle"></i></span> Compensation Failed</h4>
+<h4 id="revert_failed_transaction_scenario"><a class="anchor" href="#revert_failed_transaction_scenario"></a>3.14.3. <span class="icon red"><i class="fa fa-circle"></i></span> Compensation Failed</h4>
 <div class="imageblock">
 <div class="content">
 <img src="resources/img/Architecture-Stacksaga-evert-failed-transaction-scenario.drawio.svg" alt="Compensation/Revert failed transaction scenario" height="300">

@@ -1,0 +1,16 @@
+=== Transaction Replay. [[replay_transaction]]
+
+Transaction Replay concept is help to re-invoke the transaction that stopped for some reason in the past.
+Even though all the transactions can not be re-invoked, some transactions/executions can be re-invoked.
+Specially in the microservice architecture, a transaction can be deviated in to small atomic operations.
+Therefore, that atomic process can be failed at any time for some reason.
+But we have to be careful with that error if we are in a *distributed transaction*.
+It is not like in a standalone application with a single database.
+After executing some atomic operations successfully, reverting that executed executions is quite complicated than doing rollback in a single database.
+Even though Saga provides the way to have the compensation, we can not give up the entire transaction easily.
+Therefore, it should be identified whether the transaction can be re-invoked or not.
+
+The following reasons are caused to Transaction Replay.
+
+. IF the transaction executor was failed with <<NonRetryableExecutorException,NonRetryableExecutorException>>.
+. IF a <<dual_consistency_problem_of_sec_in_microservice,chunk-data>> file is restored after every-store problem.
