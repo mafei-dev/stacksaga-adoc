@@ -27,11 +27,23 @@ To overcome this problem, StackSaga shares all the retryable transactions within
 The architecture is quite the same as <<execution_chunk_protection_mechanism_with_the_help_of_eureka_service_registry,chunk-data file relocating>>.
 To share the transactions within the available instances, StackSaga follows the master and slave architecture.
 
-*How is master node appointed with the help of Eureka Registry?*
+*How is the master node appointed with the help of Eureka Registry?*
+
 For selecting the master node, StackSaga uses eureka client metadata.
 When the instance is started, StackSaga adds the timestamp as a metadata to the Eureka instance Info.
 Then all the instances know who is the oldest instance in the zone.
 The older instance will be appointed as the master node by itself.
+
+image::resources/img/stacksaga-unit-test-Transaction-Replay-Architecture-MI.drawio.svg[alt="StackSaga Transaction Replay Architecture",height=300]
+
+
+* pass:[<span class="rounded-number">1</span>] Master gets the service registry from the eureka cache, and allocates retryable-transactions in the event-store for each available instance.
+In the diagram, instance-1 makes the retryable-transactions allocation (you can configure the allocation count) for instance-2, instance-3, and instance-4.
+
+* pass:[<span class="rounded-number">2</span>] After making the allocation for each.
+the master notifies to each instance by making http requests.
+
+* pass:[<span class="rounded-number">3</span>]  Then each instance starts the executing the allocated retryable-transactions bulk.
 
 NOTE: Each availability zone has a master node.
 
