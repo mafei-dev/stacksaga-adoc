@@ -6,7 +6,7 @@ StackSaga Saga provides a better and resilient architecture as an *orchestration
 
 StackSaga mainly consists of two parts.
 
-. *<<stacksaga_admin,StackSaga Admin>>.* +
+. *<<stacksaga_admin_index,StackSaga Admin>>.* +
 StackSaga admin mainly provides the monitoring facilities of the transactions and manages the security.
 . *StackSaga Framework*.
 - StackSaga Framework provides orchestration engine support for your distributed transactions in your service.

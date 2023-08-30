@@ -31,7 +31,7 @@ Therefore, it is used a shared common file storage for each of them.
 
 NOTE: If you are familiar with https://docs.docker.com/storage/volumes/[Docker] or https://kubernetes.io/docs/concepts/storage/persistent-volumes/[Kubernetes], the file storage that is used is called as *persistent volumes*.
 
-==== Execution chunk protection mechanism with the help of eureka service registry.
+==== Execution chunk protection mechanism with the help of eureka service registry. [[execution_chunk_protection_mechanism_with_the_help_of_eureka_service_registry]]
 
 According to the StackSaga architecture, eureka service helps to *`Execution chunk protection`* process by providing the instance metadata for each instance.
 
