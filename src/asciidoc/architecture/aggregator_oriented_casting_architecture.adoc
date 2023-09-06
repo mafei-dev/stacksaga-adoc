@@ -29,9 +29,9 @@ image::resources/img/Architecture-Stacksaga-aggregator-oriented-up-casting-view.
 
 *Explanation:* In the event-store can have old remaining events to be re-tried.
 But due to the fact that the aggregator has been updated to a new version with new attributes, The old events also should be converted and should be run through the new aggregator.
-But if it is an upcast mapping, The new version doesn't bother to the casting process at all due that SEC uses `jackson objectmapper` to serialization and deserialization both.
+But if it is an upcast mapping, The new version doesn't bother to the casting process at all due that SEC uses `jackson objectmapper` to *serialization* and *deserialization* both.
 The new values will have the default values with help of
-`jackson objectmapper` and you have nothing to worry about upcasting with StackSaga at all.
+`jackson objectmapper` and you have nothing to worry about upcasting with StackSaga at all. See the <<,technical documentation>>
 
 TIP: All the events that go through the SEO process can be identified easily in the <<saga_executors,Executor's>> methods with the help of event-version data that provides with the aggregator object.
 See the <<technical documentation>>

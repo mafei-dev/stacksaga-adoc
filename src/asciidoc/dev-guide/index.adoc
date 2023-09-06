@@ -25,9 +25,14 @@ include::pages/create-aggregator.adoc[]
 
 include::pages/saga_serializable.adoc[]
 
+
 include::pages/aggregator_mapper_implementation.adoc[]
 
 include::pages/complex_aggrgator.adoc[]
+
+include::pages/aggregator_serialization.adoc[]
+
+include::pages/aggregator_casting.adoc[]
 
 include::pages/saga_executors.adoc[]
 

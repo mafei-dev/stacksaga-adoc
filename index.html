@@ -655,42 +655,48 @@ pre.rouge .gs {
 <li><a href="#saga_serializable">5.2. Creating SagaSerializable Class for Aggregator</a></li>
 <li><a href="#aggregator_mapper_implementation">5.3. Custom Aggregator Mapper</a></li>
 <li><a href="#complex_aggrgator">5.4. Full Aggregate implementation.</a></li>
-<li><a href="#saga_executors">5.5. Saga Executors.</a>
+<li><a href="#aggregator_serialization_and_deserialization">5.5. Aggregator Serialization And Deserialization</a></li>
+<li><a href="#aggregators_event_casting">5.6. Aggregator&#8217;s Event Casting</a>
 <ul class="sectlevel3">
-<li><a href="#query_executor">5.5.1. Query Executor.</a></li>
-<li><a href="#command_executor">5.5.2. Command Executor.</a></li>
-<li><a href="#revert_before_executor">5.5.3. Revert Before Executor.</a></li>
-<li><a href="#revert_after_executor">5.5.4. Revert After Executor.</a></li>
+<li><a href="#collect_missing_properties">5.6.1. Collect Missing properties</a></li>
 </ul>
 </li>
-<li><a href="#_processstack">5.6. ProcessStack</a></li>
-<li><a href="#retryable_executor_exception">5.7. RetryableExecutorException</a></li>
-<li><a href="#non_retryable_executor_exception">5.8. NonRetryableExecutorException</a></li>
-<li><a href="#usage_of_exceptions">5.9. Usage of Executors[Q&amp;C] With Exceptions </a></li>
-<li><a href="#saga_exception_annotation">5.10. @SagaException Annotation </a></li>
-<li><a href="#saga_revert_hint_store">5.11. RevertHintStore</a></li>
-<li><a href="#saga_event_handler">5.12. Saga Execution Event Listener </a></li>
-<li><a href="#saga_template">5.13. SagaTemplate&lt;A&gt;</a></li>
-<li><a href="#saga_trash_listener">5.14. TrashFileListener</a></li>
-<li><a href="#custom_thread_pool_configuration">5.15. Custom Thread-pool configuration</a>
+<li><a href="#saga_executors">5.7. Saga Executors.</a>
 <ul class="sectlevel3">
-<li><a href="#saga_discovery_transaction_task_executor">5.15.1. Saga Discovery Transaction TaskExecutor</a></li>
-<li><a href="#saga_event_task_executor">5.15.2. Saga Event TaskExecutor</a></li>
-<li><a href="#saga_admin_task_executor">5.15.3. Saga Admin TaskExecutor</a></li>
-<li><a href="#saga_discovery_file_task_executor">5.15.4. Saga Discovery File TaskExecutor</a></li>
-<li><a href="#saga_discovery_retry_transaction_task_executor">5.15.5. Saga Discovery Retry Transaction TaskExecutor</a></li>
+<li><a href="#query_executor">5.7.1. Query Executor.</a></li>
+<li><a href="#command_executor">5.7.2. Command Executor.</a></li>
+<li><a href="#revert_before_executor">5.7.3. Revert Before Executor.</a></li>
+<li><a href="#revert_after_executor">5.7.4. Revert After Executor.</a></li>
 </ul>
 </li>
-<li><a href="#connect_admin">5.16. Connect Admin</a>
+<li><a href="#_processstack">5.8. ProcessStack</a></li>
+<li><a href="#retryable_executor_exception">5.9. RetryableExecutorException</a></li>
+<li><a href="#non_retryable_executor_exception">5.10. NonRetryableExecutorException</a></li>
+<li><a href="#usage_of_exceptions">5.11. Usage of Executors[Q&amp;C] With Exceptions </a></li>
+<li><a href="#saga_exception_annotation">5.12. @SagaException Annotation </a></li>
+<li><a href="#saga_revert_hint_store">5.13. RevertHintStore</a></li>
+<li><a href="#saga_event_handler">5.14. Saga Execution Event Listener </a></li>
+<li><a href="#saga_template">5.15. SagaTemplate&lt;A&gt;</a></li>
+<li><a href="#saga_trash_listener">5.16. TrashFileListener</a></li>
+<li><a href="#custom_thread_pool_configuration">5.17. Custom Thread-pool configuration</a>
 <ul class="sectlevel3">
-<li><a href="#custom_admin_connect_resttemplate_configuration">5.16.1. Custom Admin Connector configuration</a></li>
+<li><a href="#saga_discovery_transaction_task_executor">5.17.1. Saga Discovery Transaction TaskExecutor</a></li>
+<li><a href="#saga_event_task_executor">5.17.2. Saga Event TaskExecutor</a></li>
+<li><a href="#saga_admin_task_executor">5.17.3. Saga Admin TaskExecutor</a></li>
+<li><a href="#saga_discovery_file_task_executor">5.17.4. Saga Discovery File TaskExecutor</a></li>
+<li><a href="#saga_discovery_retry_transaction_task_executor">5.17.5. Saga Discovery Retry Transaction TaskExecutor</a></li>
 </ul>
 </li>
-<li><a href="#service_communication">5.17. Internal Service Communication</a>
+<li><a href="#connect_admin">5.18. Connect Admin</a>
 <ul class="sectlevel3">
-<li><a href="#eureka_configuration_for_stacksaga">5.17.1. Eureka configuration for StackSaga</a>
+<li><a href="#custom_admin_connect_resttemplate_configuration">5.18.1. Custom Admin Connector configuration</a></li>
+</ul>
+</li>
+<li><a href="#service_communication">5.19. Internal Service Communication</a>
+<ul class="sectlevel3">
+<li><a href="#eureka_configuration_for_stacksaga">5.19.1. Eureka configuration for StackSaga</a>
 <ul class="sectlevel4">
-<li><a href="#custom_service_communication_resttemplate_configuration">5.17.1.1. Custom Service Communication configuration</a></li>
+<li><a href="#custom_service_communication_resttemplate_configuration">5.19.1.1. Custom Service Communication configuration</a></li>
 </ul>
 </li>
 </ul>
@@ -1981,9 +1987,9 @@ Even though the casting process is done by the SEC, as the developer, you are re
 <div class="paragraph">
 <p><strong>Explanation:</strong> In the event-store can have old remaining events to be re-tried.
 But due to the fact that the aggregator has been updated to a new version with new attributes, The old events also should be converted and should be run through the new aggregator.
-But if it is an upcast mapping, The new version doesn&#8217;t bother to the casting process at all due that SEC uses <code>jackson objectmapper</code> to serialization and deserialization both.
+But if it is an upcast mapping, The new version doesn&#8217;t bother to the casting process at all due that SEC uses <code>jackson objectmapper</code> to <strong>serialization</strong> and <strong>deserialization</strong> both.
 The new values will have the default values with help of
-<code>jackson objectmapper</code> and you have nothing to worry about upcasting with StackSaga at all.</p>
+<code>jackson objectmapper</code> and you have nothing to worry about upcasting with StackSaga at all. See the &lt;&lt;,technical documentation&gt;&gt;</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -3475,7 +3481,286 @@ Currently, StackSaga framework only supports <code>ObjectMapper</code>.
 </div>
 </div>
 <div class="sect2">
-<h3 id="saga_executors"><a class="anchor" href="#saga_executors"></a>5.5. Saga Executors.</h3>
+<h3 id="aggregator_serialization_and_deserialization"><a class="anchor" href="#aggregator_serialization_and_deserialization"></a>5.5. Aggregator Serialization And Deserialization</h3>
+<div class="paragraph">
+<p>By default, StackSaga uses <code>Jackson ObjectMapper</code> for aggregator serialization and deserialization.
+Therefore, It is possible to do default casting subject to ObjectMapper in StackSaga.
+To do that you are able to use all the <a href="https://javadoc.io/doc/com.fasterxml.jackson.core/jackson-annotations/latest/index.html">jackson-annotations</a> that are provided by the <code>Jackson ObjectMapper Library</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It is recommended to use <code>@JsonProperty</code> annotation with a <strong>fixed-name</strong> for all the properties in your aggregator class.
+It helps to keep the JSON properties safe from the Java codes in the event-store.<br>
+The suggestion does not mean to keep the properties in <strong>SNAKE_CASE</strong> at all.
+Therefore, it is not recommended to use <strong>SNAKE_CASE</strong> configuration for all the properties in your aggregator class.
+Because it will be changed correspondingly to the property name every time you change the property name in the Java code.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight nowrap"><code data-lang="java"><span class="nd">@Aggregator</span><span class="o">(</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="nd">@AggregatorVersion</span><span class="o">(</span><span class="n">major</span> <span class="o">=</span> <span class="mi">1</span><span class="o">,</span> <span class="n">minor</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">patch</span> <span class="o">=</span> <span class="mi">1</span><span class="o">),</span>
+        <span class="n">idPrefix</span> <span class="o">=</span> <span class="s">"po"</span><span class="o">,</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">"PlaceOrderAggregator"</span><span class="o">,</span>
+        <span class="n">sagaSerializable</span> <span class="o">=</span> <span class="nc">PlaceOrderAggregatorSample</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">mapper</span> <span class="o">=</span> <span class="nc">PlaceOrderAggregatorJsonMapper</span><span class="o">.</span><span class="na">class</span>
+<span class="o">)</span>
+<span class="nd">@Getter</span>
+<span class="nd">@Setter</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PlaceOrderAggregator</span> <span class="kd">extends</span> <span class="nc">SagaAggregate</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="nf">PlaceOrderAggregator</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="nc">PlaceOrderAggregator</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"order_id"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">orderId</span><span class="o">;</span>
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"username"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"total"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">Double</span> <span class="n">total</span><span class="o">;</span>
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"is_active"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">isActive</span><span class="o">;</span>
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"item_details"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">ItemDetail</span><span class="o">&gt;</span> <span class="n">itemDetails</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+    <span class="o">...</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="aggregators_event_casting"><a class="anchor" href="#aggregators_event_casting"></a>5.6. Aggregator&#8217;s Event Casting</h3>
+<div class="paragraph">
+<p>As per the architecture <a href="#version_casting_architecture">documentation</a> StackSag does support Aggregator Event <a href="#aggregator_oriented_up_casting">UpCast</a> and also Aggregator Event <a href="#aggregator_oriented_down_casting">DownCast</a>.<br>
+For the upcasting of the Aggregator Event, there is nothing to be done.
+The only thing is adding the new properties.
+But the down-casting process is a little more complicated.</p>
+</div>
+<div class="paragraph">
+<p>To overcome Aggregator&#8217;s Event down-casting in StackSaga, it can be followed in two different approaches technically.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ignore Unknown JSON Properties.</p>
+</li>
+<li>
+<p>Collect Missing properties</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<strong>Ignore Unknown JSON Properties</strong> Is not a recommended approach.
+Technically, it is possible to ignore the missing properties in Object Mapper by using <code>DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES</code> globally or using <code>@JsonIgnoreProperties(ignoreUnknown = true)</code>.
+Annotation in class level.
+But it is not recommended in StackSaga.
+Because old events have more data that the new one when it provided down-casting changes in your aggregator.
+Then, while the old events are processed, that removed data will not be available for accessing.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="collect_missing_properties"><a class="anchor" href="#collect_missing_properties"></a>5.6.1. Collect Missing properties</h4>
+<div class="paragraph">
+<p>For collecting missing properties it can be used <code>@JsonAnySetter</code> and <code>@JsonAnyGetter</code> with a custom method.
+But you don&#8217;t need to create all the things from scratch.
+Because StackSaga provides the helper class called <code>MissingJsonPropertyCollector</code> for extending without writing any custom methods.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The root implementation (Custom Aggregator) of the <strong>SagaAggregate</strong> is by default extended from <code>MissingJsonPropertyCollector</code>.
+Therefore, the root Custom Aggregator class is ready to collect the missing properties.
+But if you want to empower other inner classes that are used inside the Root Aggregator class also with Missing properties collector capabilities, you can extend all the inner classes from <code>MissingJsonPropertyCollector</code> as well.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Here is an example for down-casting with using <code>MissingJsonPropertyCollector</code> implementation.</p>
+</div>
+<div class="paragraph">
+<p><strong>Old Version Of the Custom Aggregator.</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight nowrap"><code data-lang="java"><span class="nd">@Aggregator</span><span class="o">(</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="nd">@AggregatorVersion</span><span class="o">(</span><span class="n">major</span> <span class="o">=</span> <span class="mi">1</span><span class="o">,</span> <span class="n">minor</span> <span class="o">=</span> <span class="mi">1</span><span class="o">,</span> <span class="n">patch</span> <span class="o">=</span> <span class="mi">0</span><span class="o">),</span>
+        <span class="n">idPrefix</span> <span class="o">=</span> <span class="s">"po"</span><span class="o">,</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">"PlaceOrderAggregator"</span><span class="o">,</span>
+        <span class="n">sagaSerializable</span> <span class="o">=</span> <span class="nc">PlaceOrderAggregatorSample</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">mapper</span> <span class="o">=</span> <span class="nc">PlaceOrderAggregatorJsonMapper</span><span class="o">.</span><span class="na">class</span>
+<span class="o">)</span>
+<span class="nd">@Getter</span>
+<span class="nd">@Setter</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PlaceOrderAggregator</span> <span class="kd">extends</span> <span class="nc">SagaAggregate</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="nf">PlaceOrderAggregator</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="nc">PlaceOrderAggregator</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"order_id"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">orderId</span><span class="o">;</span>
+
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"username"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"total"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">Double</span> <span class="n">total</span><span class="o">;</span>
+
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"is_active"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">isActive</span><span class="o">;</span>
+
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"comment"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">comment</span><span class="o">;</span>
+
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"item_details"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">ItemDetail</span><span class="o">&gt;</span> <span class="n">itemDetails</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+
+    <span class="nd">@Getter</span>
+    <span class="nd">@Setter</span>
+    <span class="nd">@AllArgsConstructor</span>
+    <span class="nd">@NoArgsConstructor</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ItemDetail</span> <span class="kd">implements</span> <span class="nc">Serializable</span> <span class="o">{</span>
+
+        <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"order_id"</span><span class="o">)</span>
+        <span class="kd">private</span> <span class="nc">String</span> <span class="n">itemName</span><span class="o">;</span>
+
+        <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"qty"</span><span class="o">)</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">qty</span><span class="o">;</span>
+
+        <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"price"</span><span class="o">)</span>
+        <span class="kd">private</span> <span class="kt">double</span> <span class="n">price</span><span class="o">;</span>
+
+        <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"note"</span><span class="o">)</span>
+        <span class="kd">private</span> <span class="nc">String</span> <span class="n">note</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>New Version Of the Custom Aggregator.</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight nowrap"><code data-lang="java"><span class="nd">@Aggregator</span><span class="o">(</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="nd">@AggregatorVersion</span><span class="o">(</span><span class="n">major</span> <span class="o">=</span> <span class="mi">1</span><span class="o">,</span> <span class="n">minor</span> <span class="o">=</span> <span class="mi">1</span><span class="o">,</span> <span class="n">patch</span> <span class="o">=</span> <span class="mi">1</span><span class="o">),</span>
+        <span class="n">idPrefix</span> <span class="o">=</span> <span class="s">"po"</span><span class="o">,</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">"PlaceOrderAggregator"</span><span class="o">,</span>
+        <span class="n">sagaSerializable</span> <span class="o">=</span> <span class="nc">PlaceOrderAggregatorSample</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+        <span class="n">mapper</span> <span class="o">=</span> <span class="nc">PlaceOrderAggregatorJsonMapper</span><span class="o">.</span><span class="na">class</span>
+<span class="o">)</span>
+<span class="nd">@Getter</span>
+<span class="nd">@Setter</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PlaceOrderAggregator</span> <span class="kd">extends</span> <span class="nc">SagaAggregate</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="nf">PlaceOrderAggregator</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="nc">PlaceOrderAggregator</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"order_id"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">orderId</span><span class="o">;</span>
+
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"username"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"total"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">Double</span> <span class="n">total</span><span class="o">;</span>
+
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"is_active"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">isActive</span><span class="o">;</span>
+
+    <span class="c1">//@JsonProperty("is_active") </span><i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="c1">//private String comment;</span>
+
+    <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"item_details"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">ItemDetail</span><span class="o">&gt;</span> <span class="n">itemDetails</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+
+    <span class="nd">@Getter</span>
+    <span class="nd">@Setter</span>
+    <span class="nd">@AllArgsConstructor</span>
+    <span class="nd">@NoArgsConstructor</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ItemDetail</span> <span class="kd">extends</span> <span class="nc">MissingJsonPropertyCollector</span> <span class="o">{</span> <i class="conum" data-value="2"></i><b>(2)</b>
+
+        <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"order_id"</span><span class="o">)</span>
+        <span class="kd">private</span> <span class="nc">String</span> <span class="n">itemName</span><span class="o">;</span>
+
+        <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"qty"</span><span class="o">)</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">qty</span><span class="o">;</span>
+
+        <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"price"</span><span class="o">)</span>
+        <span class="kd">private</span> <span class="kt">double</span> <span class="n">price</span><span class="o">;</span>
+
+        <span class="c1">//@JsonProperty("note") </span><i class="conum" data-value="3"></i><b>(3)</b>
+        <span class="c1">//private String note;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Getting The Collected Properties For specific Version.</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight nowrap"><code data-lang="java"><span class="nd">@SagaExecutor</span><span class="o">(</span><span class="n">executeFor</span> <span class="o">=</span> <span class="s">"order-service"</span><span class="o">,</span> <span class="n">liveCheck</span> <span class="o">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s">"OrderSaveExecutor"</span><span class="o">)</span>
+<span class="nd">@AllArgsConstructor</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">OrderSaveExecutor</span> <span class="kd">implements</span> <span class="nc">CommandExecutor</span><span class="o">&lt;</span><span class="nc">PlaceOrderAggregator</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">ProcessStepManager</span><span class="o">&lt;</span><span class="nc">PlaceOrderAggregator</span><span class="o">&gt;</span> <span class="nf">doProcess</span><span class="o">(</span>
+            <span class="nc">ProcessStack</span> <span class="n">processStack</span><span class="o">,</span>
+            <span class="nc">PlaceOrderAggregator</span> <span class="n">aggregator</span><span class="o">,</span>
+            <span class="nc">ProcessStepManagerUtil</span><span class="o">&lt;</span><span class="nc">PlaceOrderAggregator</span><span class="o">&gt;</span> <span class="n">stepManager</span>
+    <span class="o">)</span> <span class="kd">throws</span> <span class="nc">RetryableExecutorException</span><span class="o">,</span> <span class="nc">NonRetryableExecutorException</span> <span class="o">{</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">aggregator</span><span class="o">.</span><span class="na">getRealVersionAsString</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"1.0.0"</span><span class="o">))</span> <span class="o">{</span> <i class="conum" data-value="1"></i><b>(1)</b>
+            <span class="nc">String</span> <span class="n">comment</span> <span class="o">=</span> <span class="n">aggregator</span><span class="o">.</span><span class="na">getMissingProperties</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"comment"</span><span class="o">).</span><span class="na">toString</span><span class="o">();</span> <i class="conum" data-value="2"></i><b>(2)</b>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"comment = "</span> <span class="o">+</span> <span class="n">comment</span><span class="o">);</span>
+
+            <span class="k">for</span> <span class="o">(</span><span class="nc">PlaceOrderAggregator</span><span class="o">.</span><span class="na">ItemDetail</span> <span class="n">itemDetail</span> <span class="o">:</span> <span class="n">aggregator</span><span class="o">.</span><span class="na">getItemDetails</span><span class="o">())</span> <span class="o">{</span> <i class="conum" data-value="3"></i><b>(3)</b>
+                <span class="nc">String</span> <span class="n">note</span> <span class="o">=</span> <span class="n">itemDetail</span><span class="o">.</span><span class="na">getMissingProperties</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"note"</span><span class="o">).</span><span class="na">toString</span><span class="o">();</span> <i class="conum" data-value="3"></i><b>(3)</b>
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"note = "</span> <span class="o">+</span> <span class="n">note</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="o">...</span>
+
+        <span class="k">return</span> <span class="n">stepManager</span><span class="o">.</span><span class="na">next</span><span class="o">(</span><span class="nc">UpdateStockExecutor</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doRevert</span><span class="o">(</span>
+            <span class="nc">ProcessStack</span> <span class="n">processStack</span><span class="o">,</span>
+            <span class="nc">NonRetryableExecutorException</span> <span class="n">e</span><span class="o">,</span>
+            <span class="nc">PlaceOrderAggregator</span> <span class="n">aggregator</span><span class="o">,</span>
+            <span class="nc">RevertHintStore</span> <span class="n">revertHintStore</span>
+    <span class="o">)</span> <span class="kd">throws</span> <span class="nc">RetryableExecutorException</span> <span class="o">{</span>
+        <span class="o">...</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="saga_executors"><a class="anchor" href="#saga_executors"></a>5.7. Saga Executors.</h3>
 <div class="paragraph">
 <p>According to the saga design pattern, sub processes (atomic executions) can have two executions called process execution and compensation execution.
 And those executions you van create as the methods in your application anywhere.</p>
@@ -3503,7 +3788,7 @@ If some atomic process has a compensation (revert execution), that kind of proce
 </ol>
 </div>
 <div class="sect3">
-<h4 id="query_executor"><a class="anchor" href="#query_executor"></a>5.5.1. Query Executor.</h4>
+<h4 id="query_executor"><a class="anchor" href="#query_executor"></a>5.7.1. Query Executor.</h4>
 <div class="paragraph">
 <p>You can create any number of your custom Query-Executors regarding the Aggregator.
 Here you can see how you can create a Query-Executor for your <code><a href="#creating_aggregator_class">PlaceOrderAggregator</a></code>.</p>
@@ -3568,7 +3853,7 @@ The executor is identified with this value by StackSaga engine. after configurin
 </div>
 </div>
 <div class="sect3">
-<h4 id="command_executor"><a class="anchor" href="#command_executor"></a>5.5.2. Command Executor.</h4>
+<h4 id="command_executor"><a class="anchor" href="#command_executor"></a>5.7.2. Command Executor.</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight nowrap"><code data-lang="java"><i class="conum" data-value="1"></i><b>(1)</b>
@@ -3684,7 +3969,7 @@ According to the example, the revert after execution will be started from <a hre
 <hr>
 </div>
 <div class="sect3">
-<h4 id="revert_before_executor"><a class="anchor" href="#revert_before_executor"></a>5.5.3. Revert Before Executor.</h4>
+<h4 id="revert_before_executor"><a class="anchor" href="#revert_before_executor"></a>5.7.3. Revert Before Executor.</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight nowrap"><code data-lang="java"><i class="conum" data-value="1"></i><b>(1)</b>
@@ -3778,7 +4063,7 @@ That is the method is executed by the StackSaga engine.</td>
 </div>
 </div>
 <div class="sect3">
-<h4 id="revert_after_executor"><a class="anchor" href="#revert_after_executor"></a>5.5.4. Revert After Executor.</h4>
+<h4 id="revert_after_executor"><a class="anchor" href="#revert_after_executor"></a>5.7.4. Revert After Executor.</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight nowrap"><code data-lang="java"><i class="conum" data-value="1"></i><b>(1)</b>
@@ -3873,11 +4158,11 @@ That is the method is executed by the StackSaga engine.</td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_processstack"><a class="anchor" href="#_processstack"></a>5.6. ProcessStack</h3>
+<h3 id="_processstack"><a class="anchor" href="#_processstack"></a>5.8. ProcessStack</h3>
 
 </div>
 <div class="sect2">
-<h3 id="retryable_executor_exception"><a class="anchor" href="#retryable_executor_exception"></a>5.7. RetryableExecutorException</h3>
+<h3 id="retryable_executor_exception"><a class="anchor" href="#retryable_executor_exception"></a>5.9. RetryableExecutorException</h3>
 <div class="paragraph">
 <p>If you are having an exception while processing the executor due to a connection issue or that kind of re-invokable error (The exceptions that can be occurred temporarily), you can throw a <code>RetryableExecutorException</code>.
 Then the StackSaga engine will temporarily pause the execution, and the transaction does expose to the next scheduler.
@@ -3971,7 +4256,7 @@ Therefore, it is necessary to capture and identify all the exceptions that are t
 </div>
 </div>
 <div class="sect2">
-<h3 id="non_retryable_executor_exception"><a class="anchor" href="#non_retryable_executor_exception"></a>5.8. NonRetryableExecutorException</h3>
+<h3 id="non_retryable_executor_exception"><a class="anchor" href="#non_retryable_executor_exception"></a>5.10. NonRetryableExecutorException</h3>
 <div class="paragraph">
 <p>If you are having an exception while processing the executor that is not temporally occurred (The exceptions that have not any point of executing again), you can throw a <code>NonRetryableExecutorException</code>.
 Then the StackSaga engine will stop the execution forward, and start reverting back, according to the configuration.</p>
@@ -4127,7 +4412,7 @@ If you don&#8217;t want to continue the execution of the transaction to forward,
 </div>
 </div>
 <div class="sect2">
-<h3 id="usage_of_exceptions"><a class="anchor" href="#usage_of_exceptions"></a>5.9. Usage of Executors[Q&amp;C] With Exceptions </h3>
+<h3 id="usage_of_exceptions"><a class="anchor" href="#usage_of_exceptions"></a>5.11. Usage of Executors[Q&amp;C] With Exceptions </h3>
 <div class="paragraph">
 <p>Here you can see how you can handle the <strong>success</strong>,
 <strong>failure</strong> and <strong>retryable</strong> scenario inside the <strong><a href="#query_executor">query-executor</a></strong> executor.
@@ -4211,7 +4496,7 @@ IF the <code>userService.getUserDetail()</code> service throw a <code>FeignExcep
 </div>
 </div>
 <div class="sect2">
-<h3 id="saga_exception_annotation"><a class="anchor" href="#saga_exception_annotation"></a>5.10. @SagaException Annotation </h3>
+<h3 id="saga_exception_annotation"><a class="anchor" href="#saga_exception_annotation"></a>5.12. @SagaException Annotation </h3>
 <div class="paragraph">
 <p>If you want to throw an exception as a <a href="#non_retryable_executor_exception">NonRetryableExecutorException</a>, The framework suggests you to create a new exception for that by warping the real exception and specially that can be annotated with <code>@SagaException</code> annotation like below.</p>
 </div>
@@ -4365,7 +4650,7 @@ Or otherwise, the object will be empty.</td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="saga_revert_hint_store"><a class="anchor" href="#saga_revert_hint_store"></a>5.11. RevertHintStore</h3>
+<h3 id="saga_revert_hint_store"><a class="anchor" href="#saga_revert_hint_store"></a>5.13. RevertHintStore</h3>
 <div class="paragraph">
 <p><code>RevertHintStore</code> does provide you a map to put the data that the revert processes want.
 After having a <a href="#non_retryable_executor_exception">NonRetryableExecutorException</a>, the engine will start the revert process by stopping to forward anymore.
@@ -4438,7 +4723,7 @@ This value will be helpful for the next revert process.</td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="saga_event_handler"><a class="anchor" href="#saga_event_handler"></a>5.12. Saga Execution Event Listener </h3>
+<h3 id="saga_event_handler"><a class="anchor" href="#saga_event_handler"></a>5.14. Saga Execution Event Listener </h3>
 <div class="paragraph">
 <p><code>SagaExecutionEventListener</code> is the place where you&#8217;re notified about each and every action during the process by the SEC.
 As an example, you hand over your transaction to the StackSaga engine by mentioning the starting executor.
@@ -4608,7 +4893,7 @@ And also you can create multiple listeners for the target Aggregator.
 </div>
 </div>
 <div class="sect2">
-<h3 id="saga_template"><a class="anchor" href="#saga_template"></a>5.13. SagaTemplate&lt;A&gt;</h3>
+<h3 id="saga_template"><a class="anchor" href="#saga_template"></a>5.15. SagaTemplate&lt;A&gt;</h3>
 <div class="paragraph">
 <p><code>SagaTemplate</code> is the class which is responsible for starting the StackSaga engine to invoke your transaction.
 By providing the necessary data, you can say to start the process of the transaction for StackSaga engine.
@@ -4711,13 +4996,13 @@ Even though <code>SagaTemplate&lt;A&gt;</code> can be autowired anywhere in the 
 </div>
 </div>
 <div class="sect2">
-<h3 id="saga_trash_listener"><a class="anchor" href="#saga_trash_listener"></a>5.14. TrashFileListener</h3>
+<h3 id="saga_trash_listener"><a class="anchor" href="#saga_trash_listener"></a>5.16. TrashFileListener</h3>
 <div class="paragraph">
 <p><code>TrashFileListener</code> is used to be notified about the <strong>Trash-Files</strong>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="custom_thread_pool_configuration"><a class="anchor" href="#custom_thread_pool_configuration"></a>5.15. Custom Thread-pool configuration</h3>
+<h3 id="custom_thread_pool_configuration"><a class="anchor" href="#custom_thread_pool_configuration"></a>5.17. Custom Thread-pool configuration</h3>
 <div class="paragraph">
 <p>In StackSaga framework, there are several thread-pools are used behind the scene with default configurations.
 All the executions are not executed with a single thread-pool to ensure the resiliency of the application.</p>
@@ -4810,7 +5095,7 @@ All the executions are not executed with a single thread-pool to ensure the resi
 <p>In case if you want to change the default configuration, you can do it by implementing following</p>
 </div>
 <div class="sect3">
-<h4 id="saga_discovery_transaction_task_executor"><a class="anchor" href="#saga_discovery_transaction_task_executor"></a>5.15.1. Saga Discovery Transaction TaskExecutor</h4>
+<h4 id="saga_discovery_transaction_task_executor"><a class="anchor" href="#saga_discovery_transaction_task_executor"></a>5.17.1. Saga Discovery Transaction TaskExecutor</h4>
 <div class="paragraph">
 <p><code>SagaDiscoveryTransactionTaskExecutor</code> is the main pool. because this thread-pool is used for starting your transaction when it is called the <a href="#saga_template"><code>SagaTemplate.process()</code></a> method. after starting the transaction, this thread-pool will handle all the executions of the executors.</p>
 </div>
@@ -4865,7 +5150,7 @@ Even though you change the prefix of the thread-pool when the task-executor is c
 <hr>
 </div>
 <div class="sect3">
-<h4 id="saga_event_task_executor"><a class="anchor" href="#saga_event_task_executor"></a>5.15.2. Saga Event TaskExecutor</h4>
+<h4 id="saga_event_task_executor"><a class="anchor" href="#saga_event_task_executor"></a>5.17.2. Saga Event TaskExecutor</h4>
 <div class="paragraph">
 <p>— In case if you want to customize the default configuration, you can update the default configuration as follows:</p>
 </div>
@@ -4915,7 +5200,7 @@ Even though you change the prefix of the thread-pool when the task-executor is c
 <hr>
 </div>
 <div class="sect3">
-<h4 id="saga_admin_task_executor"><a class="anchor" href="#saga_admin_task_executor"></a>5.15.3. Saga Admin TaskExecutor</h4>
+<h4 id="saga_admin_task_executor"><a class="anchor" href="#saga_admin_task_executor"></a>5.17.3. Saga Admin TaskExecutor</h4>
 <div class="paragraph">
 <p>— In case if you want to customize the default configuration, you can update the default configuration as follows:</p>
 </div>
@@ -4967,7 +5252,7 @@ Even though you change the prefix of the thread-pool when the task-executor is c
 <hr>
 </div>
 <div class="sect3">
-<h4 id="saga_discovery_file_task_executor"><a class="anchor" href="#saga_discovery_file_task_executor"></a>5.15.4. Saga Discovery File TaskExecutor</h4>
+<h4 id="saga_discovery_file_task_executor"><a class="anchor" href="#saga_discovery_file_task_executor"></a>5.17.4. Saga Discovery File TaskExecutor</h4>
 <div class="paragraph">
 <p>— In case if you want to customize the default configuration, you can update the default configuration as follows:</p>
 </div>
@@ -5019,7 +5304,7 @@ Even though you change the prefix of the thread-pool when the task-executor is c
 <hr>
 </div>
 <div class="sect3">
-<h4 id="saga_discovery_retry_transaction_task_executor"><a class="anchor" href="#saga_discovery_retry_transaction_task_executor"></a>5.15.5. Saga Discovery Retry Transaction TaskExecutor</h4>
+<h4 id="saga_discovery_retry_transaction_task_executor"><a class="anchor" href="#saga_discovery_retry_transaction_task_executor"></a>5.17.5. Saga Discovery Retry Transaction TaskExecutor</h4>
 <div class="paragraph">
 <p>Even though the transaction is started by the <a href="#saga_discovery_transaction_task_executor"><code>SagaDiscoveryTransactionTaskExecutor</code></a>
 thread-pool, if the transaction is paused due a <a href="#retryable_executor_exception"><code>RetryableExecutorException</code></a>, the transaction should be retried again after some time (configured schedule).
@@ -5091,7 +5376,7 @@ Even though you change the prefix of the thread-pool when the task-executor is c
 </div>
 </div>
 <div class="sect2">
-<h3 id="connect_admin"><a class="anchor" href="#connect_admin"></a>5.16. Connect Admin</h3>
+<h3 id="connect_admin"><a class="anchor" href="#connect_admin"></a>5.18. Connect Admin</h3>
 <div class="paragraph">
 <p>As per the architecture, all the StackSaga clients connect to the StackSaga admin server initially (<strong>for submitting the instance metadata</strong>) and as well as during the StackSaga-client is being run (<strong>for submitting the terminated transaction data</strong>).</p>
 </div>
@@ -5137,7 +5422,7 @@ The default StackSaga-Admin-server running on port <strong>4444</strong>.
 </table>
 </div>
 <div class="sect3">
-<h4 id="custom_admin_connect_resttemplate_configuration"><a class="anchor" href="#custom_admin_connect_resttemplate_configuration"></a>5.16.1. Custom Admin Connector configuration</h4>
+<h4 id="custom_admin_connect_resttemplate_configuration"><a class="anchor" href="#custom_admin_connect_resttemplate_configuration"></a>5.18.1. Custom Admin Connector configuration</h4>
 <div class="paragraph">
 <p>In addition to the default configurations, if you want to provide more complex configurations for the http client (RestTemplate) like enable custom SSL configurations, You can provide your own <code>RestTemplate</code> for the StackSaga framework to use when the client connects to the admin-server.
 Then the default configuration (<code>SagaAdminConnectRestTemplateProviderDefault</code>) will be overridden with your custom configurations.</p>
@@ -5202,7 +5487,7 @@ If you want to get the admin-server connection configuration from the configurat
 </div>
 </div>
 <div class="sect2">
-<h3 id="service_communication"><a class="anchor" href="#service_communication"></a>5.17. Internal Service Communication</h3>
+<h3 id="service_communication"><a class="anchor" href="#service_communication"></a>5.19. Internal Service Communication</h3>
 <div class="paragraph">
 <p>As per the StackSaga architecture, Internally (<strong>within the same zone</strong>) each instance should be able to communicate with other instances at any time.
 Because, Any instance can be the Master instance and then the Master instance should have to make requests to other slaves to notify the retry-allocations.
@@ -5221,7 +5506,7 @@ Nature of Communication: If your microservices communicate with each other only 
 </table>
 </div>
 <div class="sect3">
-<h4 id="eureka_configuration_for_stacksaga"><a class="anchor" href="#eureka_configuration_for_stacksaga"></a>5.17.1. Eureka configuration for StackSaga</h4>
+<h4 id="eureka_configuration_for_stacksaga"><a class="anchor" href="#eureka_configuration_for_stacksaga"></a>5.19.1. Eureka configuration for StackSaga</h4>
 <div class="paragraph">
 <p>If you ara using <code>stacksaga-spring-boot-starter-discovery</code>, To communicate with the slaves, the master instance uses a <code>RestTemplate</code> internally with the following configurations.</p>
 </div>
@@ -5290,7 +5575,7 @@ By default, the server port and the management service port will be the same in 
 </table>
 </div>
 <div class="sect4">
-<h5 id="custom_service_communication_resttemplate_configuration"><a class="anchor" href="#custom_service_communication_resttemplate_configuration"></a>5.17.1.1. Custom Service Communication configuration</h5>
+<h5 id="custom_service_communication_resttemplate_configuration"><a class="anchor" href="#custom_service_communication_resttemplate_configuration"></a>5.19.1.1. Custom Service Communication configuration</h5>
 <div class="paragraph">
 <p>In case if you want to have more complex configurations more than default configurations like enabling custom SSL, adding authentication, you can provide your own RestTemplate for the framework like below:</p>
 </div>
