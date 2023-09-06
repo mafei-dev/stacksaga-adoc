@@ -608,10 +608,13 @@ pre.rouge .gs {
 </ul>
 </li>
 <li><a href="#aggregator_versioning">3.11. Aggregator Versioning</a></li>
-<li><a href="#version_casting_architecture">3.12. Aggregator Version Casting</a>
+<li><a href="#version_casting_architecture">3.12. Version Casting</a>
 <ul class="sectlevel3">
 <li><a href="#aggregator_oriented_casting_architecture">3.12.1. Aggregator-Oriented casting</a></li>
-<li><a href="#executor_oriented_casting_architecture">3.12.2. Executor-Oriented Casting</a></li>
+<li><a href="#aggregator_oriented_up_casting">3.12.2. Aggregator-Oriented Up-Casting</a></li>
+<li><a href="#aggregator_oriented_down_casting">3.12.3. Aggregator-Oriented Down-Casting</a></li>
+<li><a href="#executor_oriented_casting_architecture">3.12.4. Executor-Oriented Casting</a></li>
+<li><a href="#_up_casting">3.12.5. up-casting</a></li>
 </ul>
 </li>
 <li><a href="#dual_consistency_problem_of_sec_in_microservice">3.13. Dual-Consistency problem of SEC in microservice.</a>
@@ -1870,7 +1873,7 @@ This will cause a version update.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="version_casting_architecture"><a class="anchor" href="#version_casting_architecture"></a>3.12. Aggregator Version Casting</h3>
+<h3 id="version_casting_architecture"><a class="anchor" href="#version_casting_architecture"></a>3.12. Version Casting</h3>
 <div class="paragraph">
 <p>All the applications will be updated by changing their versions from time to time.
 When a new version is deployed, the old version will be replaced by the new version (if you are not going to use service-mesh).
@@ -1913,16 +1916,98 @@ But the new version doesn&#8217;t allow the old events, and then the event will 
 <div class="sect3">
 <h4 id="aggregator_oriented_casting_architecture"><a class="anchor" href="#aggregator_oriented_casting_architecture"></a>3.12.1. Aggregator-Oriented casting</h4>
 <div class="paragraph">
-<p>All the newly added changes to the aggregator of the new version are called as` aggregator-oriented changes.
-And then, as a developer, you have to do some casting /mapping between those aggregator versions to avoid that conflict.
-But it is not a complicated task because that, the framework uses the Jackson library for serialization.
-(Storing events in the database.) Therefore, you can follow the same effort what you have been doing with Jackson mapping as usual.</p>
+<p>If some changes are done for the aggregator, it will cause for a version-update.
+Even though the version is updated, there is something to be considered carefully.
+After updating the aggregator&#8217;s version, it is not a problem for that particular version at all.
+But StackSaga follows the event sourcing architecture and event re-invoking mechanism, in the event-store can have some events from the old version of the aggregator to be re-invoked.
+Therefore, the SEC has to cast (map/convert/deserialize) the old aggregator event to the new version.
+It is called as Aggregator-Oriented casting.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Even thought the term is quite simple at first glance, It can be effected to get crashed all the old events if you are unable to manage the version mapping.
+The casting process is failed for the old version&#8217;s events, there is no chance to be re-invoked that retry process with the old versions.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Even though the casting process is done by the SEC, as the developer, you are responsible for managing the casting the new version with the old versions' events.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>For instance, the old version&#8217;s aggregator has 3 fields, and the new version can have 4 fields or more than that, or else, the new version can have 2 fields.
-That means the aggregator has got changed relatively to the old version.
-If the new aggregator has more values than the previous one, those kinds of updates are called as upcasting.
-According to the example, the event-store might have the old events consisting of 2 fields.
+<p>Based on the behavior of the aggregator state-change, the Aggregator-Oriented version casting can be divided to two.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong><a href="#aggregator_oriented_up_casting">Up-Casting</a></strong></p>
+</li>
+<li>
+<p><strong><a href="#aggregator_oriented_down_casting">Down-Casting</a></strong></p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="aggregator_oriented_up_casting"><a class="anchor" href="#aggregator_oriented_up_casting"></a>3.12.2. Aggregator-Oriented Up-Casting</h4>
+<div class="paragraph">
+<p>If the new aggregator has more new attributes than the old one, that kind of event should be cast with upcasting.</p>
+</div>
+<div class="paragraph">
+<p>For instance, the old version&#8217;s aggregator has 3 fields, and the new version can have 4 fields or more than that, the old version&#8217;s events should be cast to the new aggregator object, and that term is called as upcasting.</p>
+</div>
+<div class="paragraph">
+<p>The following image shows how it is done by the SEC.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="resources/img/Architecture-Stacksaga-aggregator-oriented-up-casting-view.drawio.svg" alt="Stacksaga aggregator version up-casting">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Explanation:</strong> In the event-store can have old remaining events to be re-tried.
+But due to the fact that the aggregator has been updated to a new version with new attributes, The old events also should be converted and should be run through the new aggregator.
+But if it is an upcast mapping, The new version doesn&#8217;t bother to the casting process at all due that SEC uses <code>jackson objectmapper</code> to serialization and deserialization both.
+The new values will have the default values with help of
+<code>jackson objectmapper</code> and you have nothing to worry about upcasting with StackSaga at all.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+All the events that go through the SEO process can be identified easily in the <a href="#saga_executors">Executor&#8217;s</a> methods with the help of event-version data that provides with the aggregator object.
+See the <a href="#technical documentation">[technical documentation]</a>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="aggregator_oriented_down_casting"><a class="anchor" href="#aggregator_oriented_down_casting"></a>3.12.3. Aggregator-Oriented Down-Casting</h4>
+<div class="imageblock">
+<div class="content">
+<img src="resources/img/Architecture-Stacksaga-aggregator-oriented-down-casting-view.drawio.svg" alt="Stacksaga aggregator version down-casting">
+</div>
+</div>
+<div class="paragraph">
+<p>According to the example, the event-store might have the old events consisting of 2 fields.
 And if the new version has a less number of fields than the old one, it is called as down-casting.
 Now those remaining events are going to be executed through the new version.
 And the framework tries to build the new aggregator object by using the old event&#8217;s binaries.
@@ -1930,33 +2015,9 @@ This is the time the casting is been worked on.
 You have to modify and annotate the aggregator so as not to conflict while building the object by the framework.
 Here you can see the best practices related to the casting of aggregators.</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Up-Casting</strong></p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="resources/img/Architecture-Stacksaga-aggregator-version-up-casting.drawio.svg" alt=" Stacksaga aggregator version up-casting" height="300">
-</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Down-Casting</strong></p>
-</li>
-</ol>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="resources/img/Architecture-Stacksaga-aggregator-version-down-casting.drawio.svg" alt=" Stacksaga aggregator version down-casting" height="300">
-</div>
-</div>
 </div>
 <div class="sect3">
-<h4 id="executor_oriented_casting_architecture"><a class="anchor" href="#executor_oriented_casting_architecture"></a>3.12.2. Executor-Oriented Casting</h4>
+<h4 id="executor_oriented_casting_architecture"><a class="anchor" href="#executor_oriented_casting_architecture"></a>3.12.4. Executor-Oriented Casting</h4>
 <div class="paragraph">
 <p>According to the framework, one aggregator can have multiple executors based on your use case.
 When you update the version of the service, you might want to remove existing executors or add new executors based on the update that should be done.
@@ -1978,11 +2039,13 @@ IF there is an executor down-cast scenario, This time is not just like Executor-
 But in the new version, if one or more executors do not exist, most of the time the execution can be crashed.
 (In rare cases, it might not be affected upon your update) by the way, even though you want to use some executors for the previous version and for the new version that executor is not used, that kind of situation is called as executor-oriented down-casting changes.
 To avoid conflict in this way, the framework provides a feature to skip the old executor from the latest version, and the old executor is retained only for the remaining old events as it&#8217;s.
-== up-casting
 </td>
 </tr>
 </table>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_up_casting"><a class="anchor" href="#_up_casting"></a>3.12.5. up-casting</h4>
 <div class="imageblock">
 <div class="content">
 <img src="resources/img/Architecture-Stacksaga-executor-oriented-version-up-casting.drawio.svg" alt="Architecture Stacksaga executor-oriented version up-casting" height="400">
