@@ -10,26 +10,26 @@ As an example, if you have PlaceOrderAggregator, the following changes can be ca
 
 *Old Aggregator version Structure.*
 
-image::resources/img/stacksaga-old-aggregator.drawio.svg[alt="Stacksaga Old Aggregator Version",height=800]
+image::resources/img/stacksaga-old-aggregator.drawio.svg[Stacksaga Old Aggregator Version,500]
 
 *New Changes For Existing Aggregator Structure.*
 
 . *Making changes in aggregator's class.*
 +
-image::resources/img/stacksaga-aggregator-change.drawio.svg[alt="Stacksaga Making Aggregator Changes",height=800]
+image::resources/img/stacksaga-aggregator-change.drawio.svg[Stacksaga Making Aggregator Changes,500]
 +
 - Compared to the old version, some changes have been made for the aggregator without doing any changes on the executors.
 This will cause a version update.
 <<aggregator_oriented_casting_architecture,See more>>
 . *Adding new or removing existing executors* (<<query_executor_architecture,Query-Executor>>, <<command_executor,Command-Executor>>, or <<revert_after_executor,Revert-Executor>>)
 +
-image::resources/img/stacksaga-executor-change.drawio.svg[alt="Stacksaga Updating Executors",height=800]
+image::resources/img/stacksaga-executor-change.drawio.svg[Stacksaga Updating Executors,500]
 +
 - Compared to the old version, One Revert-Executor has been removed, and one Query-Executor and another Revert-Executor has been added as new executors.
 This will cause a version update. <<executor_oriented_casting_architecture,See more>>
 . *Making changes in the existing executors' classes.*
 +
-image::resources/img/stacksaga-executor-class-change.drawio.svg[alt="Stacksaga Making Executors Changes",height=800]
+image::resources/img/stacksaga-executor-class-change.drawio.svg[Stacksaga Making Executors Changes,500]
 +
 - Compared to the old version, Some changes have been made for some existing executors without changing any executors.
 This will cause a version update.
