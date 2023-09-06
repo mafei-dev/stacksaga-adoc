@@ -51,7 +51,11 @@ include::pages/aggregator_and_executors.adoc[]
 
 include::pages/aggregator_usage_with_executor.adoc[]
 
-=== Version Casting [[version_casting_architecture]]
+=== Aggregator Versioning [[aggregator_versioning]]
+
+include::aggregator_versioning.adoc[]
+
+=== Aggregator Version Casting [[version_casting_architecture]]
 
 include::version_casting_architecture.adoc[]
 

@@ -607,25 +607,26 @@ pre.rouge .gs {
 <li><a href="#aggregator_usage_with_executor">3.10.1. How the Aggregator is used through the Executors</a></li>
 </ul>
 </li>
-<li><a href="#version_casting_architecture">3.11. Version Casting</a>
+<li><a href="#aggregator_versioning">3.11. Aggregator Versioning</a></li>
+<li><a href="#version_casting_architecture">3.12. Aggregator Version Casting</a>
 <ul class="sectlevel3">
-<li><a href="#aggregator_oriented_casting_architecture">3.11.1. Aggregator-Oriented casting</a></li>
-<li><a href="#executor_oriented_casting_architecture">3.11.2. Executor-Oriented Casting</a></li>
+<li><a href="#aggregator_oriented_casting_architecture">3.12.1. Aggregator-Oriented casting</a></li>
+<li><a href="#executor_oriented_casting_architecture">3.12.2. Executor-Oriented Casting</a></li>
 </ul>
 </li>
-<li><a href="#dual_consistency_problem_of_sec_in_microservice">3.12. Dual-Consistency problem of SEC in microservice.</a>
+<li><a href="#dual_consistency_problem_of_sec_in_microservice">3.13. Dual-Consistency problem of SEC in microservice.</a>
 <ul class="sectlevel3">
-<li><a href="#how_execution_chunk_protection_works">3.12.1. How <strong>Execution Chunk Protection Mechanism</strong> works</a></li>
-<li><a href="#execution_chunk_protection_mechanism_with_the_help_of_eureka_service_registry">3.12.2. Execution chunk protection mechanism with the help of eureka service registry.</a></li>
-<li><a href="#stacksaga_discovery_configuration_properties">3.12.3. StackSaga Discovery Configuration Properties</a></li>
+<li><a href="#how_execution_chunk_protection_works">3.13.1. How <strong>Execution Chunk Protection Mechanism</strong> works</a></li>
+<li><a href="#execution_chunk_protection_mechanism_with_the_help_of_eureka_service_registry">3.13.2. Execution chunk protection mechanism with the help of eureka service registry.</a></li>
+<li><a href="#stacksaga_discovery_configuration_properties">3.13.3. StackSaga Discovery Configuration Properties</a></li>
 </ul>
 </li>
-<li><a href="#replay_transaction">3.13. Transaction Replay.</a></li>
-<li><a href="#stack_saga_transaction_type">3.14. StackSaga Transaction Types</a>
+<li><a href="#replay_transaction">3.14. Transaction Replay.</a></li>
+<li><a href="#stack_saga_transaction_type">3.15. StackSaga Transaction Types</a>
 <ul class="sectlevel3">
-<li><a href="#fully_success_transaction_scenario">3.14.1. <span class="icon green"><i class="fa fa-circle"></i></span> Fully Success</a></li>
-<li><a href="#revert_success_transaction_scenario">3.14.2. <span class="icon yellow"><i class="fa fa-circle"></i></span> Compensation Success</a></li>
-<li><a href="#revert_failed_transaction_scenario">3.14.3. <span class="icon red"><i class="fa fa-circle"></i></span> Compensation Failed</a></li>
+<li><a href="#fully_success_transaction_scenario">3.15.1. <span class="icon green"><i class="fa fa-circle"></i></span> Fully Success</a></li>
+<li><a href="#revert_success_transaction_scenario">3.15.2. <span class="icon yellow"><i class="fa fa-circle"></i></span> Compensation Success</a></li>
+<li><a href="#revert_failed_transaction_scenario">3.15.3. <span class="icon red"><i class="fa fa-circle"></i></span> Compensation Failed</a></li>
 </ul>
 </li>
 </ul>
@@ -1790,7 +1791,86 @@ You can see the executor-introduction or the real implementation of the example 
 </div>
 </div>
 <div class="sect2">
-<h3 id="version_casting_architecture"><a class="anchor" href="#version_casting_architecture"></a>3.11. Version Casting</h3>
+<h3 id="aggregator_versioning"><a class="anchor" href="#aggregator_versioning"></a>3.11. Aggregator Versioning</h3>
+<div class="paragraph">
+<p>In StackSaga, versioning is the most important thing for you as the developer.
+All the applications are being updated with new versions ever.
+In StackSaga, you have to manage your versioning for each aggregator.
+Because any kind of changes that you make regarding the aggregator, it caused for a version update.
+Not only the aggregators, even if you make some changes in one of the executors, It also causes a version update.
+Because every change you make related to the aggregator, it will change the aggregator state.
+If the aggregator-state is changed, the version must be updated.</p>
+</div>
+<div class="paragraph">
+<p>As an example, if you have PlaceOrderAggregator, the following changes can be caused to a version update.</p>
+</div>
+<div class="paragraph">
+<p><strong>Old Aggregator version Structure.</strong></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="resources/img/stacksaga-old-aggregator.drawio.svg" alt="Stacksaga Old Aggregator Version" height="800">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>New Changes For Existing Aggregator Structure.</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Making changes in aggregator&#8217;s class.</strong></p>
+<div class="imageblock">
+<div class="content">
+<img src="resources/img/stacksaga-aggregator-change.drawio.svg" alt="Stacksaga Making Aggregator Changes" height="800">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Compared to the old version, some changes have been made for the aggregator without doing any changes on the executors.
+This will cause a version update.
+<a href="#aggregator_oriented_casting_architecture">See more</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Adding new or removing existing executors</strong> (<a href="#query_executor_architecture">Query-Executor</a>, <a href="#command_executor">Command-Executor</a>, or <a href="#revert_after_executor">Revert-Executor</a>)</p>
+<div class="imageblock">
+<div class="content">
+<img src="resources/img/stacksaga-executor-change.drawio.svg" alt="Stacksaga Updating Executors" height="800">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Compared to the old version, One Revert-Executor has been removed, and one Query-Executor and another Revert-Executor has been added as new executors.
+This will cause a version update. <a href="#executor_oriented_casting_architecture">See more</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Making changes in the existing executors' classes.</strong></p>
+<div class="imageblock">
+<div class="content">
+<img src="resources/img/stacksaga-executor-class-change.drawio.svg" alt="Stacksaga Making Executors Changes" height="800">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Compared to the old version, Some changes have been made for some existing executors without changing any executors.
+This will cause a version update.</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="version_casting_architecture"><a class="anchor" href="#version_casting_architecture"></a>3.12. Aggregator Version Casting</h3>
 <div class="paragraph">
 <p>All the applications will be updated by changing their versions from time to time.
 When a new version is deployed, the old version will be replaced by the new version (if you are not going to use service-mesh).
@@ -1831,7 +1911,7 @@ But the new version doesn&#8217;t allow the old events, and then the event will 
 </ol>
 </div>
 <div class="sect3">
-<h4 id="aggregator_oriented_casting_architecture"><a class="anchor" href="#aggregator_oriented_casting_architecture"></a>3.11.1. Aggregator-Oriented casting</h4>
+<h4 id="aggregator_oriented_casting_architecture"><a class="anchor" href="#aggregator_oriented_casting_architecture"></a>3.12.1. Aggregator-Oriented casting</h4>
 <div class="paragraph">
 <p>All the newly added changes to the aggregator of the new version are called as` aggregator-oriented changes.
 And then, as a developer, you have to do some casting /mapping between those aggregator versions to avoid that conflict.
@@ -1876,7 +1956,7 @@ Here you can see the best practices related to the casting of aggregators.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="executor_oriented_casting_architecture"><a class="anchor" href="#executor_oriented_casting_architecture"></a>3.11.2. Executor-Oriented Casting</h4>
+<h4 id="executor_oriented_casting_architecture"><a class="anchor" href="#executor_oriented_casting_architecture"></a>3.12.2. Executor-Oriented Casting</h4>
 <div class="paragraph">
 <p>According to the framework, one aggregator can have multiple executors based on your use case.
 When you update the version of the service, you might want to remove existing executors or add new executors based on the update that should be done.
@@ -1911,7 +1991,7 @@ To avoid conflict in this way, the framework provides a feature to skip the old 
 </div>
 </div>
 <div class="sect2">
-<h3 id="dual_consistency_problem_of_sec_in_microservice"><a class="anchor" href="#dual_consistency_problem_of_sec_in_microservice"></a>3.12. Dual-Consistency problem of SEC in microservice.</h3>
+<h3 id="dual_consistency_problem_of_sec_in_microservice"><a class="anchor" href="#dual_consistency_problem_of_sec_in_microservice"></a>3.13. Dual-Consistency problem of SEC in microservice.</h3>
 <div class="paragraph">
 <p>In the microservice architecture, It is highly concerned about the data consistency.
 As a result of that, you had to move in to the <a href="#introduction_to_saga">SAGA design pattern,</a> and it ensures eventual consistency.</p>
@@ -1948,7 +2028,7 @@ But If the framework is not capable of handling the data consistency by itself, 
 It is called as *Execution Chunk Protection Mechanism * in StackSaga.</p>
 </div>
 <div class="sect3">
-<h4 id="how_execution_chunk_protection_works"><a class="anchor" href="#how_execution_chunk_protection_works"></a>3.12.1. How <strong>Execution Chunk Protection Mechanism</strong> works</h4>
+<h4 id="how_execution_chunk_protection_works"><a class="anchor" href="#how_execution_chunk_protection_works"></a>3.13.1. How <strong>Execution Chunk Protection Mechanism</strong> works</h4>
 <div class="paragraph">
 <p>In brief, In the Execution Chunk Protection Mechanism, chunk execution data will be stored in the shared filesystem for the particular instance.</p>
 </div>
@@ -2016,7 +2096,7 @@ If you are familiar with <a href="https://docs.docker.com/storage/volumes/">Dock
 </div>
 </div>
 <div class="sect3">
-<h4 id="execution_chunk_protection_mechanism_with_the_help_of_eureka_service_registry"><a class="anchor" href="#execution_chunk_protection_mechanism_with_the_help_of_eureka_service_registry"></a>3.12.2. Execution chunk protection mechanism with the help of eureka service registry.</h4>
+<h4 id="execution_chunk_protection_mechanism_with_the_help_of_eureka_service_registry"><a class="anchor" href="#execution_chunk_protection_mechanism_with_the_help_of_eureka_service_registry"></a>3.13.2. Execution chunk protection mechanism with the help of eureka service registry.</h4>
 <div class="paragraph">
 <p>According to the StackSaga architecture, eureka service helps to <strong><code>Execution chunk protection</code></strong> process by providing the instance metadata for each instance.</p>
 </div>
@@ -2252,12 +2332,12 @@ But if some instance is appointed as the master that same scheduler will be used
 </div>
 </div>
 <div class="sect3">
-<h4 id="stacksaga_discovery_configuration_properties"><a class="anchor" href="#stacksaga_discovery_configuration_properties"></a>3.12.3. StackSaga Discovery Configuration Properties</h4>
+<h4 id="stacksaga_discovery_configuration_properties"><a class="anchor" href="#stacksaga_discovery_configuration_properties"></a>3.13.3. StackSaga Discovery Configuration Properties</h4>
 
 </div>
 </div>
 <div class="sect2">
-<h3 id="replay_transaction"><a class="anchor" href="#replay_transaction"></a>3.13. Transaction Replay.</h3>
+<h3 id="replay_transaction"><a class="anchor" href="#replay_transaction"></a>3.14. Transaction Replay.</h3>
 <div class="paragraph">
 <p>Transaction Replay concept is help to re-invoke the transaction that stopped for some reason in the past.
 Even though all the transactions can not be re-invoked, some transactions/executions can be re-invoked.
@@ -2344,7 +2424,7 @@ Here there is an allocation process by the master for other instances in the zon
 </div>
 </div>
 <div class="sect2">
-<h3 id="stack_saga_transaction_type"><a class="anchor" href="#stack_saga_transaction_type"></a>3.14. StackSaga Transaction Types</h3>
+<h3 id="stack_saga_transaction_type"><a class="anchor" href="#stack_saga_transaction_type"></a>3.15. StackSaga Transaction Types</h3>
 <div class="paragraph">
 <p>In this section, you will get the architecture of this framework.
 Other than that, you will get what are the limitations you have to face when you are going to use microservice architecture and how to overcome those difficulties by using StackSAGA framework.</p>
@@ -2367,7 +2447,7 @@ Let&#8217;s see one by one how the StackSaga&#8217;s execution-coordinator coord
 </ol>
 </div>
 <div class="sect3">
-<h4 id="fully_success_transaction_scenario"><a class="anchor" href="#fully_success_transaction_scenario"></a>3.14.1. <span class="icon green"><i class="fa fa-circle"></i></span> Fully Success</h4>
+<h4 id="fully_success_transaction_scenario"><a class="anchor" href="#fully_success_transaction_scenario"></a>3.15.1. <span class="icon green"><i class="fa fa-circle"></i></span> Fully Success</h4>
 <div class="paragraph">
 <p>here, the SEC has successfully executed all the executors. therefore, there is no compensation/revert execution was invoked. this is the success scenario we wish.</p>
 </div>
@@ -2415,7 +2495,7 @@ Before invoking the executor that you provided as the start-executor SEC saves t
 </div>
 </div>
 <div class="sect3">
-<h4 id="revert_success_transaction_scenario"><a class="anchor" href="#revert_success_transaction_scenario"></a>3.14.2. <span class="icon yellow"><i class="fa fa-circle"></i></span> Compensation Success</h4>
+<h4 id="revert_success_transaction_scenario"><a class="anchor" href="#revert_success_transaction_scenario"></a>3.15.2. <span class="icon yellow"><i class="fa fa-circle"></i></span> Compensation Success</h4>
 <div class="paragraph">
 <p>here, the SEC hasn&#8217;t successfully executed all the executors. an error occurred while after some processing. therefore, the transaction has a compensation/revert executions.</p>
 </div>
@@ -2482,7 +2562,7 @@ To have knowledge about how retry works of revert-processes in StackSaga, please
 </div>
 </div>
 <div class="sect3">
-<h4 id="revert_failed_transaction_scenario"><a class="anchor" href="#revert_failed_transaction_scenario"></a>3.14.3. <span class="icon red"><i class="fa fa-circle"></i></span> Compensation Failed</h4>
+<h4 id="revert_failed_transaction_scenario"><a class="anchor" href="#revert_failed_transaction_scenario"></a>3.15.3. <span class="icon red"><i class="fa fa-circle"></i></span> Compensation Failed</h4>
 <div class="imageblock">
 <div class="content">
 <img src="resources/img/Architecture-Stacksaga-evert-failed-transaction-scenario.drawio.svg" alt="Compensation/Revert failed transaction scenario" height="300">
