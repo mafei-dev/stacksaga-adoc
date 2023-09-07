@@ -1,3 +1,4 @@
+:title: StackSaga Reference Documentation
 :toc-title: Table of Contents
 :icons: font
 :prewrap!:

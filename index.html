@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.20">
-<title>Introduction To Microservices</title>
+<title>StackSaga Reference Documentation</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -3229,6 +3229,23 @@ Therefore, it is not necessary to have inside the <strong>component scan</strong
 <div class="sect2">
 <h3 id="saga_serializable"><a class="anchor" href="#saga_serializable"></a>5.2. Creating SagaSerializable Class for Aggregator</h3>
 <div class="paragraph">
+<p>Providing sample objects for the framework is very important to capture the feature failures that can be occurred due to the version updates of the Aggregator.
+You can have a better understanding of version updates through the following topics.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><a href="#version_casting_architecture">Version Casting Architecture</a>.</p>
+</li>
+<li>
+<p><a href="#aggregators_event_casting">Aggregator&#8217;s Event Casting</a>.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at the implementation of <code>SagaSerializable</code> here:</p>
+</div>
+<div class="paragraph">
 <p>The <code>SagaSerializable</code> class provides you a method called <code>&lt;T&gt; getSamples()</code> to provide the sample array of objects of your real Aggregator. for each aggregator class that you made should have a separate implementation of <code>SagaSerializable</code> for validating the sample object before the application is started. that process ensures that your aggregator object will not face a serialization error while the transactions are being processed in the production.</p>
 </div>
 <div class="paragraph">
@@ -3597,8 +3614,12 @@ But if you want to empower other inner classes that are used inside the Root Agg
 <div class="paragraph">
 <p>Here is an example for down-casting with using <code>MissingJsonPropertyCollector</code> implementation.</p>
 </div>
-<div class="paragraph">
+<div class="ulist">
+<ul>
+<li>
 <p><strong>Old Version Of the Custom Aggregator.</strong></p>
+</li>
+</ul>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3657,7 +3678,14 @@ But if you want to empower other inner classes that are used inside the Root Agg
 </div>
 </div>
 <div class="paragraph">
+<p>In this <code>PlaceOrderAggregator</code> class you can see some properties in the root class, and also there is another nested class called <code>ItemDetail</code> and it contains more properties regarding the items.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
 <p><strong>New Version Of the Custom Aggregator.</strong></p>
+</li>
+</ul>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3688,7 +3716,7 @@ But if you want to empower other inner classes that are used inside the Root Agg
     <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"is_active"</span><span class="o">)</span>
     <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">isActive</span><span class="o">;</span>
 
-    <span class="c1">//@JsonProperty("is_active") </span><i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="c1">//@JsonProperty("comment") </span><i class="conum" data-value="1"></i><b>(1)</b>
     <span class="c1">//private String comment;</span>
 
     <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"item_details"</span><span class="o">)</span>
@@ -3698,7 +3726,7 @@ But if you want to empower other inner classes that are used inside the Root Agg
     <span class="nd">@Setter</span>
     <span class="nd">@AllArgsConstructor</span>
     <span class="nd">@NoArgsConstructor</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ItemDetail</span> <span class="kd">extends</span> <span class="nc">MissingJsonPropertyCollector</span> <span class="o">{</span> <i class="conum" data-value="2"></i><b>(2)</b>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ItemDetail</span> <span class="kd">extends</span> <span class="nc">MissingJsonPropertyCollector</span> <span class="o">{</span> <i class="conum" data-value="3"></i><b>(3)</b>
 
         <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"order_id"</span><span class="o">)</span>
         <span class="kd">private</span> <span class="nc">String</span> <span class="n">itemName</span><span class="o">;</span>
@@ -3709,14 +3737,54 @@ But if you want to empower other inner classes that are used inside the Root Agg
         <span class="nd">@JsonProperty</span><span class="o">(</span><span class="s">"price"</span><span class="o">)</span>
         <span class="kd">private</span> <span class="kt">double</span> <span class="n">price</span><span class="o">;</span>
 
-        <span class="c1">//@JsonProperty("note") </span><i class="conum" data-value="3"></i><b>(3)</b>
+        <span class="c1">//@JsonProperty("note") </span><i class="conum" data-value="2"></i><b>(2)</b>
         <span class="c1">//private String note;</span>
     <span class="o">}</span>
 <span class="o">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
+<p>Relatively the old version, some attributes have been removed from the root class and also from the <code>ItemDetail</code> nested class.
+That means that the old event data should be cast down when it is deserialized into the new aggregate class.</p>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The <code>comment</code> property has been removed from the root class.
+But should not be executed from the <code>MissingJsonPropertyCollector</code>.
+Because the root class is already executed from the <code>MissingJsonPropertyCollector</code> through the <code>SagaAggregate</code> class.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The <code>note</code> property has been removed from the <code>ItemDetail</code> class.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>To be collected that missing property (<code>note</code>), the <code>ItemDetail</code> has been extended from the <code>MissingJsonPropertyCollector</code> class.
+Then the deserialization is happened that missing property will be saved in to the <code>missingProperties</code> map in side of teh <code>MissingJsonPropertyCollector</code> that has been provided by the framework.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+If the <code>ItemDetail</code> has not been extended from the <code>MissingJsonPropertyCollector</code> class, an exception will be thrown by the framework when the application is started by mapping the old version&#8217;s samples that you have given in the previous version through the <code><a href="#saga_serializable">SagaSerializable</a></code> implementation.
+It will ensure that the application is in a casting trouble.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
 <p><strong>Getting The Collected Properties For specific Version.</strong></p>
+</li>
+</ul>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3756,6 +3824,42 @@ But if you want to empower other inner classes that are used inside the Root Agg
     <span class="o">}</span>
 <span class="o">}</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>You already know that you have to use the same aggregator as well as the same executors for invoking the old transactions as well.
+Although the missing properties should not be need for the new version(<code>1.0.1</code>), If the event is an old transaction from the version of <code>1.0.0</code>, the missing properties can be required.
+Therefore, it is necessary to identify the exact version of the execution (Event).
+To identify the exact version of the current execution (Event), The framework provides the data version data along with the Room Aggregator Object By default.</p>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Check the current execution is 1.0.0 or another version by using the version data that provides by the Aggregator.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>If the version is <code>1.0.0</code>, you can get the missing properties from the <code>aggregator</code> object by calling <code>getMissingProperties()</code> method.
+That pert is based on the root aggregator object.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>If the version is <code>1.0.0</code>, you can get the missing properties from the <code>itemDetail</code> object by calling <code>getMissingProperties()</code> method.
+That pert is based on the root <code>ItemDetail</code> object.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It is possible to get the missing properties and the version of the current execution (Event) in every executor like <a href="#command_executor">Command-Executor</a>, <a href="#query_executor">Query-Executor</a> and <a href="#revert_after_executor">Revert-Executor</a>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -5651,7 +5755,7 @@ Because the URL is built based on the <a href="#eureka_configuration_for_stacksa
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-08-29 13:44:57 +0530
+Last updated 2023-09-07 18:51:37 +0530
 </div>
 </div>
 </body>
