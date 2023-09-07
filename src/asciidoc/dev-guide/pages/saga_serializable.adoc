@@ -1,5 +1,13 @@
 === Creating SagaSerializable Class for Aggregator [[saga_serializable]]
 
+Providing sample objects for the framework is very important to capture the feature failures that can be occurred due to the version updates of the Aggregator.
+You can have a better understanding of version updates through the following topics.
+
+. <<version_casting_architecture,Version Casting Architecture>>.
+. <<aggregators_event_casting,Aggregator's Event Casting>>.
+
+Let's look at the implementation of `SagaSerializable` here:
+
 The `SagaSerializable` class provides you a method called `<T> getSamples()` to provide the sample array of objects of your real Aggregator. for each aggregator class that you made should have a separate implementation of `SagaSerializable` for validating the sample object before the application is started. that process ensures that your aggregator object will not face a serialization error while the transactions are being processed in the production.
 
 you can see a sample SagaSerializable `(PlaceOrderAggregatorSample.class)` implementation of the PlaceOrderAggregator.

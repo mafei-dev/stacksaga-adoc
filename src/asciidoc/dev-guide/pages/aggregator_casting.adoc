@@ -29,7 +29,7 @@ But if you want to empower other inner classes that are used inside the Root Agg
 
 Here is an example for down-casting with using `MissingJsonPropertyCollector` implementation.
 
-*Old Version Of the Custom Aggregator.*
+- *Old Version Of the Custom Aggregator.*
 
 [source,java]
 ----
@@ -87,7 +87,9 @@ public class PlaceOrderAggregator extends SagaAggregate {
 }
 ----
 
-*New Version Of the Custom Aggregator.*
+In this `PlaceOrderAggregator` class you can see some properties in the root class, and also there is another nested class called `ItemDetail` and it contains more properties regarding the items.
+
+- *New Version Of the Custom Aggregator.*
 
 [source,java]
 ----
@@ -118,7 +120,7 @@ public class PlaceOrderAggregator extends SagaAggregate {
     @JsonProperty("is_active")
     private Integer isActive;
 
-    //@JsonProperty("is_active") //<1>
+    //@JsonProperty("comment") //<1>
     //private String comment;
 
     @JsonProperty("item_details")
@@ -128,7 +130,7 @@ public class PlaceOrderAggregator extends SagaAggregate {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ItemDetail extends MissingJsonPropertyCollector { //<2>
+    public static class ItemDetail extends MissingJsonPropertyCollector { //<3>
 
         @JsonProperty("order_id")
         private String itemName;
@@ -139,13 +141,27 @@ public class PlaceOrderAggregator extends SagaAggregate {
         @JsonProperty("price")
         private double price;
 
-        //@JsonProperty("note") //<3>
+        //@JsonProperty("note") //<2>
         //private String note;
     }
 }
 ----
 
-*Getting The Collected Properties For specific Version.*
+Relatively the old version, some attributes have been removed from the root class and also from the `ItemDetail` nested class.
+That means that the old event data should be cast down when it is deserialized into the new aggregate class.
+
+<1> The `comment` property has been removed from the root class.
+But should not be executed from the `MissingJsonPropertyCollector`.
+Because the root class is already executed from the `MissingJsonPropertyCollector` through the `SagaAggregate` class.
+<2> The `note` property has been removed from the `ItemDetail` class.
+
+<3> To be collected that missing property (`note`), the `ItemDetail` has been extended from the `MissingJsonPropertyCollector` class.
+Then the deserialization is happened that missing property will be saved in to the `missingProperties` map in side of teh `MissingJsonPropertyCollector` that has been provided by the framework.
+
+WARNING: If the `ItemDetail` has not been extended from the `MissingJsonPropertyCollector` class, an exception will be thrown by the framework when the application is started by mapping the old version's samples that you have given in the previous version through the `<<saga_serializable,SagaSerializable>>` implementation.
+It will ensure that the application is in a casting trouble.
+
+- *Getting The Collected Properties For specific Version.*
 
 [source,java]
 ----
@@ -185,3 +201,18 @@ public class OrderSaveExecutor implements CommandExecutor<PlaceOrderAggregator> 
     }
 }
 ----
+
+You already know that you have to use the same aggregator as well as the same executors for invoking the old transactions as well.
+Although the missing properties should not be need for the new version(`1.0.1`), If the event is an old transaction from the version of `1.0.0`, the missing properties can be required.
+Therefore, it is necessary to identify the exact version of the execution (Event).
+To identify the exact version of the current execution (Event), The framework provides the data version data along with the Room Aggregator Object By default.
+
+<1> Check the current execution is 1.0.0 or another version by using the version data that provides by the Aggregator.
+
+<2> If the version is `1.0.0`, you can get the missing properties from the `aggregator` object by calling `getMissingProperties()` method.
+That pert is based on the root aggregator object.
+
+<3> If the version is `1.0.0`, you can get the missing properties from the `itemDetail` object by calling `getMissingProperties()` method.
+That pert is based on the root `ItemDetail` object.
+
+NOTE: It is possible to get the missing properties and the version of the current execution (Event) in every executor like <<command_executor,Command-Executor>>, <<query_executor,Query-Executor>> and <<revert_after_executor,Revert-Executor>>.
