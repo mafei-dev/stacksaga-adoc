@@ -1,17 +1,17 @@
-=== Full Aggregate implementation. [[complex_aggrgator]]
+=== Full Aggregator implementation. [[complex_aggrgator]]
 
 [source,java]
 ----
 //Aggregtor Classs
-@Aggregator(
-        version = @AggregatorVersion(major = 1, minor = 0, patch = 1),
+@SagaAggregator(
+        version = @SagaAggregatorVersion(major = 1, minor = 0, patch = 1),
         idPrefix = "po",
         name = "PlaceOrderAggregator",
         sagaSerializable = PlaceOrderAggregatorSample.class
 )
 @Getter
 @Setter
-public class PlaceOrderAggregator extends SagaAggregate {
+public class PlaceOrderAggregator extends Aggregator {
 
     public PlaceOrderAggregator() {
         super(PlaceOrderAggregator.class);

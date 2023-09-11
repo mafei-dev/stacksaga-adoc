@@ -23,7 +23,7 @@ For collecting missing properties it can be used `@JsonAnySetter` and `@JsonAnyG
 But you don't need to create all the things from scratch.
 Because StackSaga provides the helper class called `MissingJsonPropertyCollector` for extending without writing any custom methods.
 
-NOTE: The root implementation (Custom Aggregator) of the *SagaAggregate* is by default extended from `MissingJsonPropertyCollector`.
+NOTE: The root implementation (Custom Aggregator) of the *Aggregator* is by default extended from `MissingJsonPropertyCollector`.
 Therefore, the root Custom Aggregator class is ready to collect the missing properties.
 But if you want to empower other inner classes that are used inside the Root Aggregator class also with Missing properties collector capabilities, you can extend all the inner classes from `MissingJsonPropertyCollector` as well.
 
@@ -33,8 +33,8 @@ Here is an example for down-casting with using `MissingJsonPropertyCollector` im
 
 [source,java]
 ----
-@Aggregator(
-        version = @AggregatorVersion(major = 1, minor = 1, patch = 0),
+@SagaAggregator(
+        version = @SagaAggregatorVersion(major = 1, minor = 1, patch = 0),
         idPrefix = "po",
         name = "PlaceOrderAggregator",
         sagaSerializable = PlaceOrderAggregatorSample.class,
@@ -42,7 +42,7 @@ Here is an example for down-casting with using `MissingJsonPropertyCollector` im
 )
 @Getter
 @Setter
-public class PlaceOrderAggregator extends SagaAggregate {
+public class PlaceOrderAggregator extends Aggregator {
 
     public PlaceOrderAggregator() {
         super(PlaceOrderAggregator.class);
@@ -93,8 +93,8 @@ In this `PlaceOrderAggregator` class you can see some properties in the root cla
 
 [source,java]
 ----
-@Aggregator(
-        version = @AggregatorVersion(major = 1, minor = 1, patch = 1),
+@SagaAggregator(
+        version = @SagaAggregatorVersion(major = 1, minor = 1, patch = 1),
         idPrefix = "po",
         name = "PlaceOrderAggregator",
         sagaSerializable = PlaceOrderAggregatorSample.class,
@@ -102,7 +102,7 @@ In this `PlaceOrderAggregator` class you can see some properties in the root cla
 )
 @Getter
 @Setter
-public class PlaceOrderAggregator extends SagaAggregate {
+public class PlaceOrderAggregator extends Aggregator {
 
     public PlaceOrderAggregator() {
         super(PlaceOrderAggregator.class);
@@ -148,11 +148,11 @@ public class PlaceOrderAggregator extends SagaAggregate {
 ----
 
 Relatively the old version, some attributes have been removed from the root class and also from the `ItemDetail` nested class.
-That means that the old event data should be cast down when it is deserialized into the new aggregate class.
+That means that the old event data should be cast down when it is deserialized into the new aggregator class.
 
 <1> The `comment` property has been removed from the root class.
 But should not be executed from the `MissingJsonPropertyCollector`.
-Because the root class is already executed from the `MissingJsonPropertyCollector` through the `SagaAggregate` class.
+Because the root class is already executed from the `MissingJsonPropertyCollector` through the `Aggregator` class.
 <2> The `note` property has been removed from the `ItemDetail` class.
 
 <3> To be collected that missing property (`note`), the `ItemDetail` has been extended from the `MissingJsonPropertyCollector` class.

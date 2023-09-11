@@ -76,7 +76,7 @@ public class UpdateStockExecutor implements CommandExecutor<PlaceOrderAggregator
     public void doRevert(
             ProcessStack previousProcessStack,
             NonRetryableExecutorException realException,
-            PlaceOrderAggregator finalAggregateState,
+            PlaceOrderAggregator finalAggregatorState,
             RevertHintStore revertHintStore
     ) throws RetryableExecutorException {
 

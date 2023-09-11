@@ -66,12 +66,12 @@ Here you can see an example how you can create a listener of `ExecutionEventList
 @SagaExecutionEventListener
 public class PlaceOrderEventListener implements ExecutionEventListener<PlaceOrderAggregator> {
     @Override
-    public void onEachProcessPerformed(Class<? extends SagaExecutor<? extends SagaAggregate>> processedExecutor, PlaceOrderAggregator currentAggregate) {
+    public void onEachProcessPerformed(Class<? extends SagaExecutor<? extends Aggregator>> processedExecutor, PlaceOrderAggregator currentAggregator) {
         //do whatever you want
     }
 
     @Override
-    public void onEachRevertPerformed(Class<? extends SagaExecutor<? extends SagaAggregate>> revertedExecutor, PlaceOrderAggregator finalAggregateState, NonRetryableExecutorException nonRetryableExecutorException, RevertHintStore revertHintStore) {
+    public void onEachRevertPerformed(Class<? extends SagaExecutor<? extends Aggregator>> revertedExecutor, PlaceOrderAggregator finalAggregatorState, NonRetryableExecutorException nonRetryableExecutorException, RevertHintStore revertHintStore) {
         //do whatever you want
     }
 
@@ -86,7 +86,7 @@ public class PlaceOrderEventListener implements ExecutionEventListener<PlaceOrde
     }
 
     @Override
-    public void onProcessException(PlaceOrderAggregator finalAggregateState, NonRetryableExecutorException exception, Class<? extends SagaExecutor<? extends SagaAggregate>> executorClass) {
+    public void onProcessException(PlaceOrderAggregator finalAggregatorState, NonRetryableExecutorException exception, Class<? extends SagaExecutor<? extends Aggregator>> executorClass) {
         //do whatever you want
     }
 }

@@ -47,8 +47,8 @@ You can provide your custom object `SagaAggregatorMapperProvider` class to the t
 
 [source,java]
 ----
-@Aggregator(
-        version = @AggregatorVersion(major = 1, minor = 0, patch = 1),
+@SagaAggregator(
+        version = @SagaAggregatorVersion(major = 1, minor = 0, patch = 1),
         idPrefix = "po",
         name = "PlaceOrderAggregator",
         sagaSerializable = PlaceOrderAggregatorSample.class,
@@ -56,7 +56,7 @@ You can provide your custom object `SagaAggregatorMapperProvider` class to the t
 )
 @Getter
 @Setter
-public class PlaceOrderAggregator extends SagaAggregate {
+public class PlaceOrderAggregator extends Aggregator {
 
     public PlaceOrderAggregator() {
         super(PlaceOrderAggregator.class);

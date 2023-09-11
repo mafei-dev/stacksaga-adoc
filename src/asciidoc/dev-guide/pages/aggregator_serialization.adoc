@@ -12,8 +12,8 @@ Because it will be changed correspondingly to the property name every time you c
 
 [source,java]
 ----
-@Aggregator(
-        version = @AggregatorVersion(major = 1, minor = 0, patch = 1),
+@SagaAggregator(
+        version = @SagaAggregatorVersion(major = 1, minor = 0, patch = 1),
         idPrefix = "po",
         name = "PlaceOrderAggregator",
         sagaSerializable = PlaceOrderAggregatorSample.class,
@@ -21,7 +21,7 @@ Because it will be changed correspondingly to the property name every time you c
 )
 @Getter
 @Setter
-public class PlaceOrderAggregator extends SagaAggregate {
+public class PlaceOrderAggregator extends Aggregator {
 
     public PlaceOrderAggregator() {
         super(PlaceOrderAggregator.class);
