@@ -48,7 +48,7 @@ include::introduction/index.adoc[]
 
 include::saga/index.adoc[]
 
-== StackSaga Architecture
+== StackSaga Architecture [[stacksaga_architecture]]
 
 include::architecture/index.adoc[]
 

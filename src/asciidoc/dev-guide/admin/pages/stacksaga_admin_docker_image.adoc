@@ -28,7 +28,9 @@ docker run -d \
 stacksaga/stacksaga_admin_mysql:1.0.0
 ----
 
-OR, if you prefer doing the deal with docker compose, here is the basic code snippet that you want tin run your own container.
+[[docker_compose_file]]
+
+OR, if you prefer doing the deal with docker compose, here is the basic code snippet that you want to run your own container.
 
 [source,yaml]
 ----
