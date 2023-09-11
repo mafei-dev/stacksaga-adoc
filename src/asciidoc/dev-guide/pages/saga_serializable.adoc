@@ -50,6 +50,8 @@ The generic type should be the aggregator that you wish to check the sample obje
 According to the example, the Type is `PlaceOrderAggregator`.
 Then you will have a method for providing the sample objects for that given type.
 
-<2> Put your initialized sample objects for the validation process.
+<2> Put your initialized sample objects for the validation process by using `put(key,vlaue)` method.
+The key should be unique for each.
+And also you have to provide at least one sample object.
 
 WARNING: Make sure to keep the default constructor for each SagaSerializable implementation.
