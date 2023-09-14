@@ -1180,9 +1180,6 @@ Primarily feature is monitoring and tracking the transaction&#8217;s flow and tr
 For monitoring your transactions, Admin should be able to retrieve the transaction data from each event-store.
 Internally, <code>StackSaga-Discovery</code> library provides and exposes the endpoints for that.</p>
 </li>
-<li>
-<p>StackSaga provides a library called <code>StackSaga-Gateway-Shield</code> for secure your transaction-endpoints that <code>StackSaga-Discovery</code> library provides. <code>StackSaga-Gateway-Shield</code> is added as a dependency for your <a href="https://spring.io/projects/spring-cloud-gateway">Spring-Cloud API-Gateway</a>.</p>
-</li>
 </ol>
 </div>
 <div class="paragraph">
@@ -1198,9 +1195,6 @@ Internally, <code>StackSaga-Discovery</code> library provides and exposes the en
 </li>
 <li>
 <p><code>StackSaga-DB</code> (library).</p>
-</li>
-<li>
-<p><code>StackSaga-Gateway-Shield</code> (library).</p>
 </li>
 <li>
 <p><code>StackSaga-Admin-Server</code> (Application).</p>
@@ -1230,9 +1224,6 @@ If There is no any complex business domain in some services, there is no point i
 </tr>
 </table>
 </div>
-</li>
-<li>
-<p><code>StackSaga-Gateway-Shield</code> is used for protecting the event-store endpoints that provide by the <code>StackSaga-Discovery</code>.</p>
 </li>
 <li>
 <p><code>StackSaga-Admin-Server</code> Can be run as a standalone server.</p>
@@ -1274,7 +1265,7 @@ It is recommended to fallow the following architectures in detailed to have a be
 </div>
 </li>
 <li>
-<p>How StackSaga Admin communicates with each service&#8217;s event-store endpoints with help of <code>StackSaga-Discovery</code> and <code>StackSaga-Gateway-Shield</code>.</p>
+<p>How StackSaga Admin communicates with each service&#8217;s event-store endpoints with the help of API-Gateway</p>
 <div class="paragraph">
 <p><a href="#SEC">Read in detailed</a></p>
 </div>
