@@ -46,14 +46,11 @@ Primarily feature is monitoring and tracking the transaction's flow and trace.
 For monitoring your transactions, Admin should be able to retrieve the transaction data from each event-store.
 Internally, `StackSaga-Discovery` library provides and exposes the endpoints for that.
 
-. StackSaga provides a library called `StackSaga-Gateway-Shield` for secure your transaction-endpoints that `StackSaga-Discovery` library provides. `StackSaga-Gateway-Shield` is added as a dependency for your https://spring.io/projects/spring-cloud-gateway[Spring-Cloud API-Gateway].
-
 According to the high-level architecture diagram and the brief explanation, you can identify one application and 4 libraries are involved for StackSaga.
 
 . `StackSaga-Core` (library).
 . `StackSaga-Discovery` (library).
 . `StackSaga-DB` (library).
-. `StackSaga-Gateway-Shield` (library).
 . `StackSaga-Admin-Server` (Application).
 
 image::resources/img/architecture-stacksaga-products.drawio.svg[alt="StackSaga High-level architecture",height=300]
@@ -63,7 +60,6 @@ image::resources/img/architecture-stacksaga-products.drawio.svg[alt="StackSaga H
 NOTE: No need to add StackSaga for all the services in the ecosystem.
 It can be added freely only to the services that you want to use.
 If There is no any complex business domain in some services, there is no point in adding StackSaga for that particular service and keep it as it is in the ecosystem.
-* `StackSaga-Gateway-Shield` is used for protecting the event-store endpoints that provide by the `StackSaga-Discovery`.
 * `StackSaga-Admin-Server` Can be run as a standalone server.
 +
 NOTE: Currently, StackSaga-Admin does support only for MYSQL.
@@ -82,6 +78,6 @@ It is recommended to fallow the following architectures in detailed to have a be
 . How StackSaga Overcomes the <<dual_consistency_problem_of_sec_in_microservice,Dual-Consistency Problem>> with help of `StackSaga-Discovery`.
 +
 <<dual_consistency_problem_of_sec_in_microservice,Read in detailed>>
-. How StackSaga Admin communicates with each service's event-store endpoints with help of `StackSaga-Discovery` and `StackSaga-Gateway-Shield`.
+. How StackSaga Admin communicates with each service's event-store endpoints with the help of API-Gateway
 +
 <<SEC,Read in detailed>>

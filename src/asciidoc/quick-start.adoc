@@ -1,4 +1,3 @@
-:title: StackSaga Quick Start Guide
 :icons: font
 :prewrap!:
 :docinfo: shared
@@ -12,7 +11,8 @@
 :sectanchors:
 :title-logo-image: image:resources/img/stacksaga-logo.jpg[top=25%,align=center,pdfwidth=0.5in]
 :doctype: book
-
+:toc: left
+:toc-title: Steps
 
 ////
 ++++
@@ -37,132 +37,14 @@ To get started with StackSaga, these steps should be followed in high-level.
 . <<use_sagatemplate,Use `SagaTemplate`>>
 . <<use_sagatemplate,Configure API-Gateway with StackSag Shield>>
 
-== Setup StackSaga Admin Server [[setup_stacksaga_admin_server]]
+include::setup_stacksaga_admin_server.adoc[]
 
-As the first, the <<stacksaga_admin_index,StackSaga Admin>> server should be run.
-To Run the Admin server, there are <<setup_the_service,several methods>> available.
-But here it is mentioned docker image as the quick way.
+include::configure_stacksaga_core_dependency.adoc[]
 
-* pull the image.
+include::create_aggregator.adoc[]
 
-[source,shell]
-----
-docker pull stacksaga/stacksaga_admin_mysqll:latest
-----
+include::create_executors.adoc[]
 
-Run by Updating the required <<stacksaga_admin_docker_image,environment variables>>.
-(See the <<docker_compose_file,docker-compose example>>)
+include::use_sagatemplate.adoc[]
 
-[source,shell]
-----
-docker run -d \
--p 4444:4444 \
--e DB_URL=jdbc:mysql://localhost:3306/stacksaga_admin_db?createDatabaseIfNotExist=true  \
--e DB_R2DBC_URL=r2dbc:mysql://localhost:3306/stacksaga_admin_db \
--e DB_USERNAME=root \
--e DB_PASSWORD=*** \
--e DROP_FIRST_DB=your-config \
--e SECRET=*** \
--e TOKEN_EXPIRATION_TIME=60000 \
---name stacksaga-admin-server \
-stacksaga/stacksaga_admin_mysql:1.0.0
-----
-
-After running the Server, you can <<dashboard_initialize,initialize the admin server>> and after that, create *<<create_api_gateway_user,API Gateway User>>* and *<<create_service_user,Service User>>*
-
-== Adding StackSaga Framework Dependency [[configure_stacksaga_core_dependency]]
-
-As per the <<stacksaga_architecture,architecture>>, you have to add the <<stacksaga_high_level,StackSaga Framework Dependencies>> to the class path of the service that you want to be acted as an <<saga_orchestration_pattern,orchestrator>>.
-
-[source,xml]
-----
-<dependency>
-    <groupId>org.stacksaga</groupId>
-    <artifactId>stacksaga-spring-boot-starter-core</artifactId>
-    <version>1.0.0</version>
-</dependency>
-
-<dependency>
-    <groupId>org.stacksaga</groupId>
-    <artifactId>stacksaga-spring-boot-starter-mysql</artifactId>
-    <version>1.0.0</version>
-</dependency>
-
-<dependency>
-    <groupId>org.stacksaga</groupId>
-    <artifactId>stacksaga-spring-boot-starter-discovery</artifactId>
-    <version>1.0.0</version>
-</dependency>
-----
-
-== Create Aggregator [[create_aggregator]]
-
-Create a new Aggregator for your business domain.
-
-<<creating_aggregator_class,[Documentation]>>
-
-[source,java]
-----
-@SagaAggregator(
-        version = @SagaAggregatorVersion(major = 1, minor = 1, patch = 0),
-        idPrefix = "po",
-        name = "PlaceOrderAggregator",
-        sagaSerializable = PlaceOrderAggregatorSample.class
-)
-@Getter
-@Setter
-public class PlaceOrderAggregator extends Aggregator {
-
-    public PlaceOrderAggregator() {
-        super(PlaceOrderAggregator.class);
-    }
-
-    @JsonProperty("order_id")
-    private String orderId;
-
-    @JsonProperty("username")
-    private String username;
-
-    @JsonProperty("total")
-    private Double total;
-
-    @JsonProperty("is_active")
-    private Integer isActive;
-}
-----
-
-Crate the `sagaSerializable` implementation for the aggregator that you created above.
-This will help you to provide the sample aggregator object to accurate aggregator casting.
-
-[source,java]
-----
-package com.example.orderservice.saga.aggregator;
-
-import org.stacksaga.SagaSerializable;
-
-import java.util.UUID;
-
-public class PlaceOrderAggregatorSample extends SagaSerializable<PlaceOrderAggregator> {
-    public PlaceOrderAggregatorSample() {
-        //sample-1
-        PlaceOrderAggregator aggregator1 = new PlaceOrderAggregator();
-        aggregator1.setOrderId(UUID.randomUUID().toString());
-        this.put("1", aggregator1);
-
-        //sample-2
-        PlaceOrderAggregator aggregator2 = new PlaceOrderAggregator();
-        aggregator2.setOrderId(UUID.randomUUID().toString());
-        aggregator2.setUsername("mafei");
-        this.put("2", aggregator2);
-    }
-}
-----
-
-== Create Executors [[create_executors]]
-
-Create sample executors for the created aggregator.
-For instance, Here we will be creating one <<command_executor,Command Executor>>, One <<query_executor,Query Executor>>.
-
-== Use `SagaTemplate` [[use_sagatemplate]]
-
-== Configure API-Gateway with StackSag Shield [[configure_api_gateway_with_stacksag_shield]]
+include::configure_api_gateway_with_stacksag_shield.adoc[]

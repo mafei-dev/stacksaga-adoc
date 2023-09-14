@@ -1,0 +1,113 @@
+==== Create Executors [[create_executors]]
+
+Create sample executors for the created aggregator.
+For instance, Here we will be creating one <<index.adoc#command_executor,Command Executor>>, One <<index.adoc#query_executor,Query Executor>>.
+
+Executor-1: *CheckUserExecutor* (This is created for checking the user is in active state or note).
+
+[source,java]
+----
+package com.example.orderservice.saga.executor;
+
+import com.example.orderservice.saga.aggregator.PlaceOrderAggregator;
+import org.stacksaga.ProcessStepManager;
+import org.stacksaga.ProcessStepManagerUtil;
+import org.stacksaga.annotation.SagaExecutor;
+import org.stacksaga.exception.RetryableExecutorException;
+import org.stacksaga.exception.execution.NonRetryableExecutorException;
+import org.stacksaga.executor.QueryExecutor;
+import org.stacksaga.executor.utils.ProcessStack;
+
+@SagaExecutor(executeFor = "user-service", liveCheck = false, value = "CheckUserExecutor")
+public class CheckUserExecutor implements QueryExecutor<PlaceOrderAggregator> {
+    @Override
+    public ProcessStepManager<PlaceOrderAggregator> doProcess(
+            ProcessStack processStack,
+            PlaceOrderAggregator aggregator,
+            ProcessStepManagerUtil<PlaceOrderAggregator> stepManagerUtil
+    ) throws RetryableExecutorException, NonRetryableExecutorException {
+        // TODO: invoke the request for checking the getting the user's data and update the necessary data in the aggregator
+        aggregator.setIsActive(1);
+        return stepManagerUtil.next(PlaceOrderExecutor.class);
+    }
+}
+----
+
+Executor-2: *PlaceOrderExecutor* (This is executor created for saving the order details).
+
+[source,java]
+----
+package com.example.orderservice.saga.executor;
+
+import com.example.orderservice.saga.aggregator.PlaceOrderAggregator;
+import org.stacksaga.ProcessStepManager;
+import org.stacksaga.ProcessStepManagerUtil;
+import org.stacksaga.RevertHintStore;
+import org.stacksaga.annotation.SagaExecutor;
+import org.stacksaga.exception.RetryableExecutorException;
+import org.stacksaga.exception.execution.NonRetryableExecutorException;
+import org.stacksaga.executor.CommandExecutor;
+import org.stacksaga.executor.utils.ProcessStack;
+
+@SagaExecutor(executeFor = "order-service", liveCheck = false, value = "PlaceOrderExecutor")
+public class PlaceOrderExecutor implements CommandExecutor<PlaceOrderAggregator> {
+    @Override
+    public ProcessStepManager<PlaceOrderAggregator> doProcess(
+            ProcessStack previousProcessStack,
+            PlaceOrderAggregator aggregator,
+            ProcessStepManagerUtil<PlaceOrderAggregator> stepManagerUtil
+    ) throws RetryableExecutorException, NonRetryableExecutorException {
+        // TODO: invoke the atomic operation for placing the order and update the necessary data in the aggregator
+        return stepManagerUtil.next(DispatchOrderExecutor.class);
+    }
+
+    @Override
+    public void doRevert(ProcessStack previousProcessStack,
+                         NonRetryableExecutorException realException,
+                         PlaceOrderAggregator finalAggregatorState,
+                         RevertHintStore revertHintStore
+    ) throws RetryableExecutorException {
+        //atomic revert process
+    }
+}
+----
+
+Executor-3: *DispatchOrderExecutor* (This is executor created for dispatching the order).
+
+[source,java]
+----
+package com.example.orderservice.saga.executor;
+
+import com.example.orderservice.saga.aggregator.PlaceOrderAggregator;
+import org.stacksaga.ProcessStepManager;
+import org.stacksaga.ProcessStepManagerUtil;
+import org.stacksaga.RevertHintStore;
+import org.stacksaga.annotation.SagaExecutor;
+import org.stacksaga.exception.RetryableExecutorException;
+import org.stacksaga.exception.execution.NonRetryableExecutorException;
+import org.stacksaga.executor.CommandExecutor;
+import org.stacksaga.executor.utils.ProcessStack;
+
+@SagaExecutor(executeFor = "delivery-service", liveCheck = false, value = "DispatchOrderExecutor")
+public class DispatchOrderExecutor implements CommandExecutor<PlaceOrderAggregator> {
+    @Override
+    public ProcessStepManager<PlaceOrderAggregator> doProcess(
+            ProcessStack previousProcessStack,
+            PlaceOrderAggregator currentAggregator,
+            ProcessStepManagerUtil<PlaceOrderAggregator> stepManagerUtil
+    ) throws RetryableExecutorException, NonRetryableExecutorException {
+        // TODO: invoke the atomic operation for dispatching the order and update the necessary data in the aggregator
+        return stepManagerUtil.compete();
+    }
+
+    @Override
+    public void doRevert(
+            ProcessStack previousProcessStack,
+            NonRetryableExecutorException realException,
+            PlaceOrderAggregator finalAggregatorState,
+            RevertHintStore revertHintStore
+    ) throws RetryableExecutorException {
+
+    }
+}
+----

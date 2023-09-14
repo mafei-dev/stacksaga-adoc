@@ -1,0 +1,45 @@
+=== Adding StackSaga Framework Dependency [[configure_stacksaga_core_dependency]]
+
+As per the <<stacksaga_architecture,architecture>>, you have to add the <<index.adoc#stacksaga_high_level,StackSaga Framework Dependencies>> to the class path of the service that you want to be acted as an <<index.adoc#saga_orchestration_pattern,orchestrator>>.
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.stacksaga</groupId>
+    <artifactId>stacksaga-spring-boot-starter-core</artifactId>
+    <version>1.0.0</version>
+</dependency>
+
+<dependency>
+    <groupId>org.stacksaga</groupId>
+    <artifactId>stacksaga-spring-boot-starter-mysql</artifactId>
+    <version>1.0.0</version>
+</dependency>
+
+<dependency>
+    <groupId>org.stacksaga</groupId>
+    <artifactId>stacksaga-spring-boot-starter-discovery</artifactId>
+    <version>1.0.0</version>
+</dependency>
+----
+
+* Configuration properties for *orchestrator* Service.
+
+[source,properties]
+----
+#core configurations
+stacksaga.enable=true
+stacksaga.transaction-id-prefix=os
+stacksaga.app-release-version=1.0.0
+stacksaga.component-scan=com.example
+#admin conector configurations
+stacksaga.connect.admin-url=http://localhost:4444
+stacksaga.connect.admin-username=user-service-user
+stacksaga.connect.admin-password=hYP5U256UsD2dTdm
+#event-store configurations
+stacksaga.datasource.mysql.ddl-auto=update
+stacksaga.datasource.mysql.jdbc-url=jdbc:mysql://localhost:3306/stacksaga_event_store?createDatabaseIfNotExist=true
+stacksaga.datasource.mysql.username=root
+stacksaga.datasource.mysql.password=mafei
+stacksaga.datasource.mysql.driver-class-name=com.mysql.cj.jdbc.Driver
+----
