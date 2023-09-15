@@ -1,4 +1,4 @@
-==== Create Executors [[create_executors]]
+== Create Executors [[create_executors]]
 
 Create sample executors for the created aggregator.
 For instance, Here we will be creating one <<index.adoc#command_executor,Command Executor>>, One <<index.adoc#query_executor,Query Executor>>.

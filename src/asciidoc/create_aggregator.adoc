@@ -1,4 +1,4 @@
-=== Create Aggregator [[create_aggregator]]
+== Create Aggregator [[create_aggregator]]
 
 Create a new Aggregator for your business domain.
 

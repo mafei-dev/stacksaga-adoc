@@ -1,4 +1,4 @@
-=== Setup StackSaga Admin Server [[setup_stacksaga_admin_server]]
+== Setup StackSaga Admin Server [[setup_stacksaga_admin_server]]
 
 As the first, the <<index.adoc#stacksaga_admin_index,StackSaga Admin>> server should be run.
 To Run the Admin server, there are <<index.adoc#setup_the_service,several methods>> available.

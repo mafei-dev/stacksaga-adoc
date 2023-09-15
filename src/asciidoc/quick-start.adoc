@@ -47,4 +47,6 @@ include::create_executors.adoc[]
 
 include::use_sagatemplate.adoc[]
 
-include::configure_api_gateway_with_stacksag_shield.adoc[]
+*Congratulations!*
+You have successfully configured StackSaga on your server.
+Go to the StackSaga Admin Server and see the transactions by selecting the service.

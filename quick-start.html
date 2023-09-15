@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.20">
-<title>StackSaga Quick Start Guide</title>
+<title>StackSga Quick Start Guide</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -548,9 +548,19 @@ pre.rouge .gs {
 }
 </style>
 </head>
-<body class="book">
+<body class="book toc2 toc-left">
 <div id="header">
 <h1>StackSga Quick Start Guide</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Steps</div>
+<ul class="sectlevel1">
+<li><a href="#setup_stacksaga_admin_server">1. Setup StackSaga Admin Server</a></li>
+<li><a href="#configure_stacksaga_core_dependency">2. Adding StackSaga Framework Dependency</a></li>
+<li><a href="#create_aggregator">3. Create Aggregator</a></li>
+<li><a href="#create_executors">4. Create Executors</a></li>
+<li><a href="#use_sagatemplate">5. Use <code>SagaTemplate</code></a></li>
+</ul>
+</div>
 </div>
 <div id="content">
 <div id="preamble">
@@ -586,8 +596,8 @@ pre.rouge .gs {
 <h2 id="setup_stacksaga_admin_server"><a class="anchor" href="#setup_stacksaga_admin_server"></a>1. Setup StackSaga Admin Server</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As the first, the <a href="#stacksaga_admin_index">StackSaga Admin</a> server should be run.
-To Run the Admin server, there are <a href="#setup_the_service">several methods</a> available.
+<p>As the first, the <a href="index.html#stacksaga_admin_index">StackSaga Admin</a> server should be run.
+To Run the Admin server, there are <a href="index.html#setup_the_service">several methods</a> available.
 But here it is mentioned docker image as the quick way.</p>
 </div>
 <div class="ulist">
@@ -603,8 +613,8 @@ But here it is mentioned docker image as the quick way.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Run by Updating the required <a href="#stacksaga_admin_docker_image">environment variables</a>.
-(See the <a href="#docker_compose_file">docker-compose example</a>)</p>
+<p>Run by Updating the required <a href="index.html#stacksaga_admin_docker_image">environment variables</a>.
+(See the <a href="index.html#docker_compose_file">docker-compose example</a>)</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -622,7 +632,7 @@ stacksaga/stacksaga_admin_mysql:1.0.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>After running the Server, you can <a href="#dashboard_initialize">initialize the admin server</a> and after that, create <strong><a href="#create_api_gateway_user">API Gateway User</a></strong> and <strong><a href="#create_service_user">Service User</a></strong></p>
+<p>After running the Server, you can <a href="index.html#dashboard_initialize">initialize the admin server</a> and after that, create <strong><a href="index.html#create_api_gateway_user">API Gateway User</a></strong> and <strong><a href="index.html#index.adoc#create_service_user">Service User</a></strong></p>
 </div>
 </div>
 </div>
@@ -630,7 +640,7 @@ stacksaga/stacksaga_admin_mysql:1.0.0</code></pre>
 <h2 id="configure_stacksaga_core_dependency"><a class="anchor" href="#configure_stacksaga_core_dependency"></a>2. Adding StackSaga Framework Dependency</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As per the <a href="#stacksaga_architecture">architecture</a>, you have to add the <a href="#stacksaga_high_level">StackSaga Framework Dependencies</a> to the class path of the service that you want to be acted as an <a href="#saga_orchestration_pattern">orchestrator</a>.</p>
+<p>As per the <a href="#stacksaga_architecture">architecture</a>, you have to add the <a href="index.html#stacksaga_high_level">StackSaga Framework Dependencies</a> to the class path of the service that you want to be acted as an <a href="index.html#saga_orchestration_pattern">orchestrator</a>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -653,6 +663,32 @@ stacksaga/stacksaga_admin_mysql:1.0.0</code></pre>
 <span class="nt">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>Configuration properties for <strong>orchestrator</strong> Service.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight nowrap"><code data-lang="properties"><span class="c">#core configurations
+</span><span class="py">stacksaga.enable</span><span class="p">=</span><span class="s">true</span>
+<span class="py">stacksaga.transaction-id-prefix</span><span class="p">=</span><span class="s">os</span>
+<span class="py">stacksaga.app-release-version</span><span class="p">=</span><span class="s">1.0.0</span>
+<span class="py">stacksaga.component-scan</span><span class="p">=</span><span class="s">com.example</span>
+<span class="c">#admin conector configurations
+</span><span class="py">stacksaga.connect.admin-url</span><span class="p">=</span><span class="s">http://localhost:4444</span>
+<span class="py">stacksaga.connect.admin-username</span><span class="p">=</span><span class="s">user-service-user</span>
+<span class="py">stacksaga.connect.admin-password</span><span class="p">=</span><span class="s">hYP5U256UsD2dTdm</span>
+<span class="c">#event-store configurations
+</span><span class="py">stacksaga.datasource.mysql.ddl-auto</span><span class="p">=</span><span class="s">update</span>
+<span class="py">stacksaga.datasource.mysql.jdbc-url</span><span class="p">=</span><span class="s">jdbc:mysql://localhost:3306/stacksaga_event_store?createDatabaseIfNotExist=true</span>
+<span class="py">stacksaga.datasource.mysql.username</span><span class="p">=</span><span class="s">root</span>
+<span class="py">stacksaga.datasource.mysql.password</span><span class="p">=</span><span class="s">mafei</span>
+<span class="py">stacksaga.datasource.mysql.driver-class-name</span><span class="p">=</span><span class="s">com.mysql.cj.jdbc.Driver</span></code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -662,7 +698,7 @@ stacksaga/stacksaga_admin_mysql:1.0.0</code></pre>
 <p>Create a new Aggregator for your business domain.</p>
 </div>
 <div class="paragraph">
-<p><a href="#creating_aggregator_class">[Documentation]</a></p>
+<p><a href="index.html#creating_aggregator_class">[Documentation]</a></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -729,26 +765,183 @@ This will help you to provide the sample aggregator object to accurate aggregato
 <div class="sectionbody">
 <div class="paragraph">
 <p>Create sample executors for the created aggregator.
-For instance, Here we will be creating one <a href="#command_executor">Command Executor</a>, One <a href="#query_executor">Query Executor</a>.</p>
+For instance, Here we will be creating one <a href="index.html#command_executor">Command Executor</a>, One <a href="index.html#query_executor">Query Executor</a>.</p>
+</div>
+<div class="paragraph">
+<p>Executor-1: <strong>CheckUserExecutor</strong> (This is created for checking the user is in active state or note).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight nowrap"><code data-lang="java"><span class="kn">package</span> <span class="nn">com.example.orderservice.saga.executor</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.example.orderservice.saga.aggregator.PlaceOrderAggregator</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.ProcessStepManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.ProcessStepManagerUtil</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.annotation.SagaExecutor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.exception.RetryableExecutorException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.exception.execution.NonRetryableExecutorException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.executor.QueryExecutor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.executor.utils.ProcessStack</span><span class="o">;</span>
+
+<span class="nd">@SagaExecutor</span><span class="o">(</span><span class="n">executeFor</span> <span class="o">=</span> <span class="s">"user-service"</span><span class="o">,</span> <span class="n">liveCheck</span> <span class="o">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s">"CheckUserExecutor"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CheckUserExecutor</span> <span class="kd">implements</span> <span class="nc">QueryExecutor</span><span class="o">&lt;</span><span class="nc">PlaceOrderAggregator</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">ProcessStepManager</span><span class="o">&lt;</span><span class="nc">PlaceOrderAggregator</span><span class="o">&gt;</span> <span class="nf">doProcess</span><span class="o">(</span>
+            <span class="nc">ProcessStack</span> <span class="n">processStack</span><span class="o">,</span>
+            <span class="nc">PlaceOrderAggregator</span> <span class="n">aggregator</span><span class="o">,</span>
+            <span class="nc">ProcessStepManagerUtil</span><span class="o">&lt;</span><span class="nc">PlaceOrderAggregator</span><span class="o">&gt;</span> <span class="n">stepManagerUtil</span>
+    <span class="o">)</span> <span class="kd">throws</span> <span class="nc">RetryableExecutorException</span><span class="o">,</span> <span class="nc">NonRetryableExecutorException</span> <span class="o">{</span>
+        <span class="c1">// TODO: invoke the request for checking the getting the user's data and update the necessary data in the aggregator</span>
+        <span class="n">aggregator</span><span class="o">.</span><span class="na">setIsActive</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">stepManagerUtil</span><span class="o">.</span><span class="na">next</span><span class="o">(</span><span class="nc">PlaceOrderExecutor</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Executor-2: <strong>PlaceOrderExecutor</strong> (This is executor created for saving the order details).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight nowrap"><code data-lang="java"><span class="kn">package</span> <span class="nn">com.example.orderservice.saga.executor</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.example.orderservice.saga.aggregator.PlaceOrderAggregator</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.ProcessStepManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.ProcessStepManagerUtil</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.RevertHintStore</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.annotation.SagaExecutor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.exception.RetryableExecutorException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.exception.execution.NonRetryableExecutorException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.executor.CommandExecutor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.executor.utils.ProcessStack</span><span class="o">;</span>
+
+<span class="nd">@SagaExecutor</span><span class="o">(</span><span class="n">executeFor</span> <span class="o">=</span> <span class="s">"order-service"</span><span class="o">,</span> <span class="n">liveCheck</span> <span class="o">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s">"PlaceOrderExecutor"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PlaceOrderExecutor</span> <span class="kd">implements</span> <span class="nc">CommandExecutor</span><span class="o">&lt;</span><span class="nc">PlaceOrderAggregator</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">ProcessStepManager</span><span class="o">&lt;</span><span class="nc">PlaceOrderAggregator</span><span class="o">&gt;</span> <span class="nf">doProcess</span><span class="o">(</span>
+            <span class="nc">ProcessStack</span> <span class="n">previousProcessStack</span><span class="o">,</span>
+            <span class="nc">PlaceOrderAggregator</span> <span class="n">aggregator</span><span class="o">,</span>
+            <span class="nc">ProcessStepManagerUtil</span><span class="o">&lt;</span><span class="nc">PlaceOrderAggregator</span><span class="o">&gt;</span> <span class="n">stepManagerUtil</span>
+    <span class="o">)</span> <span class="kd">throws</span> <span class="nc">RetryableExecutorException</span><span class="o">,</span> <span class="nc">NonRetryableExecutorException</span> <span class="o">{</span>
+        <span class="c1">// TODO: invoke the atomic operation for placing the order and update the necessary data in the aggregator</span>
+        <span class="k">return</span> <span class="n">stepManagerUtil</span><span class="o">.</span><span class="na">next</span><span class="o">(</span><span class="nc">DispatchOrderExecutor</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doRevert</span><span class="o">(</span><span class="nc">ProcessStack</span> <span class="n">previousProcessStack</span><span class="o">,</span>
+                         <span class="nc">NonRetryableExecutorException</span> <span class="n">realException</span><span class="o">,</span>
+                         <span class="nc">PlaceOrderAggregator</span> <span class="n">finalAggregatorState</span><span class="o">,</span>
+                         <span class="nc">RevertHintStore</span> <span class="n">revertHintStore</span>
+    <span class="o">)</span> <span class="kd">throws</span> <span class="nc">RetryableExecutorException</span> <span class="o">{</span>
+        <span class="c1">//atomic revert process</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Executor-3: <strong>DispatchOrderExecutor</strong> (This is executor created for dispatching the order).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight nowrap"><code data-lang="java"><span class="kn">package</span> <span class="nn">com.example.orderservice.saga.executor</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.example.orderservice.saga.aggregator.PlaceOrderAggregator</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.ProcessStepManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.ProcessStepManagerUtil</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.RevertHintStore</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.annotation.SagaExecutor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.exception.RetryableExecutorException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.exception.execution.NonRetryableExecutorException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.executor.CommandExecutor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.executor.utils.ProcessStack</span><span class="o">;</span>
+
+<span class="nd">@SagaExecutor</span><span class="o">(</span><span class="n">executeFor</span> <span class="o">=</span> <span class="s">"delivery-service"</span><span class="o">,</span> <span class="n">liveCheck</span> <span class="o">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s">"DispatchOrderExecutor"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DispatchOrderExecutor</span> <span class="kd">implements</span> <span class="nc">CommandExecutor</span><span class="o">&lt;</span><span class="nc">PlaceOrderAggregator</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">ProcessStepManager</span><span class="o">&lt;</span><span class="nc">PlaceOrderAggregator</span><span class="o">&gt;</span> <span class="nf">doProcess</span><span class="o">(</span>
+            <span class="nc">ProcessStack</span> <span class="n">previousProcessStack</span><span class="o">,</span>
+            <span class="nc">PlaceOrderAggregator</span> <span class="n">currentAggregator</span><span class="o">,</span>
+            <span class="nc">ProcessStepManagerUtil</span><span class="o">&lt;</span><span class="nc">PlaceOrderAggregator</span><span class="o">&gt;</span> <span class="n">stepManagerUtil</span>
+    <span class="o">)</span> <span class="kd">throws</span> <span class="nc">RetryableExecutorException</span><span class="o">,</span> <span class="nc">NonRetryableExecutorException</span> <span class="o">{</span>
+        <span class="c1">// TODO: invoke the atomic operation for dispatching the order and update the necessary data in the aggregator</span>
+        <span class="k">return</span> <span class="n">stepManagerUtil</span><span class="o">.</span><span class="na">compete</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doRevert</span><span class="o">(</span>
+            <span class="nc">ProcessStack</span> <span class="n">previousProcessStack</span><span class="o">,</span>
+            <span class="nc">NonRetryableExecutorException</span> <span class="n">realException</span><span class="o">,</span>
+            <span class="nc">PlaceOrderAggregator</span> <span class="n">finalAggregatorState</span><span class="o">,</span>
+            <span class="nc">RevertHintStore</span> <span class="n">revertHintStore</span>
+    <span class="o">)</span> <span class="kd">throws</span> <span class="nc">RetryableExecutorException</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="use_sagatemplate"><a class="anchor" href="#use_sagatemplate"></a>5. Use <code>SagaTemplate</code></h2>
 <div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight nowrap"><code data-lang="java"><span class="kn">package</span> <span class="nn">com.example.orderservice.saga.controller</span><span class="o">;</span>
 
+<span class="kn">import</span> <span class="nn">com.example.orderservice.saga.aggregator.PlaceOrderAggregator</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.example.orderservice.saga.executor.CheckUserExecutor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.google.common.collect.ImmutableMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">lombok.AllArgsConstructor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.http.HttpStatus</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.stacksaga.SagaTemplate</span><span class="o">;</span>
+
+<span class="nd">@RestController</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/order"</span><span class="o">)</span>
+<span class="nd">@AllArgsConstructor</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PlaceOrderSagaController</span> <span class="o">{</span>
+
+    <span class="c1">//autowire the SagaTemplate by passing the aggregator class as the generic parameter.</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">SagaTemplate</span><span class="o">&lt;</span><span class="nc">PlaceOrderAggregator</span><span class="o">&gt;</span> <span class="n">sagaTemplate</span><span class="o">;</span>
+
+    <span class="nd">@PostMapping</span>
+    <span class="nd">@ResponseStatus</span><span class="o">(</span><span class="nc">HttpStatus</span><span class="o">.</span><span class="na">ACCEPTED</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">placeOrder</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">//initialize the aggregator object with initial values</span>
+        <span class="nc">PlaceOrderAggregator</span> <span class="n">aggregator</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PlaceOrderAggregator</span><span class="o">();</span>
+        <span class="n">aggregator</span><span class="o">.</span><span class="na">setUsername</span><span class="o">(</span><span class="s">"mafei"</span><span class="o">);</span>
+        <span class="n">aggregator</span><span class="o">.</span><span class="na">setTotal</span><span class="o">(</span><span class="mf">200.00</span><span class="o">);</span>
+
+        <span class="c1">//handover the invocation to the sagaTemplate with aggregator object by mentioning the starting executor class.</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">sagaTemplate</span><span class="o">.</span><span class="na">process</span><span class="o">(</span>
+                <span class="n">aggregator</span><span class="o">,</span>
+                <span class="nc">CheckUserExecutor</span><span class="o">.</span><span class="na">class</span>
+        <span class="o">);</span>
+        <span class="k">return</span> <span class="nc">ImmutableMap</span><span class="o">.&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span><span class="n">builder</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">put</span><span class="o">(</span>
+                        <span class="s">"transaction_id"</span><span class="o">,</span>
+                        <span class="n">aggregator</span><span class="o">.</span><span class="na">getAggregatorTransactionId</span><span class="o">()</span>
+                <span class="o">)</span>
+                <span class="o">.</span><span class="na">put</span><span class="o">(</span>
+                        <span class="s">"msg"</span><span class="o">,</span>
+                        <span class="s">"The order has been created successfully. please wait for updates."</span>
+                <span class="o">)</span>
+                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre>
 </div>
 </div>
-<div class="sect1">
-<h2 id="configure_api_gateway_with_stacksag_shield"><a class="anchor" href="#configure_api_gateway_with_stacksag_shield"></a>6. Configure API-Gateway with StackSag Shield</h2>
-<div class="sectionbody">
-
+<div class="paragraph">
+<p><strong>Congratulations!</strong>
+You have successfully configured StackSaga on your server.
+Go to the StackSaga Admin Server and see the transactions by selecting the service.</p>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-09-12 01:38:18 +0530
+Last updated 2023-09-15 23:28:42 +0530
 </div>
 </div>
 </body>

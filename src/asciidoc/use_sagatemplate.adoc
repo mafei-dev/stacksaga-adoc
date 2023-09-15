@@ -1,4 +1,4 @@
-==== Use `SagaTemplate` [[use_sagatemplate]]
+== Use `SagaTemplate` [[use_sagatemplate]]
 
 [source,java]
 ----
